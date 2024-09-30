@@ -1,4 +1,4 @@
-import { json } from "stream/consumers";
+//(c) 2024 Daniel DeMoney. All rights reserved.
 export class Company {
     companyName : string;
     businessOutlookRating: number;

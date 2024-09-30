@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 export class UserSpecificJobData {
     isFavorite: boolean;
     hasApplied: boolean;

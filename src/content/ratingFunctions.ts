@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { HelperFunctions } from "./helperFunctions";
 import { Job } from "./job";
 import { UserPreferences } from "./userPreferences";

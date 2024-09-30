@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 export class ScrapingError extends Error {
     constructor(message: string) {
       super(message);

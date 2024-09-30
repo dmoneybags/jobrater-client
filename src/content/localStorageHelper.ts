@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { Job, EMPTYJOB, JobFactory } from "./job";
 import { Resume } from "./resume";
 import { User } from "./user";

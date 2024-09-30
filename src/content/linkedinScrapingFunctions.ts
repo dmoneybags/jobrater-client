@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { ScrapingError } from "./errors"
 import { HelperFunctions } from "./helperFunctions";
 import { Job, JobFactory } from "./job"

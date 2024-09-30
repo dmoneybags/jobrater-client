@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 const NUMSENTENCESLOADED = 30
 
 export class ResumeComparison{

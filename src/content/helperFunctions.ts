@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { LocalStorageHelper } from "./localStorageHelper";
 import { DatabaseCalls } from "./databaseCalls";
 export class HelperFunctions {

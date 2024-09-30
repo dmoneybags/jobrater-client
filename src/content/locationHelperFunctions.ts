@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { LocationObject } from "./location";
 import { UserPreferences } from "./userPreferences";
 

@@ -1,3 +1,4 @@
+//(c) 2024 Daniel DeMoney. All rights reserved.
 import { json } from "stream/consumers";
 import { PaymentFrequency } from "./job";
 
