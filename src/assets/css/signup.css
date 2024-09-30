@@ -1,0 +1,38 @@
+.auth-container{
+    width: 70%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+}
+.email-input-container{
+    margin-left: 30px;
+}
+.login-btn{
+    margin: 10px;
+    width: 200px;
+}
+.signup-btn{
+    margin: 10px;
+    width: 200px;
+    transition: transform 1s ease-in-out;
+}
+.signup-input {
+    width: 80% !important;
+    height: 30px !important;
+}
+.signup-backward-arrow {
+    position: absolute;
+    top: 50%; /* 50% from the top */
+    left: 20px; /* 20 pixels from the left */
+    transform: translateY(-50%);
+    border-radius: 5%;
+}
+.signup-forward-arrow {
+    position: absolute;
+    top: 50%; /* 50% from the top */
+    right: 20px; /* 20 pixels from the left */
+    transform: translateY(-50%);
+    border-radius: 5%;
+}

@@ -1,0 +1,292 @@
+.nav-logo-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+}
+.main-home-view{
+    margin-top: 55px;
+}
+.icon {
+    position: absolute;
+    color: white;
+    top: 25px;
+}
+.minimize-icon{
+    left: 5%;
+}
+.home-icon{
+    left: 17%;
+}
+.settings-icon{
+    right: 17%;
+}
+.profile-icon{
+    right: 5%;
+}
+.job-row-container{
+
+}
+.job-row {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+.icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.icon-box {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; 
+    width: 80px;
+    margin-left: 10px;
+}
+.job-row-expanded-view {
+    padding: 10px;
+}
+.job-row-title{
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+}
+.job-row-subtitle{
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 14px;
+    color: white;
+}
+.job-row-divider{
+    margin: 0 !important;
+}
+.job-row-job-name-divider{
+    margin-left: 5px;
+    width: 55%;
+    margin: 3px !important;
+}
+.job-row-open-icon{
+    position: absolute;
+    left: 50%;
+    top: 75%;
+    transform: translateX(-50%);
+}
+.resume-rater-container{
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
+    right: 22%;
+}
+.job-row-resume-icon{
+    position: absolute;
+    top: 50%;
+    right: 34%;
+    transform: translateY(-50%);
+    z-index: 9999;
+}
+.job-row-briefcase-icon{
+    position: absolute;
+    top: 50%;
+    right: 15%;
+    transform: translateY(-50%);
+    z-index: 9999;
+}
+.job-rater-container{
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%);
+    transform: translateY(-50%);
+    right: 3%;
+}
+.no-jobs-text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.resume-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.resume-header-container p {
+    margin: 0;
+}
+
+.resume-header-container button {
+    margin-left: auto; /* Ensure the button is pushed to the right */
+}
+.hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+}
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+.navbar {
+    z-index: 10000 !important;
+}
+.resume-row {
+    position: relative;
+    background-color: var(--background-grey);
+    border-radius: 10px;
+    font-size: 18px;
+    margin: 10px;
+    height: 100px;
+}
+.resume-row-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 3%;
+}
+.resume-row-text {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    left: 15%;
+}
+.resume-row-delete {
+    position: absolute;
+    border-radius: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 90%;
+}
+.resume-row-view-btn {
+    position: absolute;
+    height: 25px;
+    border-radius: 5%;
+    top: 78%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row-reverse; /* Align buttons from right to left */
+    gap: 10px;
+}
+.latest-job-container{
+    width: 100%;
+}
+.latest-job-item {
+    position: relative;
+    color: white;
+    font-size: 11px;
+    height: 30px;
+}
+.latest-job-item-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.latest-job-item-text {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+.latest-job-job-title{
+    width: 102%; /* or a specific width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Optional: adds "..." if the text overflows */
+    font-size: 5vw; 
+}
+.job-nav-bar{
+    width: 100%;
+    margin: 0;
+    margin-top: -3px;
+}
+.job-nav-bar-item{
+    width: 33.3%;
+}
+.job-view-arrow-graph{
+    background: linear-gradient(to top right, black 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0) 75%);
+}
+.job-view-rating-item{
+    
+}
+.job-view-rating-bar{
+    height: 1.5px;
+    margin: auto;
+    top: -50%;
+}
+.job-view-rating-number{
+    background-image: linear-gradient(to right, var(--color1, #ff7e5f), var(--color2, #feb47b));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.rating-bp{
+    color: white;
+    font-size: 16px;
+}
+.resume-tab-match-score{
+    position: absolute;
+    right: 0;
+    font-size: 64px;
+    margin-right: 15px;
+}
+.resume-bp-container{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    overflow: auto;
+    height: 210px;
+}
+.preference-row{
+    width: 100%;
+    border-bottom: 1px solid #808080; 
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+}
+.pro::before {
+    content: "\f00c"; /* Unicode for Font Awesome check icon */
+    font-family: "Font Awesome 5 Free"; /* Font Awesome family */
+    font-weight: 900; /* Ensure the icon is solid */
+    color: rgb(0, 255, 0); /* Set the color to green */
+    margin-right: 8px; /* Add some space between the icon and the text */
+    vertical-align: middle;
+}
+.con::before {
+    content: "\f00d"; /* Unicode for Font Awesome 'x' (times) icon */
+    font-family: "Font Awesome 5 Free"; /* Font Awesome family */
+    font-weight: 900; /* Ensure the icon is solid */
+    color: red; /* Set the color to red */
+    margin-right: 8px; /* Add some space between the icon and the text */
+    vertical-align: middle;
+}
+.tip::before {
+    content: "\f0eb"; /* Unicode for Font Awesome 'x' (times) icon */
+    font-family: "Font Awesome 5 Free"; /* Font Awesome family */
+    font-weight: 900; /* Ensure the icon is solid */
+    color: yellow; /* Set the color to red */
+    margin-right: 8px; /* Add some space between the icon and the text */
+    vertical-align: middle;
+}
+.absolute-hoverable-icon:hover .hover-text {
+    display: block;
+}
+
+

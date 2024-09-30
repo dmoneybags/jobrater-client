@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist",      // Directory for output files
+      "sourceMap": true,       // Generate source maps
+      "noImplicitAny": true,   // Disallow implicit 'any' types
+      "module": "ESNext",         // Module code generation
+      "target": "es6", 
+      "jsx": "react",        // Specify ECMAScript target version
+      "allowJs": true,
+      "esModuleInterop": true,         // Allow JavaScript files to be compiled
+    },
+    "include": [
+      "src/**/*.ts",
+      "public/**/*.ts", 
+      "src/tests/jest.setup.ts",
+      "globals.d.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}

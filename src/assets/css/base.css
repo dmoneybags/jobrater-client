@@ -1,0 +1,62 @@
+:root {
+    --main-bg-gradient: linear-gradient(to bottom, #0f0082, #000000);
+    --text-secondary: #959595;
+    --background-grey: rgb(40,40,40);
+}
+html, body, #app {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--main-bg-color);
+    box-sizing: border-box;
+}
+body {
+    background-color: #000000;
+}
+.app-container {
+    width: 400px;
+    height: 600px;
+    margin: 0;
+    padding: 0;
+}
+.main-logo{
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    margin: auto;
+    width: 50%;
+    padding-top: 20px;
+}
+.tag-line{
+    text-align: center;
+    font-family: monospace;
+    color: var(--text-secondary);
+}
+.typing-text {
+    border-right: 2px solid #fffffff7;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+}
+.privacy-statement{
+    color: #a9a9a9;
+    font-weight: 300;
+    font-size: 10px;
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
+.centered-btn{
+    display: block;
+    width: 30;
+    margin: auto;
+}
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: rgb(255, 255, 255); }
+}
