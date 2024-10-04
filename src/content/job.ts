@@ -18,12 +18,24 @@ export const EMPTYJOB = {
 export class PaymentFrequency {
     str: string
     constructor(paymentStr: string){
-        const paymentStrs = ["hr", "yr"];
+        const paymentStrs = ["hr","yr", "month"];
         if (!paymentStrs.includes(paymentStr)){
             console.log(paymentStr);
             throw new Error("Invalid payment Str");
         }
         this.str = paymentStr;
+    }
+    static getPerFrequencyStr(str: string): string {
+        switch (str) {
+            case "yr":
+                return "K";
+            case "hr":
+                return "/hr";
+            case "month":
+                return "K/month";
+            default:
+                throw new Error("Invalid payment frequency");
+        }
     }
 }
 /**
@@ -132,6 +144,8 @@ export class Job {
             return payAmt * 40 * 52
         } else if (frequency === "yr"){
             return payAmt * 1000
+        } else if (frequency === "month"){
+            return payAmt * 12
         } else {
             console.warn("couldn't calculate payment for frequency:")
             console.warn(frequency);

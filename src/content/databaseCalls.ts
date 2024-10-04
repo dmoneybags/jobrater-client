@@ -29,9 +29,8 @@ import { UserSpecificJobData, UserSpecificJobDataFactory } from "./userSpecificJ
 import { UserPreferences, UserPreferencesFactory } from "./userPreferences";
 import { LocationObjectFactory } from "./location";
 
-const isProduction = true;
-
-const DATABASESERVER = isProduction ? 'https://ec2-54-176-220-224.us-west-1.compute.amazonaws.com/':'http://localhost:5001/'
+const isProduction = CLIENT_ENV.ENVIRONMENT === 'production';
+const DATABASESERVER = isProduction ? CLIENT_ENV.PROD_API_URL:CLIENT_ENV.DEV_API_URL;
 
 export class DatabaseCalls{
     /**

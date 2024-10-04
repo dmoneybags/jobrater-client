@@ -7,6 +7,7 @@ import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
 import { JobView } from './jobView';
 import { showFullscreenPopup } from '../helperViews/popup';
+import { PaymentFrequency } from '../../../src/content/job';
 
 export const LatestJobView = ({job, user}) => {
     const [showingPopup, setShowingPopup] = useState(false);
@@ -41,7 +42,7 @@ export const LatestJobView = ({job, user}) => {
                         style={{color: HelperFunctions.ratingToColor(RatingFunctions.getPaymentRating(job, user.preferences))}}
                         >
                         </i>
-                        <p className='latest-job-item-text'>{"$" + job.paymentBase + (job.paymentHigh ? ` - ${job.paymentHigh}`:"") + (job.paymentFreq.str === "yr" ? "K":"/hr")}</p>
+                        <p className='latest-job-item-text'>{"$" + job.paymentBase + (job.paymentHigh ? ` - ${job.paymentHigh}`:"") + (PaymentFrequency.getPerFrequencyStr(job.paymentFreq.str))}</p>
                     </div>}
                     {!job.paymentBase && <div className='latest-job-item'>
                         <i 

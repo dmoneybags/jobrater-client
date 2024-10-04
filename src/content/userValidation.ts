@@ -16,8 +16,8 @@ import { User } from "./user"
 import { request } from "http";
 
 const MINIMUMPASSWORDLENGTH: number = 8;
-const isProduction = true
-const server = isProduction ? 'https://ec2-54-176-220-224.us-west-1.compute.amazonaws.com/':'http://localhost:5001/'
+const isProduction = CLIENT_ENV.ENVIRONMENT === 'production';
+const server = isProduction ? CLIENT_ENV.PROD_API_URL:CLIENT_ENV.DEV_API_URL;
 /**
  * validateEmail
  * 

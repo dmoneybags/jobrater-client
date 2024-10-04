@@ -33,9 +33,8 @@ import bcrypt from 'bcryptjs';
 //we won't have access to chrome when testing these routes
 
 //Base url for our authentification server
-const isProduction = true;
-
-const AUTHSERVER = isProduction ? 'https://ec2-54-176-220-224.us-west-1.compute.amazonaws.com/':'http://localhost:5001/'
+const isProduction = CLIENT_ENV.ENVIRONMENT === 'production';
+const AUTHSERVER = isProduction ? CLIENT_ENV.PROD_API_URL:CLIENT_ENV.DEV_API_URL;
 
 /**
  * getSalt

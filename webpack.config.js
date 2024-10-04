@@ -55,8 +55,10 @@ module.exports = (env) => {
         chunks: ['popup']
       }),
       new webpack.DefinePlugin({
-        ENVIRONMENT: JSON.stringify(process.env.ENVIRONMENT || 'development'),
-      })
+        'CLIENT_ENV.ENVIRONMENT': JSON.stringify('development'),
+        'CLIENT_ENV.PROD_API_URL': JSON.stringify('https://api.applicantiq.org/'),
+        'CLIENT_ENV.DEV_API_URL': JSON.stringify('https://localhost:5001/'),
+      }),
     ]
   };
 };

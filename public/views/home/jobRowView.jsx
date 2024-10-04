@@ -8,6 +8,7 @@ import { DatabaseCalls } from '../../../src/content/databaseCalls';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
 import { showError } from '../helperViews/notifications';
 import { LatestJobView } from './latestJobView';
+import { PaymentFrequency } from '../../../src/content/job';
 
 export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -108,7 +109,7 @@ export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
                     <ul style={{ listStyleType: 'disc', fontSize: "12px", marginLeft: "10px", marginBottom: "5px"}}>
                         <li>{job?.mode?.str ?? "No WFH Info"}</li>
                         {job.paymentBase !== 0 && job.paymentBase !== null &&
-                            <li>{"$" + job.paymentBase + (job.paymentHigh ? ` - ${job.paymentHigh}`:"") + (job.paymentFreq.str === "yr" ? "K":"/hr")}</li>
+                            <li>{"$" + job.paymentBase + (job.paymentHigh ? ` - ${job.paymentHigh}`:"") + (PaymentFrequency.getPerFrequencyStr(job.paymentFreq.str))}</li>
                         }
                         {!job.paymentBase && <li>No Salary Info</li>}
                         <li>{job?.locationStr ?? "No location info"}</li>

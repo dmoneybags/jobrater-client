@@ -92,6 +92,9 @@ export class LinkedInScrapingFunctions {
                 if (str.includes("hr")){
                     json["paymentFreq"]  = "hr";
                 }
+                if (str.includes("month")){
+                    json["paymentFreq"]  = "month";
+                }
                 //Find our 2 numbers in the string by matching a regular expression
                 const regex = /[\d,]+\.?\d*/g;
                 const matches = str.match(regex);
