@@ -154,7 +154,8 @@ export class RatingFunctions {
             }
 
             //OVERALL COMPANY RATING
-            if (job.company.overallRating){
+            //Check that it actually has company data in glassdoor
+            if (job.company.overallRating > 0.5){
                 ratings.push(job.company.overallRating/5);
             }
             //END OVERALL COMPANY RATING

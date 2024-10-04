@@ -7,7 +7,7 @@ import { RatingBulletPointsGenerator } from '../helperViews/ratingBulletsGenerat
 export const JobViewJobTab = ({job, user}) => {
     const [bulletPoints, setBulletPoints] = useState(null);
     useEffect(()=>{
-        const newBulletPoints = RatingBulletPointsGenerator.getRatingBulletPoints(job, user.preferences);
+        const newBulletPoints = RatingBulletPointsGenerator.getRatingBulletPoints(job, user);
         setBulletPoints(newBulletPoints);
     }, [])
     return (

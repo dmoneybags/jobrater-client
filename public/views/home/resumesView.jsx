@@ -30,7 +30,7 @@ export const ResumesView = () => {
             try {
                 //Make our button show the loading
                 setWaitingForResumeResponse(true);
-                const resume = await loadResume(event.target.files[0]);
+                const resume = await loadResume(event.target.files[event.target.files.length - 1]);
                 if (resume.fileType !== "pdf"){
                     throw new Error("Only PDFs are accepted");
                 }

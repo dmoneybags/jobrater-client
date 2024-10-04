@@ -40,6 +40,14 @@ export class LocalStorageHelper {
             throw new LocalStorageError("Failed grabbing data from bg script")
         }
         const jobs: Job[] = response["message"];
+        //rehydrate dates
+        for (const job of jobs){
+            job.jobPostedAt = new Date(job.jobPostedAt);
+            job.timeAdded = new Date(job.timeAdded);
+            if (job.userSpecificJobData){
+                job.userSpecificJobData.timeSelected = new Date(job.userSpecificJobData.timeSelected);
+            }
+        }
         if (jobs === undefined || jobs.length === 0){
             console.warn("No jobs found in local storage");
             return [];
@@ -56,10 +64,6 @@ export class LocalStorageHelper {
     static saveJobs = async(jobs: Job[]):Promise<void> =>{
         console.log("Setting Jobs...");
         console.log(`Setting ${jobs.length} jobs`);
-        if (jobs.length > JOBLIMIT){
-            console.warn("Too many jobs passed, cutting length to " + JOBLIMIT);
-            jobs.splice(jobs.length - JOBLIMIT, JOBLIMIT);
-        }
         await LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "jobs", value: jobs });
     }
     /**

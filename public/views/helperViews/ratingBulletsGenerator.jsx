@@ -76,25 +76,61 @@ export class RatingBulletPointsGenerator {
         ratings.cons.push(<p className="rating-bp con">Poor Glassdoor rating</p>);
         return;
     }
-    static getRatingBulletPoints = (job, preferences) => {
+    static addTimePostedAgoBulletPoint = (job, ratings) => {
+        const dateConsideredRecently = Math.floor(Date.now()/1000) - (5 * HelperFunctions.getTimeFrameSeconds("day"));
+        //hacky but for some reason it gets implicitly converted to str, we love javascript!
+        if (typeof job.jobPostedAt == "string"){
+            job.jobPostedAt = new Date(job.jobPostedAt);
+        }
+        if (Math.floor(job.jobPostedAt.getTime() / 1000) > dateConsideredRecently){
+            ratings.pros.push(<p className="rating-bp pro">Posted Recently</p>);
+        }
+    }
+    static addNearbyBulletPoint = (job, user, ratings) => {
+        function areLocationsNearby(userLocation, jobLocation, thresholdKm = 30) {
+            // Approximate conversion factors for latitude and longitude to kilometers
+            const kmPerDegreeLat = 111; // 1 degree latitude ≈ 111 km
+            const kmPerDegreeLon = 111 * Math.cos(userLocation.latitude * Math.PI / 180); // Adjust by latitude
+        
+            // Calculate the difference in latitudes and longitudes
+            const dLat = (jobLocation.latitude - userLocation.latitude) * kmPerDegreeLat;
+            const dLon = (jobLocation.longitude - userLocation.longitude) * kmPerDegreeLon;
+        
+            // Use Pythagoras' theorem to calculate the distance
+            const distanceKm = Math.sqrt(dLat * dLat + dLon * dLon);
+        
+            // Return true if distance is within the threshold, otherwise false
+            return distanceKm <= thresholdKm;
+        }
+        if (areLocationsNearby(user.location, job.location)){
+            ratings.pros.push(<p className="rating-bp pro">Nearby</p>);
+        }
+    }
+    static getRatingBulletPoints = (job, user) => {
         const ratings = {
             pros: [],
             cons: []
         };
         if (job.paymentBase){
-            RatingBulletPointsGenerator.addSalaryBulletPoint(job, preferences, ratings);
+            RatingBulletPointsGenerator.addSalaryBulletPoint(job, user.preferences, ratings);
         }
         if (job.mode){
-            RatingBulletPointsGenerator.addModeBulletPoint(job, preferences, ratings);
+            RatingBulletPointsGenerator.addModeBulletPoint(job, user.preferences, ratings);
         }
         if (job.careerStage){
-            RatingBulletPointsGenerator.addCareerStageBulletPoint(job, preferences, ratings);
+            RatingBulletPointsGenerator.addCareerStageBulletPoint(job, user.preferences, ratings);
         }
         if (job.applicants){
             RatingBulletPointsGenerator.addApplicantsBulletPoint(job, ratings);
         }
         if (job.company.overallRating){
             RatingBulletPointsGenerator.addCompanyRatingBulletPoint(job, ratings);
+        }
+        if (job.jobPostedAt){
+            RatingBulletPointsGenerator.addTimePostedAgoBulletPoint(job, ratings);
+        }
+        if (job.location && user.location){
+            RatingBulletPointsGenerator.addNearbyBulletPoint(job, user, ratings)
         }
         return ratings;
     }

@@ -32,7 +32,7 @@ const ratingDescriptions = {
 export const CompanyViewJobTab = ({job}) => {
     useEffect(()=>{
         console.log("Loading company view with:");
-        console.log(job.company)
+        console.log(job.company);
     }, [])
     return (
         <div className='pr-2 pl-2'>
@@ -84,7 +84,7 @@ export const CompanyViewJobTab = ({job}) => {
                                 top: "50%",
                                 transform: "translateY(-50%)",
                                 marginRight: "5px",
-                                fontSize: Math.floor(job.company[attributeName]/((attributeName in outOfOneRatings) ? 1:5) * 100) === 100 ? "56px" : "64px"
+                                fontSize: Math.floor(job.company[attributeName]/((attributeName in outOfOneRatings) ? 1:5) * 100) === 100 ? "50px" : "64px"
                             }}
                             >
                                 {Math.floor(job.company[attributeName]/((attributeName in outOfOneRatings) ? 1:5) * 100)}
