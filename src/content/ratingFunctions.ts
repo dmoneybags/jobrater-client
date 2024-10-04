@@ -152,13 +152,23 @@ export class RatingFunctions {
             } else {
                 console.debug("Couldn't get career stage rating");
             }
+            //END CAREER STAGE RATING
 
             //OVERALL COMPANY RATING
             //Check that it actually has company data in glassdoor
             if (job.company.overallRating > 0.5){
                 ratings.push(job.company.overallRating/5);
+                console.debug(`Overall company rating: ${job.company.overallRating}`)
+            } else {
+                console.debug("Couldn't get overall company rating")
             }
             //END OVERALL COMPANY RATING
+
+            //OVERALL AMOUNT OF INFORMATION RATING
+            //4 is hardcoded change if we add more
+            const amountOfInformationRating = Math.min(ratings.length, 6)/6
+            ratings.push(amountOfInformationRating);
+            console.debug(`Amount of information rating ${amountOfInformationRating}`)
             console.debug("Ratings:")
             console.debug(ratings);
             const rating = Math.min(ratings.reduce((sum, current) => sum + current, 0) / ratings.length, 1.000000000000001)
