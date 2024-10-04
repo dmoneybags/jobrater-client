@@ -128,6 +128,7 @@ export const ResumesView = () => {
                 value = {uploadedResumeName}
                 placeholder='ex: Systems Engineering Focused'
                 onChange={updateResumeName}
+                maxLength={50}
                 required
                 />
                 <button class="button is-success is-dark" 

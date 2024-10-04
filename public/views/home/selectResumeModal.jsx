@@ -82,6 +82,7 @@ export const SelectResumeModal = ({showingPopup, setShowingPopup, callbackFuncti
                     className={`input m-2 ${nameInvalid ? "is-danger":""}`}
                     value={resumeName}
                     onChange={(e)=>setResumeName(e.target.value)}
+                    maxLength={50}
                     style={{width: "250px"}}
                     type="text"
                     placeholder="ex: Sales Focused"

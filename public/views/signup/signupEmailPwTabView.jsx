@@ -15,6 +15,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                             placeholder="Josh"
                             value={formData.firstName}
                             onChange={handleChange}
+                            maxLength={255}
                             required
                         />
                     </div>
@@ -30,6 +31,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                             placeholder="Ferguson"
                             value={formData.lastName}
                             onChange={handleChange}
+                            maxLength={255}
                             required
                         />
                     </div>
@@ -46,6 +48,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                         placeholder="Email input"
                         value={formData.email}
                         onChange={handleChange}
+                        maxLength={255}
                         required
                     />
                 </div>
@@ -62,6 +65,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleChange}
+                        maxLength={255}
                         required
                     />
                 </div>
@@ -78,6 +82,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                         placeholder="Password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
+                        maxLength={255}
                         required
                     />
                 </div>

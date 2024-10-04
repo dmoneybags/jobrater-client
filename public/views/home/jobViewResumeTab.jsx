@@ -210,6 +210,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                 value = {uploadedResumeName}
                 placeholder='ex: IOS Focused'
                 onChange={(e) => setUploadedResumeName(e.target.value)}
+                maxLength={50}
                 required
                 />}
                 <button class={`button is-success is-dark ${waitingForReupload ? "is-loading" : ""}`} onClick={handleNewResumeSubmit}>
