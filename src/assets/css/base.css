@@ -3,6 +3,9 @@
     --text-secondary: #959595;
     --background-grey: rgb(40,40,40);
 }
+html {
+    color-scheme: dark;
+}
 html, body, #app {
     margin: 0;
     padding: 0;

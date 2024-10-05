@@ -132,12 +132,22 @@ export const ResumesView = () => {
                 required
                 />
                 <button class="button is-success is-dark" 
-                onClick={() => {
+                onClick={(e) => {
+                    // Add "is-loading" class to the button
+                    e.target.classList.add("is-loading");
+            
                     setNameInvalid(uploadedResumeName === '' || !uploadedResumeName);
-                    if (uploadedResumeName === '' || !uploadedResumeName){
+                    
+                    if (uploadedResumeName === '' || !uploadedResumeName) {
+                        // Remove "is-loading" class if the name is invalid
+                        e.target.classList.remove("is-loading");
                         return;
                     }
-                    handleResumeSubmit();
+            
+                    handleResumeSubmit().finally(() => {
+                        // Remove "is-loading" class after the submit is done
+                        e.target.classList.remove("is-loading");
+                    });
                 }}>
                     Submit
                 </button>
