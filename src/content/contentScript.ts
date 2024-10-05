@@ -52,7 +52,7 @@ import { LocalStorageHelper } from "./localStorageHelper";
 
             LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
                 isLoading: true, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
-            
+
             DatabaseCalls.sendMessageToAddJob(jobread)
             .then((responseJson: Record<string, any>) => {
                 const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
@@ -118,6 +118,8 @@ import { LocalStorageHelper } from "./localStorageHelper";
             })
         })
     }
+
+
     //No job is loaded yet
     let currentJob: string = "";
     //Listener that activates every time a new job message is sent from background

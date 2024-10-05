@@ -8,6 +8,8 @@ Executes: processing the query to get the job id
 Sends: a message to contentscript to scrape the job
 */
 
+import { GlassdoorScrapingFunctions } from "../content/glassdoor";
+
 /*
 First order data needed:
 
@@ -113,6 +115,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             console.error('Error clearing data:', error);
             sendResponse({ success: false, message: 'Failed to store data', error: error.message });
         }
+        return true;
+    } else if (message.action === 'scrapeGd'){
+        const company = message.company;
+        if (!company){
+            sendResponse({ success: false, message: 'Failed to read company arg', error: "NO COMPANY" });
+        }
+        GlassdoorScrapingFunctions.scrape(company).then((companyData) => {
+            const gdPageSource = companyData.pageSource;
+            const gdUrl = companyData.url;
+            const noCompanies = companyData.noCompanies;
+            sendResponse({gdPageSource: gdPageSource, gdUrl: gdUrl, noCompanies: noCompanies})
+        })
+        //we're going to resolve asynchrously
         return true;
     }
 });

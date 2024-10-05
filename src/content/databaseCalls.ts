@@ -73,6 +73,10 @@ export class DatabaseCalls{
      * 
      * we send our jobjson to server and server adds it to db and sends it back with all fk data
      * 
+     * will check before if company is in db, if company is not in db will scrape glassdoor and add page source to request
+     * 
+     * If glassdoor request fails, page source will be null and server will attempt to scrape
+     * 
      * @param {Job} job
      * @returns {Promise<Record<string, any>>} contains the finished job under the "job" keyword
      */
@@ -82,6 +86,19 @@ export class DatabaseCalls{
         console.log(jobJson);
         //create a promise to resolve it asynchronously
         return new Promise(async (resolve, reject) => {
+            //glassdoor page source
+            let gdPageSource = null;
+            let gdUrl = null;
+            let noCompanies = false;
+            if (job?.company?.companyName){
+                const companyExists = await DatabaseCalls.checkIfCompanyExists(job.company.companyName);
+                if (!companyExists){
+                    const gdData = await LocalStorageHelper.__sendMessageToBgScript({action: "scrapeGd", company: job.company.companyName});
+                    gdPageSource = gdData.gdPageSource;
+                    gdUrl = gdData.gdUrl;
+                    noCompanies = gdData.noCompanies;
+                }
+            }
             //Our database program runs on port 5001 on our local server
             var xhr = new XMLHttpRequest();
             //call an http request
@@ -109,7 +126,7 @@ export class DatabaseCalls{
             };
             //send our response
             xhr.send(
-                JSON.stringify({job: jobJson})
+                JSON.stringify({job: jobJson, gdPageSource: gdPageSource, gdUrl: gdUrl, noCompanies: noCompanies})
             );
         });
     };
