@@ -12,7 +12,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                             type="text"
                             id="firstName"
                             name="firstName"
-                            placeholder="Josh"
+                            placeholder="John"
                             value={formData.firstName}
                             onChange={handleChange}
                             maxLength={255}
@@ -28,7 +28,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                             type="text"
                             id="lastName"
                             name="lastName"
-                            placeholder="Ferguson"
+                            placeholder="Doe"
                             value={formData.lastName}
                             onChange={handleChange}
                             maxLength={255}
