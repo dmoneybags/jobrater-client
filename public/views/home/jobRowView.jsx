@@ -89,7 +89,19 @@ export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
                 onClick={toggleExpand}
             ></animated.i>
 
-            <i className='fa-solid fa-briefcase job-row-resume-icon has-text-link absolute-hoverable-icon'>
+            <i 
+            className='fa-solid fa-briefcase job-row-resume-icon has-text-link absolute-hoverable-icon'
+            style={{cursor: "pointer"}}
+            onClick={async () => {
+                const resumes = await LocalStorageHelper.readResumes();
+                if (!resumes.length){
+                    //Makes sure a user uploads a resume first by putting the gate that makes them upload a resume first
+                    showFullscreenPopup(LatestJobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {});
+                } else {
+                    showFullscreenPopup(JobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {})
+                }
+            }}
+            >
                 <div className="hover-text" style={{marginTop: "5px"}}>Job Score</div>
             </i>
 

@@ -21,7 +21,25 @@ export class RatingBulletPointsGenerator {
         const percentOfDesiredPay = Job.getPaymentAmount(job.paymentBase, job.paymentFreq.str)/preferences.desiredPay;
         const rating = RatingFunctions.getPaymentRating(job, preferences);
         console.log({rating});
-        const jobSalary = Job.getPaymentAmount(job.paymentBase, job.paymentFreq.str)
+        const jobSalary = Job.getPaymentAmount(job.paymentBase, job.paymentFreq.str);
+        if (jobSalary === preferences.desiredPay){
+            ratings.pros.push(<p className="rating-bp pro">Matches your desired pay</p>);
+        } else if (jobSalary > preferences.desiredPay){
+            ratings.pros.push(<p className="rating-bp pro">
+                {RatingBulletPointsGenerator.getGradientNumberSpan(rating, Math.abs(percentOfDesiredPay - 1), false)} higher than your desired pay (on average)
+            </p>);
+        } else {
+            ratings.cons.push(<p className="rating-bp con">
+                {RatingBulletPointsGenerator.getGradientNumberSpan(rating + 0.5, Math.abs(percentOfDesiredPay - 1), true)} lower than your desired pay (on average)
+            </p>);
+        }
+    }
+    static addSalaryBulletPointWithPaymentHigh = (job, preferences, ratings) => {
+        const averagePay = (Job.getPaymentAmount(job.paymentBase, job.paymentFreq.str) + Job.getPaymentAmount(job.paymentHigh, job.paymentFreq.str))/2;
+        const percentOfDesiredPay = averagePay/preferences.desiredPay;
+        const rating = RatingFunctions.getPaymentRating(job, preferences);
+        console.log({rating});
+        const jobSalary = averagePay;
         if (jobSalary === preferences.desiredPay){
             ratings.pros.push(<p className="rating-bp pro">Matches your desired pay</p>);
         } else if (jobSalary > preferences.desiredPay){
@@ -112,7 +130,11 @@ export class RatingBulletPointsGenerator {
             cons: []
         };
         if (job.paymentBase){
-            RatingBulletPointsGenerator.addSalaryBulletPoint(job, user.preferences, ratings);
+            if (!job.paymentHigh){
+                RatingBulletPointsGenerator.addSalaryBulletPoint(job, user.preferences, ratings);
+            } else {
+                RatingBulletPointsGenerator.addSalaryBulletPointWithPaymentHigh(job, user.preferences, ratings)
+            }
         }
         if (job.mode){
             RatingBulletPointsGenerator.addModeBulletPoint(job, user.preferences, ratings);
