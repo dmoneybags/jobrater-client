@@ -85,7 +85,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             height: 530,
             width: 400
             }, 
-            "ATS Parsing View", "The greener the sentence, the better the match",
+            "ATS Parsing View", "",
             () => {}, false);
     }
     const handleFileChange = async (event) => {

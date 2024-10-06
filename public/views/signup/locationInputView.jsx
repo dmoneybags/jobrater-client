@@ -45,23 +45,40 @@ export const LocationInputView = ({formData, setFormData, handleChange}) => {
                 </div>
                 {!formData.validationData.streetValid && <p class="help is-danger">Invalid street</p>}
             </div>
-            {!formData.validationData.streetValid && <p class="help is-danger">Invalid street</p>}
             <div className="field is-grouped is-grouped-centered">
                 <div className="field">
                     <label className="label">City</label>
                     <div className="control is-expanded">
                         <input
-                            className={`input signup-input is-small ${formData.validationData.cityValid ? "":"is-danger"}`}
+                            className={`input is-small ${formData.validationData.cityValid ? "":"is-danger"}`}
                             type="text"
                             placeholder="San Jose"
                             name='city'
                             value={formData.city}
                             onChange={handleChange}
+                            style={{width: "120px", height: "30px"}}
                             required
                             disabled={wontShareLocation}
                         />
                     </div>
                     {!formData.validationData.cityValid && <p class="help is-danger">Invalid city</p>}
+                </div>
+                <div className="field">
+                    <label className="label">State</label>
+                    <div className="control is-expanded">
+                        <input
+                            className={`input is-small ${formData.validationData.stateCodeValid ? "":"is-danger"}`}
+                            placeholder="CA"
+                            name='stateCode'
+                            value={formData.stateCode}
+                            onChange={handleChange}
+                            style={{width: "40px", height: "30px"}}
+                            maxLength={2}
+                            required
+                            disabled={wontShareLocation}
+                        />
+                    </div>
+                    {!formData.validationData.stateCodeValid && <p class="help is-danger">Invalid state</p>}
                 </div>
                 <div className="field">
                     <label className="label">Zip Code</label>
@@ -77,21 +94,6 @@ export const LocationInputView = ({formData, setFormData, handleChange}) => {
                         />
                     </div>
                     {!formData.validationData.zipCodeValid && <p class="help is-danger">Invalid zip code</p>}
-                </div>
-                <div className="field">
-                    <label className="label">State Code</label>
-                    <div className="control is-expanded">
-                        <input
-                            className={`input signup-input is-small ${formData.validationData.stateCodeValid ? "":"is-danger"}`}
-                            placeholder="CA"
-                            name='stateCode'
-                            value={formData.stateCode}
-                            onChange={handleChange}
-                            required
-                            disabled={wontShareLocation}
-                        />
-                    </div>
-                    {!formData.validationData.stateCodeValid && <p class="help is-danger">Invalid state</p>}
                 </div>
             </div>
         </form>

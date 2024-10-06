@@ -146,7 +146,7 @@ export const validateLocationData = (locationJson: Record<string, any>, validati
         "modesValid": true
     }
 }
- */
+*/
 export const validateRawSignUpData = (signUpJson: Record<string, any>):Record<string, any> => {
     const validationData = {
         "firstNameValid": true,
@@ -172,6 +172,39 @@ export const validateRawSignUpData = (signUpJson: Record<string, any>):Record<st
     if (!signUpJson.wontShareLocation){
         validateLocationData(signUpJson, validationData);
     }
+    return validationData;
+}
+export const validateRawSignUpDataAllowEmpty = (signUpJson: Record<string, any>): Record<string, any> => {
+    const validationData = {
+        "firstNameValid": true,
+        "lastNameValid": true,
+        "emailValid": true,
+        "passwordValid": true,
+        "confirmPasswordValid": true,
+        "streetValid": true,
+        "cityValid": true,
+        "zipCodeValid": true,
+        "stateCodeValid": true,
+        "modesValid": true,
+        "careerStageValid": true
+    }
+
+    // Allow empty strings (''), but if not empty, apply the length validation
+    validationData.firstNameValid = signUpJson.firstName.length === 0 || (signUpJson.firstName.length < 255 && signUpJson.firstName.length > 0);
+    validationData.lastNameValid = signUpJson.lastName.length === 0 || (signUpJson.lastName.length < 255 && signUpJson.lastName.length > 0);
+    validationData.emailValid = signUpJson.email.length === 0 || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(signUpJson.email);
+
+    // Same validation for password and confirm password, as they are critical
+    validationData.passwordValid = signUpJson.password.length === 0 || !(getStrengthValues(signUpJson.password).includes(false));
+    validationData.confirmPasswordValid = signUpJson.confirmPassword.length === 0 || signUpJson.password === signUpJson.confirmPassword;
+
+    if (!signUpJson.wontShareLocation) {
+        validationData.streetValid = signUpJson.street.length === 0 || /^\d+\s[A-Za-z ]+$/.test(signUpJson.street);
+        validationData.cityValid = signUpJson.city.length === 0 || /^[A-Za-z\s-]{2,}$/.test(signUpJson.city);
+        validationData.zipCodeValid = signUpJson.zipCode.length === 0 || /^\d{5}$/.test(signUpJson.zipCode);
+        validationData.stateCodeValid = signUpJson.stateCode.length === 0 || /^[A-Z]{2}$/.test(signUpJson.stateCode);
+    }
+
     return validationData;
 }
 /**

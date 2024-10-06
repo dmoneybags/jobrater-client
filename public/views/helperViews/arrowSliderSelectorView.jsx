@@ -1,4 +1,4 @@
-import React, { createElement, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export const ArrowSliderSelectorView = ({value, setValue, displayFunc, mainColor='#23d160', bgColor='#23d160'}) => {
     const [position, setPosition] = useState(0);
@@ -12,13 +12,11 @@ export const ArrowSliderSelectorView = ({value, setValue, displayFunc, mainColor
     const handleMouseMove = (e) => {
         if (isDragging) {
             e.stopPropagation();
-            // Calculate the new position based on mouse movement
-            const rect = e.target.closest('.arrow-slider-container').getBoundingClientRect();
-            let newPosition = e.movementX + position;
-            // Constrain the position within the slider bounds
-            newPosition = Math.max(0, Math.min(rect.width, newPosition));
-            setValue(newPosition/rect.width)
-            setPosition(newPosition);
+            const rect = containerRef.current.getBoundingClientRect();
+            let newPosition = e.clientX - rect.left;
+            newPosition = Math.max(0, Math.min(rect.width, newPosition)); // Constrain position
+            setValue(newPosition / rect.width); // Update value based on position
+            setPosition(newPosition); // Update position
         }
     };
 
@@ -26,24 +24,45 @@ export const ArrowSliderSelectorView = ({value, setValue, displayFunc, mainColor
         setIsDragging(false);
     };
 
-    useEffect(()=>{
-        //grab our own recatangle
+    useEffect(() => {
+        const handleGlobalMouseMove = (e) => {
+            if (isDragging) {
+                handleMouseMove(e); // Track mouse movements even outside the container
+            }
+        };
+
+        const handleGlobalMouseUp = () => {
+            if (isDragging) {
+                setIsDragging(false); // Stop dragging when the mouse is released
+            }
+        };
+
+        // Attach global listeners during dragging
+        if (isDragging) {
+            window.addEventListener('mousemove', handleGlobalMouseMove);
+            window.addEventListener('mouseup', handleGlobalMouseUp);
+        }
+
+        // Cleanup listeners when dragging stops
+        return () => {
+            window.removeEventListener('mousemove', handleGlobalMouseMove);
+            window.removeEventListener('mouseup', handleGlobalMouseUp);
+        };
+    }, [isDragging]);
+
+    useEffect(() => {
         if (containerRef.current) {
-            //get the dimensions
             const rect = containerRef.current.getBoundingClientRect();
             const newPosition = value * rect.width;
-            setPosition(newPosition);
+            setPosition(newPosition); // Update position on value change
         }
-    }, [])
-
+    }, [value]);
 
     return (
         <div
             ref={containerRef}
             className="arrow-slider-container"
             style={{ cursor: isDragging ? 'grabbing' : 'pointer' }}
-            
-            onMouseOut={handleMouseUp}
         >
             <p className='arrow-slider-text' style={{ color: mainColor }}>{displayFunc(value)}</p>
             <hr className="arrow-slider-main-bar" style={{ backgroundColor: bgColor }} />
@@ -54,9 +73,7 @@ export const ArrowSliderSelectorView = ({value, setValue, displayFunc, mainColor
                     left: `${position}px`,
                 }}
                 onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onMouseMove={handleMouseMove}
             ></div>
         </div>
-    )
-}
+    );
+};

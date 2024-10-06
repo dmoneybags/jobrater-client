@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect } from 'react';
 
-export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
+export const SignupEmailPwTabView = ({formData, handleChange}) => {
     return (
         <form className="email-input-container">
             <div className="field is-grouped is-grouped-centered">
@@ -41,7 +41,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                 <label className="label" htmlFor="email">Email</label>
                 <div className="control is-expanded">
                     <input
-                        className={`input signup-input ${(formData.validationData.emailFilled && validEmail) ? "":"is-danger"}`}
+                        className={`input signup-input ${(formData.validationData.emailValid) ? "":"is-danger"}`}
                         type="email"
                         id="email"
                         name="email"
@@ -53,7 +53,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                     />
                 </div>
             </div>
-            {!validEmail && <p class="help is-danger">This email is invalid</p>}
+            {!formData.validationData.emailValid && <p class="help is-danger">This email is invalid</p>}
             <div className="field">
                 <label className="label" htmlFor="password">Password</label>
                 <div className="control is-expanded">
@@ -63,6 +63,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                         id="password"
                         name="password"
                         placeholder="Password"
+                        autocomplete="new-password"
                         value={formData.password}
                         onChange={handleChange}
                         maxLength={255}
@@ -80,6 +81,7 @@ export const SignupEmailPwTabView = ({formData, handleChange, validEmail}) => {
                         id="confirm-password"
                         name="confirmPassword"
                         placeholder="Password"
+                        autocomplete="new-password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         maxLength={255}

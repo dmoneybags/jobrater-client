@@ -288,6 +288,9 @@ export const HighlightedResumeView = ({resumeComparison, resume, width, height})
                             })
                         }
                     }}
+                    onMouseLeave={(e) => {
+                        setCurrentPopupData(null);
+                    }}
                 />
                 ))}
                 {currentPopupData && <div

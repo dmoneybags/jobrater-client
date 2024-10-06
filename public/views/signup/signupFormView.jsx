@@ -4,7 +4,7 @@ import { SignupEmailPwTabView } from './signupEmailPwTabView';
 import { PreferencesTabView } from './preferencesTabView';
 import { CareerStageTabView } from './careerStageTabView';
 import { LocationInputView } from './locationInputView';
-import { validateRawSignUpData, validateLocation } from '../../../src/content/userValidation'
+import { validateRawSignUpData, validateLocation , validateRawSignUpDataAllowEmpty} from '../../../src/content/userValidation'
 import { showError } from '../helperViews/notifications';
 import { LocationObjectFactory } from '../../../src/content/location';
 import { User } from '../../../src/content/user';
@@ -47,9 +47,7 @@ export const SignupFormView = () => {
         validationData: {
             firstNameValid: true,
             lastNameValid: true,
-            //we already check email validation on type so let's only have it be red if
-            //its empty
-            emailFilled: true,
+            emailValid: true,
             passwordValid: true,
             confirmPasswordValid: true,
             streetValid: true,
@@ -61,8 +59,6 @@ export const SignupFormView = () => {
         }
     });
 
-    const [validEmail, setValidEmail] = useState(true);
-
     const [selectedTab, setSelectedTab] = useState(0);
 
     const [waitingForSignIn, setWaitingForSignIn] = useState(false);
@@ -72,12 +68,11 @@ export const SignupFormView = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        //hacky but makes it not pop up when you edit stuff before email
-        if (formData["email"] === ''){
-            return setValidEmail(true);
-        }
-        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        setValidEmail(emailRegex.test(formData["email"]));
+        const newValidationData = validateRawSignUpDataAllowEmpty({ ...formData, [name]: value });
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            validationData: newValidationData
+        }));
     };
 
     const attemptSignUp = async (event) => {
@@ -166,7 +161,7 @@ export const SignupFormView = () => {
             onClick={() => {setSelectedTab(Math.min(selectedTab + 1, 3))}}
             className='fas fa-angle-right fa-xl signup-forward-arrow has-text-link'
             ></i>}
-            {selectedTab === 0 && <SignupEmailPwTabView formData={formData} handleChange={handleChange} validEmail={validEmail}/>}
+            {selectedTab === 0 && <SignupEmailPwTabView formData={formData} handleChange={handleChange}/>}
             {selectedTab === 1 && <PreferencesTabView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
             {selectedTab === 2 && <CareerStageTabView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
             {selectedTab === 3 && <LocationInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
