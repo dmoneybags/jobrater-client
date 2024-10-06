@@ -23,7 +23,7 @@ export const LoginFormView = () => {
         //on each change set our form data values
         setFormData({ ...formData, [name]: value });
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-        setValidEmail(emailRegex.test(formData["email"]));
+        setValidEmail(emailRegex.test({ ...formData, [name]: value }["email"]));
     };
 
     const handleSubmit = async (e) => {

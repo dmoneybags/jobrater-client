@@ -141,7 +141,7 @@ export const SignupFormView = () => {
             //Have to clear expiration time and force client to regrab
             await LocalStorageHelper.__sendMessageToBgScript({ action: "storeData", key: "userDataLastGrabbed", value: 0});
             // Navigate to the current path, forcing a reload
-            navigate("/", { replace: true });
+            navigate("/", { replace: true, state: { firstLogin: true } });
             // Force reload
             window.location.reload();
         } else {

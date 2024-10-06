@@ -1,6 +1,8 @@
 import React, { createElement, useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import { HomeViewNavBar } from './homeViewNavBar';
 import { JobRowView } from './jobRowView';
+import { WelcomePopupView } from './welcomePopupView';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper'
 import { Spinner } from '../helperViews/loadingSpinner'
 import { HelperFunctions } from '../../../src/content/helperFunctions';
@@ -18,6 +20,9 @@ export const HomeView = () => {
     const [loadingCompanyName, setLoadingCompanyName] = useState('');
     const [latestJob, setLatestJob] = useState(null);
     const [bestResumeScores, setBestResumeScores] = useState(null);
+    const location = useLocation();
+    const firstLogin = location.state?.firstLogin ?? false;
+    const [showingWelcomePopup, setShowingWelcomePopup] = useState(firstLogin);
 
     const asyncLoadData = async ({force=false} = {}) => {
         await HelperFunctions.downloadDataIfNecessary(force);
@@ -80,6 +85,7 @@ export const HomeView = () => {
     return (
         <div className='main-container has-navbar-fixed-top'>
             <HomeViewNavBar/>
+            <WelcomePopupView showingPopup={showingWelcomePopup} setShowingPopup={setShowingWelcomePopup}/>
             <div className='job-row-container main-home-view'>
                 {jobsSet && (
                     <>
