@@ -3,6 +3,8 @@ import { CircleRater } from "../helperViews/circleRater";
 import { RatingFunctions } from '../../../src/content/ratingFunctions';
 import { HelperFunctions } from '../../../src/content/helperFunctions';
 import { RatingBulletPointsGenerator } from '../helperViews/ratingBulletsGenerator';
+import { PaymentFrequency } from '../../../src/content/job';
+import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
 
 export const JobViewJobTab = ({job, user}) => {
     const [bulletPoints, setBulletPoints] = useState(null);
@@ -12,13 +14,77 @@ export const JobViewJobTab = ({job, user}) => {
     }, [])
     return (
         <div className='p-3' style={{"height": "490px"}}>
-            <div style={{
-                display: "flex",
-                width: "100%",
-                justifyContent: "center",
-                marginTop: "-10px"
-            }}>
-                <CircleRater rating={RatingFunctions.getRating(job, user.preferences)} size={200} thickness={8} circleThickness={25} fontSize={64}/>
+            <div className='columns is-flex'>
+                <div className='column is-half'>
+                    <CircleRater rating={RatingFunctions.getRating(job, user.preferences)} size={160} thickness={5} circleThickness={15} fontSize={48} />
+                </div>
+                <div 
+                className='column is-half'
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                }}
+                >
+                    {job.mode && <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid ${RatingFunctions.getModeRating(job, user.preferences) ? "fa-check" : "fa-x"} fa-xl latest-job-item-icon`}
+                        style={{color: RatingFunctions.getModeRating(job, user.preferences) ? "green" : "red"}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>{job.mode.str}</p>
+                    </div>}
+                    {!job.mode && <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid fa-question fa-xl latest-job-item-icon`}
+                        style={{color: "yellow"}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>No WFH Info</p>
+                    </div>}
+                    {job.paymentBase !== 0 && job.paymentBase !== null && <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid fa-dollar-sign fa-xl latest-job-item-icon`}
+                        style={{color: HelperFunctions.ratingToColor(RatingFunctions.getPaymentRating(job, user.preferences))}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>{"$" + job.paymentBase + (job.paymentHigh ? ` - ${job.paymentHigh}`:"") + (PaymentFrequency.getPerFrequencyStr(job.paymentFreq.str))}</p>
+                    </div>}
+                    {!job.paymentBase && <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid fa-question fa-xl latest-job-item-icon`}
+                        style={{color: "yellow"}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>No Salary Info</p>
+                    </div>}
+                    {job.careerStage && <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid ${RatingFunctions.getCareerStageRating(job, user.preferences) ? "fa-check" : "fa-x"} fa-xl latest-job-item-icon`}
+                        style={{color: RatingFunctions.getCareerStageRating(job, user.preferences) ? "green" : "red"}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>{job.careerStage}</p>
+                    </div>}
+                    <div className='latest-job-item'>
+                        <i 
+                        className={`fa-solid fa-user fa-xl latest-job-item-icon`}
+                        // we add 0.01 below to not have the value be 0 and result in grey
+                        style={{color: HelperFunctions.ratingToColor(RatingFunctions.getApplicantsRating(job) + 0.01)}}
+                        >
+                        </i>
+                        <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
+                    </div>
+                    <div className='latest-job-item'>
+                        <img 
+                        src={glassdoorIcon}
+                        className='latest-job-item-icon'
+                        style={{height: "24px", width: "24px"}}
+                        >
+                        </img>
+                        <p className='latest-job-item-text'>{job.company.overallRating > 0.01 ? job.company.overallRating + "/5 Glassdoor": "No Glassdoor info"}</p>
+                    </div>
+                </div>
             </div>
             <p className='is-size-3 has-text-white has-text-centered p-2'>Job fit: <span style={{color: HelperFunctions.ratingToColor(RatingFunctions.getRating(job, user.preferences))}}>
                     {RatingFunctions.getJobRatingStr(RatingFunctions.getRating(job, user.preferences))}
@@ -32,7 +98,7 @@ export const JobViewJobTab = ({job, user}) => {
             }}>
                 <button 
                 className='button is-focused is-small'
-                onClick={()=>{window.open(`https://www.linkedin.com/jobs/collections/recommended/?currentJobId=${job.jobId}`)}}
+                onClick={()=>{window.open(`https://www.linkedin.com/jobs/view/${job.jobId}`)}}
                 >
                     Visit Job
                 </button>

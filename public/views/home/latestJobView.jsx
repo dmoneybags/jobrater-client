@@ -15,11 +15,14 @@ export const LatestJobView = ({job, user}) => {
         <div className='latest-job-container p-3'>
             <SelectResumeModal showingPopup={showingPopup} setShowingPopup={setShowingPopup} callbackFunction={()=>showFullscreenPopup(JobView, {job: job, user: user}, job.jobName, job.company.companyName, ()=>{})}/>
             <p className='job-title mb-2' style={{color: 'white', fontSize: '20px'}}>Job Score:</p>
-            <div className='columns is-flex'>
-                <div className='column is-half'>
-                    <CircleRater rating={RatingFunctions.getRating(job, user.preferences)} size={160} thickness={5} circleThickness={15} fontSize={48} />
+            <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
+                <div>
+                    <CircleRater rating={RatingFunctions.getRating(job, user.preferences)}  size={200} thickness={8} circleThickness={25} fontSize={64} />
                 </div>
-                <div className='column is-half'>
+                <div 
+                style={{width: "110px", whiteSpace: "nowrap", overflow: "visible"}}
+                className='m-2 mb-6 mt-4'
+                >
                     {job.mode && <div className='latest-job-item'>
                         <i 
                         className={`fa-solid ${RatingFunctions.getModeRating(job, user.preferences) ? "fa-check" : "fa-x"} fa-xl latest-job-item-icon`}
@@ -78,29 +81,6 @@ export const LatestJobView = ({job, user}) => {
                         </img>
                         <p className='latest-job-item-text'>{job.company.overallRating > 0.01 ? job.company.overallRating + "/5 Glassdoor": "No Glassdoor info"}</p>
                     </div>
-                </div>
-            </div>
-            <p className='job-title' style={{color: 'white', fontSize: '20px'}}>Resume Score:</p>
-            <div className='columns is-flex'>
-                <div className='column is-half mt-2'>
-                    <CircleRater rating={0} size={160} thickness={5} circleThickness={15} fontSize={48} />
-                </div>
-                <div className='column is-half' style={{marginTop: "-10px", fontSize: "14px"}}>
-                    <p style={{color: 'white'}}>Pros:</p>
-                    <hr style={{ width: '80%', margin: '0', backgroundColor: 'grey', borderWidth: "1px", opacity: 0.2}}/>
-                    <div className='shining-rectangle' style={{width: "90px"}}></div>
-                    <div className='shining-rectangle' style={{width: "110px"}}></div>
-                    <div className='shining-rectangle' style={{width: "70px"}}></div>
-                    <p style={{color: 'white'}}>Cons:</p>
-                    <hr style={{ width: '80%', margin: '0', backgroundColor: 'grey', borderWidth: "1px", opacity: 0.2}}/>
-                    <div className='shining-rectangle' style={{width: "100px"}}></div>
-                    <div className='shining-rectangle' style={{width: "80px"}}></div>
-                    <div className='shining-rectangle' style={{width: "70px"}}></div>
-                    <p style={{color: 'white'}}>Tips:</p>
-                    <hr style={{ width: '80%', margin: '0', backgroundColor: 'grey', borderWidth: "1px", opacity: 0.2}}/>
-                    <div className='shining-rectangle' style={{width: "60px"}}></div>
-                    <div className='shining-rectangle' style={{width: "80px"}}></div>
-                    <div className='shining-rectangle' style={{width: "70px"}}></div>
                 </div>
             </div>
             <div class="buttons is-centered" style={{marginTop: "-10px", marginBottom: "7px"}}>
