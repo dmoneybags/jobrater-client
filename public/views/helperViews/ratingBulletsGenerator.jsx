@@ -22,7 +22,7 @@ export class RatingBulletPointsGenerator {
         const rating = RatingFunctions.getPaymentRating(job, preferences);
         console.log({rating});
         const jobSalary = Job.getPaymentAmount(job.paymentBase, job.paymentFreq.str);
-        if (jobSalary === preferences.desiredPay){
+        if (Math.abs(percentOfDesiredPay - 1) < 0.1){
             ratings.pros.push(<p className="rating-bp pro">Matches your desired pay</p>);
         } else if (jobSalary > preferences.desiredPay){
             ratings.pros.push(<p className="rating-bp pro">
