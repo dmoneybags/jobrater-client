@@ -52,9 +52,9 @@ export const HomeView = () => {
         const isLoadingJobResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "loadingJob"});
         console.log("Response when checking if we're loading a job: ");
         console.log(isLoadingJobResp);
-        setLoadingJob(isLoadingJobResp.message.isLoading);
-        setLoadingJobName(isLoadingJobResp.message.jobName);
-        setLoadingCompanyName(isLoadingJobResp.message.companyName);
+        setLoadingJob(isLoadingJobResp.message?.isLoading ?? false);
+        setLoadingJobName(isLoadingJobResp.message?.jobName ?? '');
+        setLoadingCompanyName(isLoadingJobResp.message?.companyName ?? '');
     };
 
     const handleMessage = (message, sender, sendResponse) => {
