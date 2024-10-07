@@ -147,5 +147,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             chrome.action.setBadgeText({ text: count.toString() }); // Update badge
         });
         sendResponse({ success: true, message: 'Notification shown'});
+    } else if (message.action === 'openPopup') {
+        chrome.action.openPopup();
+        sendResponse({ success: true, message: 'Popup shown'});
     }
 });

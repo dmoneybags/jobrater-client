@@ -32,6 +32,7 @@ import { LinkedInScrapingFunctions } from "./linkedinScrapingFunctions";
 import { EMPTYJOB, Job, JobFactory } from "./job"
 import { DatabaseCalls } from "./databaseCalls";
 import { LocalStorageHelper } from "./localStorageHelper";
+import { HtmlInjection } from "./htmlInjection";
 
 //MAIN
 (() => {
@@ -138,6 +139,8 @@ import { LocalStorageHelper } from "./localStorageHelper";
     //seeing a new url that corresponds to a job url
     chrome.runtime.onMessage.addListener(async (obj, sender, response) => {
         console.log("NEW JOB MESSAGE RECIEVED");
+        //Add button to page
+        HtmlInjection.addViewInApplicantIQbtn();
         //Only arg to the message is the job id
         const { type, company, jobId } = obj;
         currentJob = jobId;
