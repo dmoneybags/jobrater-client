@@ -100,7 +100,7 @@ export const JobViewJobTab = ({job, user}) => {
                 className='button is-focused is-small'
                 onClick={()=>{window.open(`https://www.linkedin.com/jobs/view/${job.jobId}`)}}
                 >
-                    Visit Job
+                    Visit Job On LinkedIn
                 </button>
             </div>
             <hr style={{margin: "5px", backgroundColor: "hsl(0deg 0% 33.33%)"}}/>
