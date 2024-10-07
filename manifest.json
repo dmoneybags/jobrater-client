@@ -9,7 +9,8 @@
     "activeTab",
     "scripting",
     "webRequest",
-    "background"
+    "background",
+    "notifications"
     ],
     "host_permissions" : [
     "http://*/*",
@@ -44,6 +45,7 @@
     "web_accessible_resources": [
     {
       "resources": [
+        "icons/logo_128.png",
         "src/assets/fonts/GeistVF.ttf"
       ],
       "matches": ["<all_urls>"]

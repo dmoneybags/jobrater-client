@@ -81,7 +81,19 @@ import { LocalStorageHelper } from "./localStorageHelper";
                 .catch(error => {
                     console.error("Error:", error);
                 });
-
+                let notificationMessage : Record<string, any> = {
+                    action: "showNotification", 
+                    notificationTitle: jobread.jobName + " loaded in ApplicantIQ",
+                    notifactionText: "Check the popup window to see the jobs ratings"
+                }
+                chrome.runtime.sendMessage(notificationMessage)
+                .then(response => {
+                    console.log("Sent message to bg script to show notification");
+                    console.log("Response from bg:", response);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
             })
             .catch((err) => {
                 LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {

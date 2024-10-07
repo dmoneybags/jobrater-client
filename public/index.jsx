@@ -30,6 +30,7 @@ const MainView = ({ContentView}) => {
     };
 
     checkAuth();
+    chrome.action.setBadgeText({ text: '' }); // clear badge
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
   if (isAuthed === null) {

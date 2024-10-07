@@ -129,5 +129,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         })
         //we're going to resolve asynchrously
         return true;
+    } else if (message.action === 'showNotification'){
+        chrome.action.setBadgeBackgroundColor({ color: [228, 51, 37, 255] });
+        chrome.notifications.create("NEW_JOB_NOTIFICATION", {
+            type: 'basic',
+            iconUrl: chrome.runtime.getURL('icons/logo_128.png'),  
+            title: message?.notificationTitle ?? "",
+            message: message?.notifactionText ?? "",
+            priority: 2
+          }, function(notificationId) {
+            console.log('Notification created with ID:', notificationId);
+          });
+        // Get the current badge text (if any)
+        chrome.action.getBadgeText({}, function(currentBadgeText) {
+            let count = parseInt(currentBadgeText) || 0; // Convert to number, default to 0 if NaN
+            count++; // Increment the count
+            chrome.action.setBadgeText({ text: count.toString() }); // Update badge
+        });
+        sendResponse({ success: true, message: 'Notification shown'});
     }
 });
