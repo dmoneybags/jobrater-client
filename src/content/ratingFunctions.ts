@@ -62,7 +62,7 @@ export class RatingFunctions {
     static getCareerStageRating(job: Job, preferences: UserPreferences):number{
         switch (preferences.desiredCareerStage){
             case "Entry level":
-                if (job.careerStage === "Entry level" || job.careerStage === "Associate"){
+                if (job.careerStage === "Entry level" || job.careerStage === "Associate" || job.careerStage === "Internship"){
                     return 1;
                 }
                 break;
@@ -72,7 +72,7 @@ export class RatingFunctions {
                 }
                 break;
             case "Executive":
-                if (job.careerStage === "Executive"){
+                if (job.careerStage === "Executive" || job.careerStage === "Director"){
                     return 1;
                 }
                 break;
