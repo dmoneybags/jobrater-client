@@ -9,6 +9,7 @@ Sends: a message to contentscript to scrape the job
 */
 
 import { GlassdoorScrapingFunctions } from "../content/glassdoor";
+import { WindowingFunctions } from "./windowingFunctions";
 
 /*
 First order data needed:
@@ -148,7 +149,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
         sendResponse({ success: true, message: 'Notification shown'});
     } else if (message.action === 'openPopup') {
-        chrome.action.openPopup();
+        WindowingFunctions.createOrRefreshWindow();
         sendResponse({ success: true, message: 'Popup shown'});
     }
 });
