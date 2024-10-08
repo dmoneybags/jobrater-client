@@ -20,7 +20,7 @@ export class WindowingFunctions {
       }
     static createDetachedWindow = () => {
         chrome.windows.create({
-            url: 'dist/popup.html', // The HTML page you want to load
+            url: 'dist/popup.html?windowType=detached', // The HTML page you want to load
             type: 'popup', // Makes the window detached without the usual browser controls
             width: 400,
             height: 630,

@@ -1,4 +1,5 @@
 import React, { createElement, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { JobDebugView } from '../src/tests/debugView/debugView'
@@ -11,6 +12,7 @@ import { LoginOrSignupView } from './views/signup/loginOrSignupView';
 import { ResumesView } from './views/home/resumesView';
 import { SettingsView } from './views/home/settingsView';
 import { ProfileView } from './views/home/profileView';
+import { PopupLinkView } from './views/popup/popupLinkView';
 
 
 const BASEURL = "extension://jdmbkjofpaobeedpmoeoocbjnhpfalmm";
@@ -19,9 +21,18 @@ const DEBUG = false;
 
 const MainView = ({ContentView}) => {
   const [isAuthed, setIsAuthed] = useState(false);
+  const [windowType, setWindowType] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     console.log("Loading main view...");
+
+    // Adjust behavior based on windowType
+    if (window.location.href.includes("detached")) {
+      setWindowType('detached');
+    } else {
+      setWindowType('popup');
+    }
     // Check if the user is authorized when the component mounts
     const checkAuth = async () => {
       const authStatus = await ScrapingHelperFunctions.isAuthed();
@@ -33,6 +44,7 @@ const MainView = ({ContentView}) => {
     chrome.action.setBadgeText({ text: '' }); // clear badge
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
+  //UNUSED
   if (isAuthed === null) {
     // Optionally, you could render a loading spinner or nothing while checking auth status
     return(
@@ -43,28 +55,33 @@ const MainView = ({ContentView}) => {
       </>
     );
   }
-
+  if (windowType === "detached"){
+    return (
+      <>
+        <div className="app-container">
+          {isAuthed ? <ContentView /> : <LoginOrSignupView />}
+        </div>
+      </>
+    );
+  }
   return (
-    <>
-      <div className="app-container">
-        {isAuthed ? <ContentView /> : <LoginOrSignupView />}
-      </div>
-    </>
-  );
+    <PopupLinkView/>
+  )
 }
 
-const App = () => {
+const App = () => {  
+  // Conditionally render based on windowType
   return (
     <HashRouter>
       <Routes>
         {/* if were debugging show the debug view */}
-         <Route path="/" element = {DEBUG ? <JobDebugView/>:<MainView ContentView={HomeView}/>}/>
-         <Route path="/resumes" element = {<MainView ContentView={ResumesView}/>}/>
-         <Route path="/settings" element = {<MainView ContentView={SettingsView}/>}/>
-         <Route path="/profile" element = {<MainView ContentView={ProfileView}/>}/>
-         <Route path="*" element={<p>{"404 " + location.href + " not found"}</p>} />            
+          <Route path="/" element = {DEBUG ? <JobDebugView/>:<MainView ContentView={HomeView}/>}/>
+          <Route path="/resumes" element = {<MainView ContentView={ResumesView}/>}/>
+          <Route path="/settings" element = {<MainView ContentView={SettingsView}/>}/>
+          <Route path="/profile" element = {<MainView ContentView={ProfileView}/>}/>
+          <Route path="*" element={<p>{"404 " + location.href + " not found"}</p>} />            
       </Routes>
-   </HashRouter>
+    </HashRouter>
   );
 };
 
