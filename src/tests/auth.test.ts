@@ -10,7 +10,7 @@ import { HelperFunctions } from '../content/helperFunctions';
 describe("Auth.ts file tests", () => {
   beforeAll(() => {
     //clear our db
-    execSync('buildjobrater', { stdio: 'inherit' });
+    execSync('buildjobrater -BD', { stdio: 'inherit' });
     HelperFunctions.delaySync(5000);
   });
   it("Tests that we can properly talk to our auth server to get salt", async () => {

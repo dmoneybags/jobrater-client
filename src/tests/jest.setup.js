@@ -1,9 +1,11 @@
-import { LocalStorageHelper } from "../content/localStorageHelper";
-import { localStorageMock } from "./mocks/localStorageMock"
+const { LocalStorageHelper } =  require("../content/localStorageHelper");
+const { localStorageMock } = require("./mocks/localStorageMock");
 
-const xhr2 = require('xhr2');
-
-global.XMLHttpRequest = xhr2.XMLHttpRequest;
+global.CLIENT_ENV = {
+    ENVIRONMENT: 'development',
+    PROD_API_URL: 'https://api.applicantiq.org/',
+    DEV_API_URL: 'http://localhost:5001/',
+  };
 
 jest.spyOn(LocalStorageHelper, '__sendMessageToBgScript').mockImplementation((message) => {
     return new Promise((resolve) => {

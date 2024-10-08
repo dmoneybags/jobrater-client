@@ -19,7 +19,7 @@ const readFile = promisify(fs.readFile);
 describe("DatabaseCalls.ts file tests", () => {
     beforeAll(() => {
         // clear our db
-        execSync('buildjobrater', { stdio: 'inherit' });
+        execSync('buildjobrater -BD', { stdio: 'inherit' });
         HelperFunctions.delaySync(10000);
     });
     it("tests that we properly get info back when company doesn't exist", () => {

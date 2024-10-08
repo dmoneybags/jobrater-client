@@ -10,7 +10,7 @@ import { HelperFunctions } from '../content/helperFunctions';
 describe("userPreferences.ts file tests", () => {
     beforeAll(() => {
       // clear our db
-      execSync('buildjobrater', { stdio: 'inherit' });
+      execSync('buildjobrater -BD', { stdio: 'inherit' });
       HelperFunctions.delaySync(10000);
     });
     it("Tests that we can properly register a user with preferences", () => {
