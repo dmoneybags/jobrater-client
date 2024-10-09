@@ -10,6 +10,7 @@ import { ProfileViewDesiredCommuteSection } from './profileViewDesiredCommuteSec
 import { ProfileViewDesiredModeSection } from './profileViewDesiredModeSection';
 import { ProfileViewDesiredCareerStageSection } from './profileViewDesiredCareerStageSection';
 import { ProfileViewLocationSection } from './profileViewLocationSection';
+import { ProfileViewDesiredKeywordsSection } from './profileViewDesiredKeywordsSection';
 
 export const ProfileView = () => {
     const [user, setUser] = useState(null);
@@ -54,8 +55,12 @@ export const ProfileView = () => {
                     <PreferenceRow id={4} title={"Career Stage"} height={"160px"} idShowing={showingId} setIdShowing={setIdShowing} content={
                         <ProfileViewDesiredCareerStageSection user={user} setShowingId={setIdShowing} reloadFunc={asyncLoadData}/>
                     }/>
+                    {/* keywords */}
+                    <PreferenceRow id={5} title={"Desired Keywords"} height={"400px"} idShowing={showingId} setIdShowing={setIdShowing} content={
+                        <ProfileViewDesiredKeywordsSection user={user} setShowingId={setIdShowing} reloadFunc={asyncLoadData}/>
+                    }/>
                     {/* location */}
-                    <PreferenceRow id={5} title={"Location Data"} height={"320px"} idShowing={showingId} setIdShowing={setIdShowing} content={
+                    <PreferenceRow id={6} title={"Location Data"} height={"320px"} idShowing={showingId} setIdShowing={setIdShowing} content={
                         <ProfileViewLocationSection user={user} setShowingId={setIdShowing} reloadFunc={asyncLoadData}/>
                     }/>
                     </>

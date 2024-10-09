@@ -124,11 +124,37 @@ export class RatingBulletPointsGenerator {
             ratings.pros.push(<p className="rating-bp pro">Nearby</p>);
         }
     }
+    static addKeywordBulletPoints = (job, preferences, ratings) => {
+        console.debug("evaluating keywords");
+        const lowerCaseDescription = job.description.toLowerCase();
+        const lowerCasedJobName = job.jobName.toLowerCase();
+        console.debug("Positive keywords:");
+        console.debug(preferences.positiveKeywords);
+        console.debug("Job Description");
+        console.debug(job.description);
+        for (const positiveKeyword of preferences.positiveKeywords){
+            if (lowerCaseDescription.includes(positiveKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(positiveKeyword.toLowerCase())){
+                ratings.pros.push(<p className="rating-bp pro">{positiveKeyword}</p>);
+            }
+        }
+        console.debug("Negative keywords:");
+        console.debug(preferences.negativeKeywords);
+        for (const negativeKeyword of preferences.negativeKeywords){
+            if (lowerCaseDescription.includes(negativeKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(negativeKeyword.toLowerCase())){
+                ratings.cons.push(<p className="rating-bp con">{negativeKeyword}</p>);
+            }
+        }
+    }
     static getRatingBulletPoints = (job, user) => {
         const ratings = {
             pros: [],
             cons: []
         };
+        if (job.description){
+            RatingBulletPointsGenerator.addKeywordBulletPoints(job, user.preferences, ratings)
+        }
         if (job.paymentBase){
             if (!job.paymentHigh){
                 RatingBulletPointsGenerator.addSalaryBulletPoint(job, user.preferences, ratings);

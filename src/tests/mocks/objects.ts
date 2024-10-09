@@ -108,7 +108,7 @@ export class MockObjects {
     )
     static preferences: UserPreferences = new UserPreferences(
         null, 80000, new PaymentFrequency("yr"), 30, false, true, true, "Hybrid", true,
-        false, false
+        false, false, [],[]
     )
     static ericdemoneyUserWithPreferences: User = new User(null, "ericdemoney@gmail.com", null, "Daniel", "DeMoney", null, MockObjects.preferences);
 }

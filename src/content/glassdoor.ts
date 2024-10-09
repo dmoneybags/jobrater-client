@@ -54,7 +54,7 @@ export class GlassdoorScrapingFunctions {
             return null;
         }
         const html = await response.text();
-        console.log(html);
+        console.debug(html);
         return html;
     }
     static overview(employer: string, employer_id: string) {

@@ -261,6 +261,14 @@
     margin-bottom: 0;
     position: relative;
 }
+.keyword-box{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap;
+    overflow: auto;
+}
 .pro::before {
     content: "\f00c"; /* Unicode for Font Awesome check icon */
     font-family: "Font Awesome 5 Free"; /* Font Awesome family */

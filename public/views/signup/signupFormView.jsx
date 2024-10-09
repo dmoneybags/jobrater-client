@@ -14,6 +14,9 @@ import { register } from '../../../src/content/auth';
 import { useNavigate } from 'react-router-dom';
 import { genSaltSync } from 'bcryptjs';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { KeywordInputView } from './keywordInputView';
+
+const NUMTABS = 5
 
 export const SignupFormView = () => {
     const [formData, setFormData] = useState({
@@ -27,6 +30,8 @@ export const SignupFormView = () => {
         desiredPaySliderValue: 0,
         desiredCommute: 0,
         desiredCommuteSliderValue: 0,
+        positiveKeywords: [],
+        negativeKeywords: [],
         street: '',
         city: '',
         zipCode: '',
@@ -123,7 +128,7 @@ export const SignupFormView = () => {
         //Create out user object with our form data
         const user = new User(null, formData["email"], null, formData["firstName"], formData["lastName"], location,
             new UserPreferences(null, formData["desiredPay"], new PaymentFrequency(formData["desiredPaymentFreq"]), formData["desiredCommute"], formData["desiresRemote"],
-        formData["desiresHybrid"], formData["desiresOnsite"], formData["desiredCareerStage"], true, true, true)
+        formData["desiresHybrid"], formData["desiresOnsite"], formData["desiredCareerStage"], true, true, true, formData["positiveKeywords"], formData["negativeKeywords"])
         );
 
         const salt = genSaltSync(4);
@@ -151,21 +156,22 @@ export const SignupFormView = () => {
     }
     return (
         <>
-            <DotProgressBarView totalNum={4} selected={selectedTab}/>
+            <DotProgressBarView totalNum={NUMTABS} selected={selectedTab}/>
             {selectedTab > 0 && <i
             onClick={() => {setSelectedTab(Math.max(selectedTab - 1, 0))}}
             className='fas fa-angle-left fa-xl signup-backward-arrow has-text-link'
             ></i>
             }
-            {selectedTab < 3 && <i
-            onClick={() => {setSelectedTab(Math.min(selectedTab + 1, 3))}}
+            {selectedTab < NUMTABS - 1 && <i
+            onClick={() => {setSelectedTab(Math.min(selectedTab + 1, NUMTABS - 1))}}
             className='fas fa-angle-right fa-xl signup-forward-arrow has-text-link'
             ></i>}
             {selectedTab === 0 && <SignupEmailPwTabView formData={formData} handleChange={handleChange}/>}
             {selectedTab === 1 && <PreferencesTabView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
             {selectedTab === 2 && <CareerStageTabView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
-            {selectedTab === 3 && <LocationInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
-            {selectedTab === 3 && <button 
+            {selectedTab === 3 && <KeywordInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
+            {selectedTab === 4 && <LocationInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
+            {selectedTab === NUMTABS - 1 && <button 
             className={`button is-link ${waitingForSignIn ? 'is-loading' : ''}`} 
             style={{ 
             width: "30%", 

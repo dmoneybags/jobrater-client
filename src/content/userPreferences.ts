@@ -1,5 +1,4 @@
 //(c) 2024 Daniel DeMoney. All rights reserved.
-import { json } from "stream/consumers";
 import { PaymentFrequency } from "./job";
 
 export class UserPreferences {
@@ -15,9 +14,11 @@ export class UserPreferences {
     autoActiveOnNewJobLoaded: boolean;
     autoCompareResumeOnNewJobLoaded: boolean;
     saveEveryJobByDefault: boolean;
+    positiveKeywords: string[];
+    negativeKeywords: string[];
     constructor(userId: string, desiredPay: number, desiredPaymentFreq: PaymentFrequency, desiredCommute: number,
         desiresRemote: boolean, desiresHybrid: boolean, desiresOnsite: boolean, desiredCareerStage: string, autoActiveOnNewJobLoaded: boolean,
-        autoCompareResumeOnNewJobLoaded: boolean, saveEveryJobByDefault: boolean){
+        autoCompareResumeOnNewJobLoaded: boolean, saveEveryJobByDefault: boolean, positiveKeywords: string[], negativeKeywords: string[]){
             this.userId = userId;
             this.desiredPay = desiredPay;
             this.desiredPaymentFreq = desiredPaymentFreq;
@@ -29,6 +30,8 @@ export class UserPreferences {
             this.autoActiveOnNewJobLoaded = autoActiveOnNewJobLoaded;
             this.autoCompareResumeOnNewJobLoaded = autoCompareResumeOnNewJobLoaded
             this.saveEveryJobByDefault = saveEveryJobByDefault;
+            this.positiveKeywords = positiveKeywords;
+            this.negativeKeywords = negativeKeywords;
         }
     toJson(){
         return {
@@ -42,7 +45,9 @@ export class UserPreferences {
             desiredCareerStage: this.desiredCareerStage,
             autoActiveOnNewJobLoaded: this.autoActiveOnNewJobLoaded,
             autoCompareResumeOnNewJobLoaded: this.autoCompareResumeOnNewJobLoaded,
-            saveEveryJobByDefault: this.saveEveryJobByDefault
+            saveEveryJobByDefault: this.saveEveryJobByDefault,
+            positiveKeywords: this.positiveKeywords,
+            negativeKeywords: this.negativeKeywords
         }
     }
 }
@@ -59,7 +64,9 @@ export class UserPreferencesFactory {
             json_object["desiredCareerStage"],
             json_object["autoActiveOnNewJobLoaded"],
             json_object["autoCompareResumeOnNewJobLoaded"],
-            json_object["saveEveryJobByDefault"]
+            json_object["saveEveryJobByDefault"],
+            json_object["positiveKeywords"],
+            json_object["negativeKeywords"],
         )
     }
 }

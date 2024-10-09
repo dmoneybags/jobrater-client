@@ -172,6 +172,8 @@ export const validateRawSignUpData = (signUpJson: Record<string, any>):Record<st
     if (!signUpJson.wontShareLocation){
         validateLocationData(signUpJson, validationData);
     }
+    console.log("Validated sign up data to: ");
+    console.log(validationData);
     return validationData;
 }
 export const validateRawSignUpDataAllowEmpty = (signUpJson: Record<string, any>): Record<string, any> => {

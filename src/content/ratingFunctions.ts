@@ -94,6 +94,35 @@ export class RatingFunctions {
         return rating;
     }
     /**
+     * getKeywordRatings
+     * 
+     * Returns a list of ratings. 1 is we found a match for a positive keyword, 0 is we found a match
+     * for a negative keyword
+     */
+    static getKeywordRatings(job: Job, preferences: UserPreferences): number[]{
+        const keywordRatings = [];
+        console.debug("evaluating keywords");
+        const lowerCaseDescription = job.description.toLowerCase();
+        const lowerCasedJobName = job.jobName.toLowerCase();
+        console.debug("Positive keywords:");
+        console.debug(preferences.positiveKeywords);
+        for (const positiveKeyword of preferences.positiveKeywords){
+            if (lowerCaseDescription.includes(positiveKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(positiveKeyword.toLowerCase())){
+                keywordRatings.push(1);
+            }
+        }
+        console.debug("Negative keywords:");
+        console.debug(preferences.negativeKeywords);
+        for (const negativeKeyword of preferences.negativeKeywords){
+            if (lowerCaseDescription.includes(negativeKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(negativeKeyword.toLowerCase())){
+                    keywordRatings.push(0);;
+            }
+        }
+        return keywordRatings;
+    }
+    /**
      * getCareerStageRating
      */
     //pass
@@ -169,6 +198,8 @@ export class RatingFunctions {
             const amountOfInformationRating = Math.min(ratings.length, 6)/6
             ratings.push(amountOfInformationRating);
             console.debug(`Amount of information rating ${amountOfInformationRating}`)
+            const keywordRatings = RatingFunctions.getKeywordRatings(job, preferences);
+            ratings = [...ratings, ...keywordRatings];
             console.debug("Ratings:")
             console.debug(ratings);
             const rating = Math.min(ratings.reduce((sum, current) => sum + current, 0) / ratings.length, 1.000000000000001)
