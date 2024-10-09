@@ -102,7 +102,7 @@ export const validateUser = (user: User, password: string, retypedPassword: stri
     }
 }
 export const validateLocationData = (locationJson: Record<string, any>, validationData: Record<string, any>,) => {
-    validationData.streetValid = /^\d+\s[A-Za-z ]+$/.test(locationJson.street);
+    //validationData.streetValid = /^\d+\s[A-Za-z ]+$/.test(locationJson.street);
     validationData.cityValid = /^[A-Za-z\s-]{2,}$/.test(locationJson.city);
     validationData.zipCodeValid = /^\d{5}$/.test(locationJson.zipCode);
     validationData.stateCodeValid = /^[A-Z]{2}$/.test(locationJson.stateCode);
@@ -199,7 +199,7 @@ export const validateRawSignUpDataAllowEmpty = (signUpJson: Record<string, any>)
     validationData.confirmPasswordValid = signUpJson.confirmPassword.length === 0 || signUpJson.password === signUpJson.confirmPassword;
 
     if (!signUpJson.wontShareLocation) {
-        validationData.streetValid = signUpJson.street.length === 0 || /^\d+\s[A-Za-z ]+$/.test(signUpJson.street);
+        //validationData.streetValid = signUpJson.street.length === 0 || /^\d+\s[A-Za-z ]+$/.test(signUpJson.street);
         validationData.cityValid = signUpJson.city.length === 0 || /^[A-Za-z\s-]{2,}$/.test(signUpJson.city);
         validationData.zipCodeValid = signUpJson.zipCode.length === 0 || /^\d{5}$/.test(signUpJson.zipCode);
         validationData.stateCodeValid = signUpJson.stateCode.length === 0 || /^[A-Z]{2}$/.test(signUpJson.stateCode);

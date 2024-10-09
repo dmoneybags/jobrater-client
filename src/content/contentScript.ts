@@ -57,7 +57,7 @@ import { HtmlInjection } from "./htmlInjection";
             DatabaseCalls.sendMessageToAddJob(jobread)
             .then((responseJson: Record<string, any>) => {
                 const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
-                LocalStorageHelper.addJob(completeJob);
+                //LocalStorageHelper.addJob(completeJob);
                 //if its not loaded it wont show so lets store it in our bg script too
 
                 LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
@@ -139,10 +139,10 @@ import { HtmlInjection } from "./htmlInjection";
     //seeing a new url that corresponds to a job url
     chrome.runtime.onMessage.addListener(async (obj, sender, response) => {
         console.log("NEW JOB MESSAGE RECIEVED");
-        //Add button to page
-        HtmlInjection.addViewInApplicantIQbtn();
         //Only arg to the message is the job id
         const { type, company, jobId } = obj;
+        //Add button to page
+        HtmlInjection.addViewInApplicantIQbtn(jobId);
         currentJob = jobId;
         //check if we already have job in localStorage
         if (await LocalStorageHelper.jobExistsInLocalStorage(jobId)){

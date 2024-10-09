@@ -1,6 +1,6 @@
 {
     "name": "ApplicantIQ Alpha",
-    "version": "0.1",
+    "version": "0.2",
     "description": "Get the real information on job postings BEFORE you apply.",
     "permissions": [
     "cookies",

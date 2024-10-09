@@ -149,7 +149,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
         sendResponse({ success: true, message: 'Notification shown'});
     } else if (message.action === 'openPopup') {
-        WindowingFunctions.createOrRefreshWindow();
+        if (message.options){
+            WindowingFunctions.createOrRefreshWindow(message.options);
+        } else {
+            WindowingFunctions.createOrRefreshWindow();
+        }
         sendResponse({ success: true, message: 'Popup shown'});
     }
 });

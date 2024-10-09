@@ -96,9 +96,9 @@ export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
                 const resumes = await LocalStorageHelper.readResumes();
                 if (!resumes.length){
                     //Makes sure a user uploads a resume first by putting the gate that makes them upload a resume first
-                    showFullscreenPopup(LatestJobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {});
+                    showFullscreenPopup(LatestJobView, { job: job, user: user, mainViewReloadFunc: reloadFunc }, job.jobName, job.company.companyName, () => {});
                 } else {
-                    showFullscreenPopup(JobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {})
+                    showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: reloadFunc}, job.jobName, job.company.companyName, () => {})
                 }
             }}
             >
@@ -133,9 +133,9 @@ export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
                             const resumes = await LocalStorageHelper.readResumes();
                             if (!resumes.length){
                                 //Makes sure a user uploads a resume first by putting the gate that makes them upload a resume first
-                                showFullscreenPopup(LatestJobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {});
+                                showFullscreenPopup(LatestJobView, { job: job, user: user, mainViewReloadFunc: reloadFunc }, job.jobName, job.company.companyName, () => {});
                             } else {
-                                showFullscreenPopup(JobView, { job: job, user: user }, job.jobName, job.company.companyName, () => {})
+                                showFullscreenPopup(JobView, { job: job, user: user, mainViewReloadFunc: reloadFunc }, job.jobName, job.company.companyName, () => {})
                             }
                         }}
                         >

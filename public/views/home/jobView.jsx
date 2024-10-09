@@ -4,7 +4,7 @@ import { ResumeViewJobTab } from './jobViewResumeTab';
 import { CompanyViewJobTab } from './jobViewCompanyTab';
 import { LocationViewJobTab } from './jobViewLocationTab';
 
-export const JobView = ({job, user}) => {
+export const JobView = ({job, user, mainViewReloadFunc}) => {
     const [activeTab, setActiveTab] = useState("job");
     const [isLoadingComparison, setIsLoadingComparison] = useState(false);
     return (
@@ -54,8 +54,8 @@ export const JobView = ({job, user}) => {
                     </button>
                 </p>
             </div>
-            {activeTab === "job" && <JobViewJobTab job={job} user={user}/>}
-            {activeTab === "resume" && <ResumeViewJobTab job={job} user={user} isLoadingComparison={isLoadingComparison} setIsLoadingComparison={setIsLoadingComparison}/>}
+            {activeTab === "job" && <JobViewJobTab job={job} user={user} mainViewReloadFunc={mainViewReloadFunc}/>}
+            {activeTab === "resume" && <ResumeViewJobTab job={job} user={user} isLoadingComparison={isLoadingComparison} setIsLoadingComparison={setIsLoadingComparison} mainViewReloadFunc={mainViewReloadFunc}/>}
             {activeTab === "company" && <CompanyViewJobTab job={job}/>}
             {activeTab === "location" && <LocationViewJobTab job={job} user={user}/>}
         </div>

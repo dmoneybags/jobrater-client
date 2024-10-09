@@ -4,13 +4,22 @@ import { RatingFunctions } from '../../../src/content/ratingFunctions';
 import { HelperFunctions } from '../../../src/content/helperFunctions';
 import { RatingBulletPointsGenerator } from '../helperViews/ratingBulletsGenerator';
 import { PaymentFrequency } from '../../../src/content/job';
+import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { showError, showSuccess } from '../helperViews/notifications';
 import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
 
-export const JobViewJobTab = ({job, user}) => {
+export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
     const [bulletPoints, setBulletPoints] = useState(null);
+    const [jobSaved, setJobSaved] = useState(false);
     useEffect(()=>{
+        const setJobSavedAsync = async() => {
+            const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId)
+            setJobSaved(jobExists);
+        }
         const newBulletPoints = RatingBulletPointsGenerator.getRatingBulletPoints(job, user);
         setBulletPoints(newBulletPoints);
+        setJobSavedAsync();
     }, [])
     return (
         <div className='p-3' style={{"height": "490px"}}>
@@ -96,12 +105,28 @@ export const JobViewJobTab = ({job, user}) => {
                 justifyContent: "center",
                 marginTop: "-10px"
             }}>
-                <button 
+                {!jobSaved && <button 
+                className='button is-focused is-small'
+                onClick={async ()=>{
+                    try {
+                        const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
+                        LocalStorageHelper.addJob(reReadJob);
+                        setJobSaved(true);
+                        mainViewReloadFunc({showLatestJob: false});
+                        showSuccess("Job successfully saved!");
+                    } catch (err) {
+                        showError(err)
+                    }
+                }}
+                >
+                    Save Job
+                </button>}
+                {jobSaved && <button 
                 className='button is-focused is-small'
                 onClick={()=>{window.open(`https://www.linkedin.com/jobs/view/${job.jobId}`)}}
                 >
                     Visit Job On LinkedIn
-                </button>
+                </button>}
             </div>
             <hr style={{margin: "5px", backgroundColor: "hsl(0deg 0% 33.33%)"}}/>
             <div className="columns" style={{ display: "flex"}}>

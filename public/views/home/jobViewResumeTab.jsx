@@ -10,7 +10,7 @@ import { showFullscreenPopup } from '../helperViews/popup';
 import { Spinner } from '../helperViews/loadingSpinner'
 import { loadResume } from '../../../src/tests/debugView/loadMockResumes';
 
-export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingComparison}) => {
+export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingComparison, mainViewReloadFunc}) => {
     const [resumes, setResumes] = useState(null);
     const [currentResume, setCurrentResume] = useState(null);
     const [currentResumeComparison, setCurrentResumeComparison] = useState(null);
@@ -72,6 +72,28 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             setIsLoadingComparison(false);
             //force us to regrab data from server
             asyncLoadData({force: true, changeResume: false})
+            const lsBestResumeScoresMessage = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "bestResumeScores"});
+            const lsBestResumeScores = lsBestResumeScoresMessage.message;
+            if (lsBestResumeScores[job.jobId]){
+                if (resumeComparison.matchScore > lsBestResumeScores[job.jobId]){
+                    lsBestResumeScores[job.jobId] = resumeComparison.matchScore;
+                    console.log("Setting best resume scores of:");
+                    console.log(lsBestResumeScores);
+                    await LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "bestResumeScores", value: lsBestResumeScores});
+                    return;
+                }
+            }
+            console.log("Setting best resume scores of:");
+            console.log({
+                ...lsBestResumeScores,
+                [job.jobId]: resumeComparison.matchScore, // Correct way to set dynamic property keys
+            });
+            await LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "bestResumeScores", value: {
+                ...lsBestResumeScores,
+                [job.jobId]: resumeComparison.matchScore, // Correct way to set dynamic property keys
+            }});
+            
+            mainViewReloadFunc({showLatestJob: false});
         } catch (err){
             setIsLoadingComparison(false);
             showError(err);

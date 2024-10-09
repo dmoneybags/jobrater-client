@@ -24,7 +24,7 @@ export const HomeView = () => {
     const firstLogin = location.state?.firstLogin ?? false;
     const [showingWelcomePopup, setShowingWelcomePopup] = useState(firstLogin);
 
-    const asyncLoadData = async ({force=false} = {}) => {
+    const asyncLoadData = async ({force=false, showLatestJob=true} = {}) => {
         await HelperFunctions.downloadDataIfNecessary(force);
         const curJobs = await LocalStorageHelper.readJobs();
         console.log("Setting jobs to:");
@@ -32,7 +32,7 @@ export const HomeView = () => {
         setJobs(curJobs);
         const lsBestResumeScores = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "bestResumeScores"});
         console.log("Best Resume Scores");
-        console.log(lsBestResumeScores);
+        console.log(lsBestResumeScores.message);
         setBestResumeScores(lsBestResumeScores.message);
         const readUser = await LocalStorageHelper.getActiveUser();
         setUser(readUser);
@@ -42,9 +42,9 @@ export const HomeView = () => {
         setLatestJob(lsLatestJob);
         console.log("Our popup read the latest job of: ");
         console.log(lsLatestJob);
-        if (lsLatestJob){
+        if (lsLatestJob && showLatestJob){
             console.log("SHOWING LATEST JOB POPUP")
-            showFullscreenPopup(LatestJobView, {job: lsLatestJob, user: readUser}, lsLatestJob.jobName, lsLatestJob.company.companyName, async ()=>{
+            showFullscreenPopup(LatestJobView, {job: lsLatestJob, user: readUser, mainViewReloadFunc: asyncLoadData}, lsLatestJob.jobName, lsLatestJob.company.companyName, async ()=>{
                 //Should we await?
                 await LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
             });
@@ -67,7 +67,12 @@ export const HomeView = () => {
             sendResponse({ status: "success", message: "Recieved new job message" });
             console.log("Recieved message to show job!");
             //Message payload will have job but we can just reload
-            asyncLoadData();
+            if (message.action === 'REFRESH'){
+                asyncLoadData({showLatestJob: false});
+            } else {
+                asyncLoadData();
+            }
+            
         }
         if (message.action === "NEW_JOB_LOADING"){
             sendResponse({ status: "success", message: "Recieved new job loading message" });
@@ -95,10 +100,15 @@ export const HomeView = () => {
                         :
                         (jobs.map((job) => (
                             job && (
-                                <>
-                                    <JobRowView job={job} user={user} resumeScore={bestResumeScores[job.jobId]} reloadFunc={asyncLoadData}/>
+                                <React.Fragment key={job.jobId}>
+                                    <JobRowView 
+                                        job={job} 
+                                        user={user} 
+                                        resumeScore={bestResumeScores ? bestResumeScores[job.jobId] : undefined} 
+                                        reloadFunc={asyncLoadData} 
+                                    />
                                     <hr className='job-row-divider'/>
-                                </>
+                                </React.Fragment>
                             )
                         )))}
                     </>

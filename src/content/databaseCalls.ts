@@ -689,6 +689,35 @@ export class DatabaseCalls{
             xhr.send(JSON.stringify({updateDict:updateJson}));
         })
     }
+    static sendMessageToAddUserJob = async(jobId: string):Promise<Job> => {
+        return new Promise(async (resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', DATABASESERVER + 'databases/add_user_job?jobId=' + jobId, true);
+            await setTokenHeader(xhr);
+            xhr.onload = function () {
+                //It suceeded
+                if (xhr.status === 200) {
+                    var response: string = xhr.responseText;
+                    const responseJson: Record<string, any> = JSON.parse(response);
+                    console.log("Added user job");
+                    console.log(responseJson)
+                    //resolve the token
+                    resolve(JobFactory.generateFromJson(responseJson));
+                } else {
+                    //Didnt get a sucessful message
+                    console.error('Request failed. Status:', xhr.status);
+                    reject(String(xhr.status));
+                }
+            };
+            //Couldnt load the http request
+            xhr.onerror = function () {
+                console.error('Request failed. Network error');
+                reject('Network Error');
+            };
+            //send our response
+            xhr.send();
+        })
+    }
     static sendMessageToDeleteUserJob = async(jobId: string):Promise<string> => {
         return new Promise(async (resolve, reject) => {
             var xhr = new XMLHttpRequest();

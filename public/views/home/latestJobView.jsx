@@ -9,7 +9,7 @@ import { JobView } from './jobView';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { PaymentFrequency } from '../../../src/content/job';
 
-export const LatestJobView = ({job, user}) => {
+export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
     const [showingPopup, setShowingPopup] = useState(false);
     return (
         <div className='latest-job-container p-3'>
@@ -39,7 +39,7 @@ export const LatestJobView = ({job, user}) => {
                         </i>
                         <p className='latest-job-item-text'>No WFH Info</p>
                     </div>}
-                    {job.paymentBase !== 0 && job.paymentBase !== null && <div className='latest-job-item'>
+                    {job.paymentBase !== 0 && job.paymentBase !== null && job.paymentFreq?.str && <div className='latest-job-item'>
                         <i 
                         className={`fa-solid fa-dollar-sign fa-xl latest-job-item-icon`}
                         style={{color: HelperFunctions.ratingToColor(RatingFunctions.getPaymentRating(job, user.preferences))}}
@@ -95,7 +95,9 @@ export const LatestJobView = ({job, user}) => {
                         setShowingPopup(true);
                     } else {
                         console.log("Loading job view");
-                        showFullscreenPopup(JobView, {job: job, user: user}, job.jobName, job.company.companyName, ()=>{})
+                        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
+                            LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
+                        })
                     }
                 }}
                 >

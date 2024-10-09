@@ -13,6 +13,7 @@ import { ResumesView } from './views/home/resumesView';
 import { SettingsView } from './views/home/settingsView';
 import { ProfileView } from './views/home/profileView';
 import { PopupLinkView } from './views/popup/popupLinkView';
+import { LocalStorageHelper } from '../src/content/localStorageHelper';
 
 
 const BASEURL = "extension://jdmbkjofpaobeedpmoeoocbjnhpfalmm";
@@ -27,11 +28,35 @@ const MainView = ({ContentView}) => {
   useEffect(() => {
     console.log("Loading main view...");
 
-    // Adjust behavior based on windowType
-    if (window.location.href.includes("detached")) {
+    const params = new URLSearchParams(window.location.search)
+    console.log("With params:");
+    console.log(params);
+    if (params.get("windowType") === "detached") {
       setWindowType('detached');
     } else {
       setWindowType('popup');
+    }
+    //anyone who calls the main view can set the latest job to show the user a cetrain job
+    if (params.get("latestJob")){
+      const asyncSetLatestJob = async () => {
+        //spaghetti code but basically first we check if the job is in local storage
+        //if its a new job the content script will set latest job
+        const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(params.get("latestJob"));
+        if (jobExists){
+          //get the jobs from localstorage
+          const jobs = await LocalStorageHelper.readJobs();
+          for (const job of jobs){
+            //look for our match
+            if (params.get("latestJob") === job.jobId){
+              //just latest job
+              let latestJobMessage = {action: 'storeData', key: "latestJob", value: job };
+              await LocalStorageHelper.__sendMessageToBgScript({latestJobMessage});
+              break;
+            }
+          }
+        }
+      }
+      asyncSetLatestJob();
     }
     // Check if the user is authorized when the component mounts
     const checkAuth = async () => {

@@ -5,7 +5,7 @@ export class HtmlInjection {
         fontAwesomeLink.rel = 'stylesheet';
         document.head.appendChild(fontAwesomeLink); // Append Font Awesome to the document head
     };
-    static addViewInApplicantIQbtn = () => {
+    static addViewInApplicantIQbtn = (jobId: string) => {
         HtmlInjection.addFontAwesome();
         const element = document.querySelector('.jobs-s-apply.jobs-s-apply--fadein.inline-flex.mr2');
         const btnContainer = element.parentElement;
@@ -36,7 +36,7 @@ export class HtmlInjection {
     
         button.appendChild(icon); // Append the icon to the button
         button.addEventListener('click', () => {
-            chrome.runtime.sendMessage({ action: 'openPopup' });
+            chrome.runtime.sendMessage({ action: 'openPopup' , options: {latestJob: jobId}});
         });
         btnContainer.appendChild(button);
     };

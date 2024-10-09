@@ -6,6 +6,7 @@ import { HashRouter } from 'react-router-dom';
 const HEADERSIZE = "70px"
 
 export const showFullscreenPopup = (Component, props, title, subtitle, exitCallback = () => {}, overwrite = true) => {
+    document.body.style.overflow = 'hidden';
     const popup = document.createElement('div');
     popup.className = 'popup-fullscreen';
     popup.id = 'fullscreen-popup';
@@ -26,7 +27,6 @@ export const showFullscreenPopup = (Component, props, title, subtitle, exitCallb
     }
     
     document.body.prepend(popup);
-    document.body.style.overflow = 'hidden';
     console.log("Setting up full screen popup view...");
     console.log("with props:");
     console.log(props);
