@@ -749,7 +749,6 @@ export class DatabaseCalls{
         return new Promise(async (resolve, reject) => {
             console.log("Sending request to update user location");
             console.log({updateJson: updateJson});
-            console.log({user_id: user_id});
             var xhr = new XMLHttpRequest();
             xhr.open('POST', DATABASESERVER + 'databases/update_user_location', true);
             await setTokenHeader(xhr);
@@ -808,7 +807,6 @@ export class DatabaseCalls{
         return new Promise(async (resolve, reject) => {
             console.log("Sending request to update user preferences");
             console.log({updateJson: updateJson});
-            console.log({user_id: user_id});
             var xhr = new XMLHttpRequest();
             xhr.open('POST', DATABASESERVER + 'databases/update_user_preferences', true);
             await setTokenHeader(xhr);
@@ -834,6 +832,34 @@ export class DatabaseCalls{
             };
             //send our response
             xhr.send(JSON.stringify({updateJson: updateJson}));
+        })
+    }
+    static sendMessageToUpdateUserKeywords = async(positiveKeywords: string[], negativeKeywords: string[]) => {
+        return new Promise(async (resolve, reject) => {
+            console.log("Sending request to update user keywords");
+            console.log({positiveKeywords: positiveKeywords, negativeKeywords: negativeKeywords});
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', DATABASESERVER + 'databases/update_user_keywords', true);
+            await setTokenHeader(xhr);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.onload = function () {
+                //It suceeded
+                if (xhr.status === 200) {
+                    var response: string = xhr.responseText;
+                    resolve(response);
+                } else {
+                    //Didnt get a sucessful message
+                    console.error('Request failed. Status:', xhr.status);
+                    reject(String(xhr.status));
+                }
+            };
+            //Couldnt load the http request
+            xhr.onerror = function () {
+                console.error('Request failed. Network error');
+                reject('Network Error');
+            };
+            //send our response
+            xhr.send(JSON.stringify({positiveKeywords: positiveKeywords, negativeKeywords: negativeKeywords}));
         })
     }
     static sendMessageToReadSpecificResumeComparison = async(resumeId: string, jobId: string):Promise<ResumeComparison | null> => {

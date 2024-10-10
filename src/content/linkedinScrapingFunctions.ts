@@ -16,7 +16,8 @@ export class LinkedInScrapingFunctions {
      */
     static getTextContentWithNewlines(element: HTMLElement):string {
         let result = '';
-
+        console.debug("Getting text content with new lines for: ");
+        console.debug(element.textContent);
         element.childNodes.forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
                 result += node.textContent;

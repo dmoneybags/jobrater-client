@@ -1,5 +1,7 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { showError } from '../helperViews/notifications';
+import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { showError, showSuccess } from '../helperViews/notifications';
 
 const MAXKEYWORDS = 5;
 
@@ -130,7 +132,20 @@ export const ProfileViewDesiredKeywordsSection = ({user, setShowingId, reloadFun
                 >Cancel</button>
                 <button 
                 className='button is-info m-1'
-                onClick={()=>{}}
+                onClick={async ()=>{
+                    try {
+                        await DatabaseCalls.sendMessageToUpdateUserKeywords(currentPositiveKeywords, currentNegativeKeywords);
+                        const activeUser = await LocalStorageHelper.getActiveUser();
+                        //overly careful copy because I forget react behaviour setting soemthing to a state value
+                        activeUser.preferences.positiveKeywords = [...currentPositiveKeywords];
+                        activeUser.preferences.negativeKeywords = [...currentNegativeKeywords];
+                        await LocalStorageHelper.setActiveUser(activeUser);
+                        reloadFunc();
+                        showSuccess("Updated Keywords");
+                    } catch (err) {
+                        showError(err);
+                    }
+                }}
                 >
                 Update</button>
             </div>
