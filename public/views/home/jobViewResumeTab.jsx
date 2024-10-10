@@ -297,9 +297,9 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                         <HorizontalBubbleRaterView height={30} width={250} rating={currentResumeComparison.matchScore/100}/>
                     </div>
                     <div style={{display: "flex", justifyContent: "center", marginTop: "10px", gap: "20px"}}>
-                        <button className='button is-success' onClick={showResumeParserPopoup}>
-                            View ATS Parsing
-                        </button>
+                        {/* <button className='button is-success' onClick={showResumeParserPopoup}> */}
+                            {/* View ATS Parsing */}
+                        {/* </button> */}
                         <button className='button is-link' onClick={()=>{setShowingUploadResumePopup(true)}}>
                             Reupload Resume
                         </button>

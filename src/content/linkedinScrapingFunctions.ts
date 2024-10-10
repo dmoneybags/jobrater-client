@@ -178,9 +178,14 @@ export class LinkedInScrapingFunctions {
     static getJobDescription = ():string | null => {
         const jobDescriptionElem: HTMLElement = document.getElementsByClassName("jobs-description")[0] as HTMLElement;
         if (!jobDescriptionElem){
-            return null
+            throw new ScrapingError("Could not get description");
         }
-        return LinkedInScrapingFunctions.getTextContentWithNewlines(jobDescriptionElem);
+        const text = LinkedInScrapingFunctions.getTextContentWithNewlines(jobDescriptionElem);
+        //Sometimes only grabs the title when you load in too quick
+        if (text.length < 100){
+            throw new ScrapingError("Could not get description");
+        }
+        return text;
     }
     /**
      * getTopBoxData

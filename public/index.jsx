@@ -14,7 +14,7 @@ import { SettingsView } from './views/home/settingsView';
 import { ProfileView } from './views/home/profileView';
 import { PopupLinkView } from './views/popup/popupLinkView';
 import { LocalStorageHelper } from '../src/content/localStorageHelper';
-
+import { WindowingFunctions } from '../src/background/windowingFunctions';
 
 const BASEURL = "extension://jdmbkjofpaobeedpmoeoocbjnhpfalmm";
 
@@ -40,7 +40,7 @@ const MainView = ({ContentView}) => {
     if (params.get("latestJob")){
       const asyncSetLatestJob = async () => {
         //spaghetti code but basically first we check if the job is in local storage
-        //if its a new job the content script will set latest job
+        //if its a new job we first check if content script is loading it, else we send a request to scrape
         const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(params.get("latestJob"));
         if (jobExists){
           //get the jobs from localstorage
@@ -53,6 +53,24 @@ const MainView = ({ContentView}) => {
               await LocalStorageHelper.__sendMessageToBgScript({latestJobMessage});
               break;
             }
+          }
+        } else {
+          const isLoadingJobResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "loadingJob"});
+          const isLoading = isLoadingJobResp.message?.isLoading ?? false;
+          const currrentTabMessage = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "currentTab"});
+          const currentTab = currrentTabMessage.message;
+          if (!isLoading && currentTab){
+            console.log("Sending message to content script to scrape");
+            console.log(currentTab);
+            chrome.tabs.sendMessage(currentTab, {
+                type: "NEW",
+                company: "LINKEDIN",
+                jobId: params.get("latestJob")
+            }).then(response => {
+                console.log('Message sent successfully:', response);
+            }).catch(error => {
+                console.error('Error sending message to content script:', error);
+            });
           }
         }
       }

@@ -70,7 +70,7 @@ export const SignupEmailPwTabView = ({formData, handleChange}) => {
                         required
                     />
                 </div>
-                {!formData.validationData.passwordValid && <p class="help is-danger">Password must be 8 characters, have an Uppercase letter, number, and symbol.</p>}
+                {!formData.validationData.passwordValid && <p class="help is-danger">Password must be 8 characters, have an uppercase letter and symbol.</p>}
             </div>
             <div className="field">
                 <label className="label" htmlFor="confirm-password">Confirm Password</label>

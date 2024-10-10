@@ -152,6 +152,7 @@ export const validateRawSignUpData = (signUpJson: Record<string, any>):Record<st
         "firstNameValid": true,
         "lastNameValid": true,
         "emailFilled": true,
+        "emailValid": true,
         "passwordValid": true,
         "confirmPasswordValid": true,
         "streetValid": true,

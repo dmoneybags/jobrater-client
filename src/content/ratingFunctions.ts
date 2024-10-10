@@ -107,18 +107,21 @@ export class RatingFunctions {
         console.debug("Positive keywords:");
         console.debug(preferences.positiveKeywords);
         for (const positiveKeyword of preferences.positiveKeywords){
-            if (lowerCaseDescription.includes(positiveKeyword.toLowerCase()) 
-                || lowerCasedJobName.includes(positiveKeyword.toLowerCase())){
+            if (lowerCaseDescription.includes(" " + positiveKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(" " + positiveKeyword.toLowerCase())){
                 keywordRatings.push(1);
             }
         }
         console.debug("Negative keywords:");
         console.debug(preferences.negativeKeywords);
         for (const negativeKeyword of preferences.negativeKeywords){
-            if (lowerCaseDescription.includes(negativeKeyword.toLowerCase()) 
-                || lowerCasedJobName.includes(negativeKeyword.toLowerCase())){
-                    keywordRatings.push(0);;
+            if (lowerCaseDescription.includes(" " + negativeKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(" " + negativeKeyword.toLowerCase())){
+                    keywordRatings.push(0);
             }
+        }
+        if (!keywordRatings.length){
+            keywordRatings.push(0);
         }
         return keywordRatings;
     }

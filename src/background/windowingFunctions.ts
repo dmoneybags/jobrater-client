@@ -3,6 +3,12 @@ import { LocalStorageHelper } from "../content/localStorageHelper";
 const POPUPTITLE = "ApplicantIQ";
 
 export class WindowingFunctions {
+    static async getCurrentTab() {
+      let queryOptions = { active: true, lastFocusedWindow: true };
+      // `tab` will either be a `tabs.Tab` instance or `undefined`.
+      let [tab] = await chrome.tabs.query(queryOptions);
+      return tab;
+    }
     //Not currently working
     static async closeWindow() {
       console.log("CLOSING WINDOWS");

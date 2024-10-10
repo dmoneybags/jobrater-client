@@ -132,6 +132,7 @@ export const PreferencesTabView = ({formData, setFormData, handleChange}) => {
                     </label>
                 </div>
             </div>
+            {!formData.validationData.modesValid && <p class="help is-danger">Select one or two work from home modes.</p>}
         </form>
     )
 }

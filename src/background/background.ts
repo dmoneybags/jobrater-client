@@ -41,8 +41,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (tab.url && (tab.url.includes("linkedin.com/jobs/search") || 
         tab.url.includes("linkedin.com/jobs/collections/") || 
         tab.url.includes("linkedin.com/jobs/view/"))) {
-        
         console.log("GOT TAB CHANGE MESSAGE");
+        //save a reference to the last tab that was activated
+        chrome.storage.local.set({"currentTab": tabId});
+        console.log("SENDING CURRENT TABID TO " + tabId)
         
         if (changeInfo.status === 'complete') {
             let jobId = null;
@@ -78,6 +80,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         }
     }
 });
+
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     console.debug("BG LISTENER GOT MESSAGE OF: ");
     console.debug(message);

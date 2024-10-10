@@ -132,7 +132,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
             <div className="columns" style={{ display: "flex"}}>
                 <div className="column" style={{ flex: "1 1 50%" }}>
                     <p className='has-text-centered is-size-4' style={{ color: HelperFunctions.ratingToColor(1) }}>Pros</p>
-                    <div style={{height: "130px", overflowY: "auto", overflowX: "hidden"}}>
+                    <div style={{height: "140px", overflowY: "auto", overflowX: "hidden"}}>
                         {bulletPoints?.pros && bulletPoints.pros.map((pro, index) => (
                             <div key={index}>
                                 {pro}
@@ -142,7 +142,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                 </div>
                 <div className="column" style={{ flex: "1 1 50%" }}>
                     <p className='has-text-centered is-size-4' style={{ color: HelperFunctions.ratingToColor(0.1) }}>Cons</p>
-                    <div style={{height: "130px", overflowY: "auto", overflowX: "hidden" }}>
+                    <div style={{height: "140px", overflowY: "auto", overflowX: "hidden" }}>
                         {bulletPoints?.cons && bulletPoints.cons.map((con, index) => (
                             <div key={index}>
                                 {con}

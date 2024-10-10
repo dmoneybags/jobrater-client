@@ -133,16 +133,16 @@ export class RatingBulletPointsGenerator {
         console.debug("Job Description");
         console.debug(job.description);
         for (const positiveKeyword of preferences.positiveKeywords){
-            if (lowerCaseDescription.includes(positiveKeyword.toLowerCase()) 
-                || lowerCasedJobName.includes(positiveKeyword.toLowerCase())){
+            if (lowerCaseDescription.includes(" " + positiveKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(" " + positiveKeyword.toLowerCase())){
                 ratings.pros.push(<p className="rating-bp pro">{positiveKeyword}</p>);
             }
         }
         console.debug("Negative keywords:");
         console.debug(preferences.negativeKeywords);
         for (const negativeKeyword of preferences.negativeKeywords){
-            if (lowerCaseDescription.includes(negativeKeyword.toLowerCase()) 
-                || lowerCasedJobName.includes(negativeKeyword.toLowerCase())){
+            if (lowerCaseDescription.includes(" " + negativeKeyword.toLowerCase()) 
+                || lowerCasedJobName.includes(" " + negativeKeyword.toLowerCase())){
                 ratings.cons.push(<p className="rating-bp con">{negativeKeyword}</p>);
             }
         }

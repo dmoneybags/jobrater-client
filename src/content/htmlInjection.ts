@@ -1,3 +1,6 @@
+import { WindowingFunctions } from "../background/windowingFunctions";
+import { LocalStorageHelper } from "./localStorageHelper";
+
 export class HtmlInjection {
     static addFontAwesome = () => {
         const fontAwesomeLink = document.createElement('link');
@@ -35,7 +38,7 @@ export class HtmlInjection {
         button.style.marginLeft = "10px";
     
         button.appendChild(icon); // Append the icon to the button
-        button.addEventListener('click', () => {
+        button.addEventListener('click', async () => {
             chrome.runtime.sendMessage({ action: 'openPopup' , options: {latestJob: jobId}});
         });
         btnContainer.appendChild(button);
