@@ -112,7 +112,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
                         LocalStorageHelper.addJob(reReadJob);
                         setJobSaved(true);
-                        mainViewReloadFunc({showLatestJob: false});
+                        mainViewReloadFunc({force: true, showLatestJob: false});
                         showSuccess("Job successfully saved!");
                     } catch (err) {
                         showError(err)

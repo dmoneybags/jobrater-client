@@ -93,7 +93,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                 [job.jobId]: resumeComparison.matchScore, // Correct way to set dynamic property keys
             }});
             
-            mainViewReloadFunc({showLatestJob: false});
+            mainViewReloadFunc({force: true, showLatestJob: false});
         } catch (err){
             setIsLoadingComparison(false);
             showError(err);
@@ -291,7 +291,13 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                         </div>
                         <div style={{display: "flex", justifyContent: "space-between"}}>
                             <div style={{width: "250px"}}>
-                                <p className='has-text-white is-size-3'>Resume Match</p>
+                                <p className='has-text-white is-size-3'>
+                                    Resume Match 
+                                    <div className='hoverable-icon-container ml-2'> 
+                                        <i className="fas fa-info-circle" style={{fontSize: "12px"}}></i>
+                                        <div className="hover-text" style={{width: "200px"}}>The Resume Score is calculated using LLMs (Large Language models). Because of this even identical resumes may get a slightly variable score. Treat the score as a guide, not an absolute.</div>
+                                    </div>
+                                </p>
                             </div>
                         </div>
                         <HorizontalBubbleRaterView height={30} width={250} rating={currentResumeComparison.matchScore/100}/>
