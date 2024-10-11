@@ -10,6 +10,8 @@ import { DatabaseCalls } from '../../../src/content/databaseCalls';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { LatestJobView } from './latestJobView';
 import { LoadingJobRowView } from './loadingJobRowView';
+import { HomeViewSorter } from './homeViewSorter';
+import { HomeViewFilterer } from './homeViewFilterer';
 
 export const HomeView = () => {
     const [jobs, setJobs] = useState(undefined);
@@ -92,6 +94,10 @@ export const HomeView = () => {
             <HomeViewNavBar/>
             <WelcomePopupView showingPopup={showingWelcomePopup} setShowingPopup={setShowingWelcomePopup}/>
             <div className='job-row-container main-home-view'>
+                <div style={{position: "sticky", top:"52px", zIndex: "9999"}}>
+                    <HomeViewSorter jobs={jobs} setJobs={setJobs} user={user} bestResumeScores={bestResumeScores}/>
+                    <HomeViewFilterer jobs={jobs} setJobs={setJobs} user={user}/>
+                </div>
                 {jobsSet && (
                     <>
                         {loadingJob && <LoadingJobRowView jobName={loadingJobName} companyName={loadingCompanyName}/>}

@@ -79,6 +79,7 @@ export const ProfileViewDesiredKeywordsSection = ({user, setShowingId, reloadFun
                             placeholder="ex: 'contract', 'agile'"
                             name='negativeKeywordInput'
                             value={currentNegativeKeyword}
+                            maxLength={20}
                             onChange={(e) => {setCurrentNegativeKeyword(e.target.value)}}
                         />
                     </div>

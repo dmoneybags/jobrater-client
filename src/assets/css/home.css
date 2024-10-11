@@ -46,6 +46,14 @@
     width: 80px;
     margin-left: 10px;
 }
+.homeview-scroll-control {
+    width: 100%;
+    height: 30px;
+    color: white;
+    padding: 5px;
+    position: relative;
+    background-color: black;
+}
 .job-row-expanded-view {
     padding: 10px;
 }
@@ -88,14 +96,14 @@
     top: 50%;
     right: 34%;
     transform: translateY(-50%);
-    z-index: 9999;
+    z-index: 9998;
 }
 .job-row-briefcase-icon{
     position: absolute;
     top: 50%;
     right: 15%;
     transform: translateY(-50%);
-    z-index: 9999;
+    z-index: 9998;
 }
 .job-rater-container{
     position: absolute;
