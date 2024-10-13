@@ -39,7 +39,7 @@ const validateEmail = (email: string) => {
  * @param {string} password - the string password of the user, unhashed
  * @returns {boolean[]} result for each test as given in the order above
  */
-const getStrengthValues = (password: string): boolean[]  => {
+export const getStrengthValues = (password: string): boolean[]  => {
     //return values are 
     //0: whether or not the string contains a special character
     //1: whether or not the string is over 8 characters

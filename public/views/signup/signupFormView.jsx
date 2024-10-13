@@ -15,10 +15,14 @@ import { useNavigate } from 'react-router-dom';
 import { genSaltSync } from 'bcryptjs';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
 import { KeywordInputView } from './keywordInputView';
+import { EmailConfirmationPopup } from './emailConfirmationPopup';
+import { DatabaseCalls } from '../../../src/content/databaseCalls'
 
 const NUMTABS = 5
 
 export const SignupFormView = () => {
+    const [selectedTab, setSelectedTab] = useState(0);
+    const [waitingForEmailConfirmation, setWaitingForEmailConfirmation] = useState(false);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -63,10 +67,6 @@ export const SignupFormView = () => {
             careerStageValid: true
         }
     });
-
-    const [selectedTab, setSelectedTab] = useState(0);
-
-    const [waitingForSignIn, setWaitingForSignIn] = useState(false);
     //redirecting to home
     const navigate = useNavigate();
 
@@ -80,25 +80,7 @@ export const SignupFormView = () => {
         }));
     };
 
-    const attemptSignUp = async (event) => {
-        event.stopPropagation();
-        event.preventDefault();
-        console.log("=========== ATTEMPTING TO SIGN UP USER =============")
-        console.debug("formData current state:");
-        console.debug(formData);
-        const newValidationData = validateRawSignUpData(formData);
-        console.debug("validation data new state:");
-        console.debug(newValidationData);
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            validationData: newValidationData
-        }));
-
-        if (Object.values(newValidationData).includes(false)){
-            showError("Can't sign up, some fields are invalid or not filled");
-            return;
-        }
-
+    const getLocation = async () => {
         let location = null
         if (!formData.wontShareLocation){
             console.log("Checking location...");
@@ -124,6 +106,33 @@ export const SignupFormView = () => {
                 "longitude": response["coordinates"][0]
             });
         }
+        return location;
+    }
+
+    const validate = (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        console.log("=========== ATTEMPTING VALIDATE =============")
+        console.debug("formData current state:");
+        console.debug(formData);
+        const newValidationData = validateRawSignUpData(formData);
+        console.debug("validation data new state:");
+        console.debug(newValidationData);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            validationData: newValidationData
+        }));
+
+        if (Object.values(newValidationData).includes(false)){
+            showError("Can't sign up, some fields are invalid or not filled");
+            return false;
+        }
+        return true;
+    }
+    //The email confirmation popup sends the request for signup we pass it as an arg
+    const attemptSignUp = async () => {
+
+        const location = await getLocation();
 
         //Create out user object with our form data
         const user = new User(null, formData["email"], null, formData["firstName"], formData["lastName"], location,
@@ -154,8 +163,30 @@ export const SignupFormView = () => {
             console.log(res);
         }
     }
+    useEffect(() => {
+        const asyncReloadFormState = async () => {
+            const lsFormDataResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "signUpFormData"});
+            if (lsFormDataResp.message){
+                console.log("Reloading form state from localStorage...")
+                setFormData(lsFormDataResp.message);
+            }
+            const lsWaitingForConfirmationResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "waitingForEmailConfirmation"});
+            if (lsWaitingForConfirmationResp.message){
+                console.log("Reloading waiting for confirmation from localStorage...")
+                setFormData(lsWaitingForConfirmationResp.message);
+            }
+        }
+        asyncReloadFormState();
+    }, [])
+    useEffect(() => {
+        LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "signUpFormData", value: formData});
+    }, [formData])
+    useEffect(() => {
+        LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "waitingForEmailConfirmation", value: waitingForEmailConfirmation});
+    }, [waitingForEmailConfirmation])
     return (
         <>
+            <EmailConfirmationPopup email={formData.email} waitingForEmailConfirmation={waitingForEmailConfirmation} setWaitingForEmailConfirmation={setWaitingForEmailConfirmation} attemptSignUp={attemptSignUp}/>
             <DotProgressBarView totalNum={NUMTABS} selected={selectedTab}/>
             {selectedTab > 0 && <i
             onClick={() => {setSelectedTab(Math.max(selectedTab - 1, 0))}}
@@ -172,18 +203,30 @@ export const SignupFormView = () => {
             {selectedTab === 3 && <KeywordInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
             {selectedTab === 4 && <LocationInputView formData={formData} setFormData={setFormData} handleChange={handleChange}/>}
             {selectedTab === NUMTABS - 1 && <button 
-            className={`button is-link ${waitingForSignIn ? 'is-loading' : ''}`} 
+            className="button is-link" 
             style={{ 
             width: "30%", 
             display: "block", 
             margin: "20px auto 0 auto" 
             }}
             onClick={async (e)=>{
+                const validData = validate(e);
+                if (!validData){
+                    return;
+                }
+                try {
+                    await DatabaseCalls.sendMessageToAddConfirmationCode(formData.email);
+                } catch (err) {
+                    showError(err);
+                }
+                setWaitingForEmailConfirmation(true);
+                /*
                 setWaitingForSignIn(true);
                 console.log("Set waiting for sign in")
                 attemptSignUp(e);
                 //if we got here we also failed but due to an expected reason
                 setWaitingForSignIn(false);
+                */
             }}
             >Submit</button>}
         </>

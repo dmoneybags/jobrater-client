@@ -28,6 +28,7 @@ import { ResumeComparison } from "./resumeComparison";
 import { UserSpecificJobData, UserSpecificJobDataFactory } from "./userSpecificJobData";
 import { UserPreferences, UserPreferencesFactory } from "./userPreferences";
 import { LocationObjectFactory } from "./location";
+import { json } from "stream/consumers";
 
 const isProduction = CLIENT_ENV.ENVIRONMENT === 'production';
 const DATABASESERVER = isProduction ? CLIENT_ENV.PROD_API_URL:CLIENT_ENV.DEV_API_URL;
@@ -901,5 +902,86 @@ export class DatabaseCalls{
             //send our response
             xhr.send();
         });
+    }
+    static sendMessageToAddConfirmationCode = async(email: string, forgotPassword: boolean = false):Promise<string> => {
+        return new Promise(async (resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', DATABASESERVER + 'api/send_email_confirmation?email=' + email + `${forgotPassword ? "&forgotPassword=1":""}`, true);
+            xhr.onload = function () {
+                //It suceeded
+                if (xhr.status === 200) {
+                    var response: string = xhr.responseText;
+                    console.log(response);
+                    resolve(response);
+                } else {
+                    //Didnt get a sucessful message
+                    console.error('Request failed. Status:', xhr.status);
+                    reject(String(xhr.responseText));
+                }
+            };
+            //Couldnt load the http request
+            xhr.onerror = function () {
+                console.error('Request failed. Network error');
+                reject('Network Error');
+            };
+            //send our response
+            xhr.send();
+        })
+    }
+    static sendMessageToEvaluateConfirmationCode = async(email: string, confirmationCode: string, forgotPassword: boolean = false):Promise<string> => {
+        return new Promise(async (resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', DATABASESERVER + 'api/evaluate_email_confirmation?email=' + email + "&" + "confirmationCode=" + confirmationCode + `${forgotPassword ? "&forgotPassword=1":""}`, true);
+            xhr.onload = function () {
+                //It suceeded
+                console.log("Evaluated confirmation code to be " + String(xhr.status))
+                if (xhr.status === 200) {
+                    var response: string = xhr.responseText;
+                    console.log(response);
+                    resolve(response);
+                } else {
+                    //Didnt get a sucessful message
+                    console.error('Request failed. Status:', xhr.status);
+                    reject(xhr.responseText);
+                }
+            };
+            //Couldnt load the http request
+            xhr.onerror = function () {
+                console.error('Request failed. Network error');
+                reject('Network Error');
+            };
+            //send our response
+            xhr.send();
+        })
+    }
+    //pw must be hashed with appropriate salt beforehand
+    static sendMessageToResetPassword = async(temporaryToken: string, newPassword: string):Promise<string> => {
+        return new Promise(async (resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', DATABASESERVER + 'api/reset_password', true);
+            console.log(`Setting temporary token to ${temporaryToken}`)
+            xhr.setRequestHeader("Authorization", temporaryToken);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            xhr.onload = function () {
+                //It suceeded
+                console.log("Evaluated confirmation code to be " + String(xhr.status))
+                if (xhr.status === 200) {
+                    var response: string = xhr.responseText;
+                    console.log(response);
+                    resolve(response);
+                } else {
+                    //Didnt get a sucessful message
+                    console.error('Request failed. Status:', xhr.status);
+                    reject(xhr.responseText);
+                }
+            };
+            //Couldnt load the http request
+            xhr.onerror = function () {
+                console.error('Request failed. Network error');
+                reject('Network Error');
+            };
+            //send our response
+            xhr.send(JSON.stringify({newPassword: newPassword}));
+        })
     }
 }

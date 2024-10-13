@@ -4,17 +4,16 @@ import { showError } from '../helperViews/notifications';
 import { useNavigate } from 'react-router-dom';
 import { DatabaseCalls } from '../../../src/content/databaseCalls';
 import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { ForgotPasswordPopup } from './forgotPasswordPopup'
 
 export const LoginFormView = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
-
     const [waitingForLogIn, setWaitingForLogIn] = useState(false);
-
     const [validEmail, setValidEmail] = useState(true);
-
+    const [showingForgotPassword, setShowingForgotPassword] = useState(false);
     //redirecting to home
     const navigate = useNavigate();
 
@@ -47,6 +46,7 @@ export const LoginFormView = () => {
     };
     return (
         <>
+        <ForgotPasswordPopup showingForgotPassword={showingForgotPassword} setShowingForgotPassword={setShowingForgotPassword}/>
         <form onSubmit={handleSubmit}>
             <div className="field">
                 <label className="label" htmlFor="email">Email</label>
@@ -79,6 +79,12 @@ export const LoginFormView = () => {
                     />
                 </div>
             </div>
+            <p 
+            className='has-text-link m-3' 
+            style={{cursor: "pointer", textAlign: "center"}} 
+            onClick={async ()=>{setShowingForgotPassword(true)}}>
+                Forgot Password
+            </p>
         </form>
         <button 
         className={`button is-success centered-btn ${waitingForLogIn ? 'is-loading' : ''}`}  
