@@ -15,7 +15,7 @@ export class HtmlInjection {
         const previousBtn = btnContainer.querySelector('#ApplicantIQbtn');
 
         if (previousBtn) {
-            return;
+            previousBtn.remove();  // Remove the previous button
         }
         
         const button = document.createElement('button');
