@@ -277,6 +277,18 @@
     flex-wrap: wrap;
     overflow: auto;
 }
+.setting-row{
+    position: relative;
+    width: 100%;
+    padding: 30px;
+}
+.setting-switch{
+    position: absolute;
+    top: 50%;
+    left: 300px;
+    transform: translateY(-50%);
+    width: 100%;
+}
 .pro::before {
     content: "\f00c"; /* Unicode for Font Awesome check icon */
     font-family: "Font Awesome 5 Free"; /* Font Awesome family */
