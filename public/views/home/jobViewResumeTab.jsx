@@ -50,6 +50,9 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
         }
     }
     const asyncLoadResumeComparison = async () => {
+        console.debug("GETTING RESUME COMPARISON");
+        console.debug("FOR JOB:");
+        console.debug(job);
         //Can be null
         try {
             const resumeComparison = await DatabaseCalls.sendMessageToReadSpecificResumeComparison(currentResume.id, job.jobId);
@@ -93,11 +96,11 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                 [job.jobId]: resumeComparison.matchScore, // Correct way to set dynamic property keys
             }});
             
-            mainViewReloadFunc({force: true, showLatestJob: false});
         } catch (err){
             setIsLoadingComparison(false);
             showError(err);
         }
+        mainViewReloadFunc({force: true, showLatestJob: false});
     }
     const showResumeParserPopoup = () => {
         showFullscreenPopup(HighlightedResumeView, 
@@ -177,6 +180,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
     //Catch if user switches tabs mid comparison check
     useEffect(()=>{
         if (!isLoadingComparison && !currentResumeComparison && currentResume){
+            console.debug("User switched tabs, checking if we loaded the comparison");
             asyncLoadResumeComparison();
         }
     }, [isLoadingComparison])

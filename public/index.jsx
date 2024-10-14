@@ -38,6 +38,8 @@ const MainView = ({ContentView}) => {
     }
     //anyone who calls the main view can set the latest job to show the user a cetrain job
     if (params.get("latestJob")){
+      console.log("Got latest job arg of:");
+      console.log(params.get("latestJob"));
       const asyncSetLatestJob = async () => {
         //spaghetti code but basically first we check if the job is in local storage
         //if its a new job we first check if content script is loading it, else we send a request to scrape

@@ -46,7 +46,8 @@ export const HomeView = () => {
         console.log(lsLatestJob);
         if (lsLatestJob && showLatestJob){
             console.log("SHOWING LATEST JOB POPUP")
-            showFullscreenPopup(LatestJobView, {job: lsLatestJob, user: readUser, mainViewReloadFunc: asyncLoadData}, lsLatestJob.jobName, lsLatestJob.company.companyName, async ()=>{
+            showFullscreenPopup(LatestJobView, {job: lsLatestJob, user: readUser, mainViewReloadFunc: asyncLoadData}, lsLatestJob.jobName, 
+                lsLatestJob.company.companyName, async ()=>{
                 //Should we await?
                 await LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
             });

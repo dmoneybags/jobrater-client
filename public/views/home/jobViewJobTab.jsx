@@ -106,10 +106,14 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                 marginTop: "-10px"
             }}>
                 {!jobSaved && <button 
-                className='button is-focused is-small'
+                className='button is-link is-small'
                 onClick={async ()=>{
                     try {
+                        console.log("Adding Job");
+                        console.log(job);
                         const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
+                        console.log("Returned job of");
+                        console.log(reReadJob);
                         LocalStorageHelper.addJob(reReadJob);
                         setJobSaved(true);
                         mainViewReloadFunc({force: true, showLatestJob: false});

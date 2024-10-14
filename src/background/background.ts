@@ -152,6 +152,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
         sendResponse({ success: true, message: 'Notification shown'});
     } else if (message.action === 'openPopup') {
+        console.log("RECIEVED MESSAGE TO OPEN POPUP!!");
+        console.log("WITH OPTIONS:");
+        console.log(message.options);
         if (message.options){
             WindowingFunctions.createOrRefreshWindow(message.options);
         } else {

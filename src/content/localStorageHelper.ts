@@ -21,8 +21,10 @@ export class LocalStorageHelper {
         return new Promise((resolve, reject) => {
           chrome.runtime.sendMessage(message, (response) => {
             if (chrome.runtime.lastError) {
-                console.log(chrome.runtime.lastError);
-              reject(new Error(String(chrome.runtime.lastError)));
+              console.log("Failed to send message of:");
+              console.log(message);
+              console.log(chrome.runtime.lastError);
+              reject(chrome.runtime.lastError);
             } else {
               resolve(response);
             }
