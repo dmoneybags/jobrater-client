@@ -34,9 +34,9 @@ import { DatabaseCalls } from "./databaseCalls";
 import { LocalStorageHelper } from "./localStorageHelper";
 import { HtmlInjection } from "./htmlInjection";
 
-const handleJobPromise = (promise:Promise<Job>) => {
-    promise
-    .then((jobread:Job):void => {
+const handleJobPromise = async (promise:Promise<Job>) => {
+    try {
+        const jobread = await promise;
         let popupMessage : Record<string, any> = {action: 'NEW_JOB_LOADING', payload: {
             jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"}};
         //Send out message to our popup
@@ -51,11 +51,13 @@ const handleJobPromise = (promise:Promise<Job>) => {
 
         LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
             isLoading: true, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
-
-        DatabaseCalls.sendMessageToAddJob(jobread)
-        .then((responseJson: Record<string, any>) => {
+        try {
+            const responseJson = await DatabaseCalls.sendMessageToAddJob(jobread)
             const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
-            //LocalStorageHelper.addJob(completeJob);
+            const activeUser = await LocalStorageHelper.getActiveUser();
+            if (activeUser.preferences.saveEveryJobByDefault){
+                await LocalStorageHelper.addJob(completeJob);
+            }
             //if its not loaded it wont show so lets store it in our bg script too
 
             LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
@@ -93,8 +95,7 @@ const handleJobPromise = (promise:Promise<Job>) => {
             .catch(error => {
                 console.error("Error:", error);
             });
-        })
-        .catch((err) => {
+        } catch(err){
             LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
                 isLoading: false, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} });
                 
@@ -115,9 +116,8 @@ const handleJobPromise = (promise:Promise<Job>) => {
                 console.log("Response from background:", response);
             })
 
-        })
-    })
-    .catch((err) => {
+        }
+    } catch(err) {
         console.log("ERR executing scrape");
         console.warn(err);
 
@@ -127,7 +127,7 @@ const handleJobPromise = (promise:Promise<Job>) => {
             console.log("Sent message to background script");
             console.log("Response from background:", response);
         })
-    })
+    }
 }
 
 //MAIN

@@ -100,10 +100,11 @@ export class DatabaseCalls{
                     noCompanies = gdData.noCompanies;
                 }
             }
+            const activeUser = await LocalStorageHelper.getActiveUser();
             //Our database program runs on port 5001 on our local server
             var xhr = new XMLHttpRequest();
             //call an http request
-            xhr.open('POST', DATABASESERVER + 'databases/add_job', true);
+            xhr.open('POST', DATABASESERVER + 'databases/add_job' + (activeUser.preferences.saveEveryJobByDefault ? "?addUserJob=1":""), true);
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
             await setTokenHeader(xhr);
             xhr.onload = function () {

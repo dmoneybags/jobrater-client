@@ -177,6 +177,7 @@ export const HomeViewSorter = ({jobs, setJobs, user, bestResumeScores}) => {
                             const rereadJobs = await LocalStorageHelper.readJobs();
                             setJobs(rereadJobs);
                             setIsSorted(false);
+                            setExpanded(false);
                         }}
                         >
                             Clear

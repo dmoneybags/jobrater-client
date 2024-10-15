@@ -114,22 +114,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     } else if (message.action === 'clearAllData'){
         try {
             chrome.storage.local.clear();
-            console.log("Cleared LocalStorage")
+            console.log("Cleared LocalStorage");
+            sendResponse({ success: true, message: 'Successfully cleared local storage'});
         } catch (error) {
             console.error('Error clearing data:', error);
             sendResponse({ success: false, message: 'Failed to store data', error: error.message });
         }
         return true;
     } else if (message.action === 'scrapeGd'){
+        console.log("Got message to scrape glassdoor");
         const company = message.company;
         if (!company){
             sendResponse({ success: false, message: 'Failed to read company arg', error: "NO COMPANY" });
         }
-        GlassdoorScrapingFunctions.scrape(company).then((companyData) => {
+        GlassdoorScrapingFunctions.scrape(company)
+        .then((companyData) => {
             const gdPageSource = companyData.pageSource;
             const gdUrl = companyData.url;
             const noCompanies = companyData.noCompanies;
             sendResponse({gdPageSource: gdPageSource, gdUrl: gdUrl, noCompanies: noCompanies})
+        })
+        .catch((err) => {
+            console.error("Got error while scraping gd");
+            console.error(err);
+            sendResponse({gdPageSource: null, gdUrl: null, noCompanies: false})
         })
         //we're going to resolve asynchrously
         return true;

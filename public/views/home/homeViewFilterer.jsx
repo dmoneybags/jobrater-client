@@ -238,6 +238,7 @@ export const HomeViewFilterer = ({jobs, setJobs, user}) => {
                             const rereadJobs = await LocalStorageHelper.readJobs();
                             setJobs(rereadJobs);
                             setIsFiltered(false);
+                            setExpanded(false);
                         }}
                         >
                             Clear

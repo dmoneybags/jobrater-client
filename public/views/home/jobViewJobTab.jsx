@@ -116,11 +116,11 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         console.log(reReadJob);
                         LocalStorageHelper.addJob(reReadJob);
                         setJobSaved(true);
-                        mainViewReloadFunc({force: true, showLatestJob: false});
                         showSuccess("Job successfully saved!");
                     } catch (err) {
                         showError(err)
                     }
+                    mainViewReloadFunc({force: true, showLatestJob: false});
                 }}
                 >
                     Save Job
