@@ -84,7 +84,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         </i>
                         <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
                     </div>
-                    <div className='latest-job-item'>
+                    {/* <div className='latest-job-item'>
                         <img 
                         src={glassdoorIcon}
                         className='latest-job-item-icon'
@@ -92,7 +92,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         >
                         </img>
                         <p className='latest-job-item-text'>{job.company.overallRating > 0.01 ? job.company.overallRating + "/5 Glassdoor": "No Glassdoor info"}</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <p className='is-size-3 has-text-white has-text-centered p-2'>Job fit: <span style={{color: HelperFunctions.ratingToColor(RatingFunctions.getRating(job, user.preferences))}}>
