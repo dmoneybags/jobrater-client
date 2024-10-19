@@ -1,4 +1,4 @@
-import { Resume, ResumeFactory } from "applicantiq_core/Core/resume";
+import { Resume, ResumeFactory } from "@applicantiq/applicantiq_core/Core/resume";
 import { promisify } from 'util';
 import * as fs from 'fs';
 

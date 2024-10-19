@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
 
 export const CircleRater = ({rating, size, thickness, mainColor, bgColor, circleThickness, fontSize}) => {
     const computedMainColor = mainColor || HelperFunctions.ratingToColor(rating);

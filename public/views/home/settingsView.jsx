@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomeViewNavBar } from './homeViewNavBar';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications'
 import '../../../src/assets/css/switch.css';
 

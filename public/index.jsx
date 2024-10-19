@@ -13,7 +13,7 @@ import { ResumesView } from './views/home/resumesView';
 import { SettingsView } from './views/home/settingsView';
 import { ProfileView } from './views/home/profileView';
 import { PopupLinkView } from './views/popup/popupLinkView';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { WindowingFunctions } from '../src/background/windowingFunctions';
 
 const BASEURL = "extension://jdmbkjofpaobeedpmoeoocbjnhpfalmm";

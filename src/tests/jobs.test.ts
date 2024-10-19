@@ -1,5 +1,5 @@
 //Tests for the file job.ts
-import { Job, JobFactory } from "applicantiq_core/Core/job"
+import { Job, JobFactory } from "@applicantiq/applicantiq_core/Core/job"
 import { MockObjects } from "./mocks/objects";
 describe("Job.ts file tests", () => {
     it("tests that companies can properly load values", () => {

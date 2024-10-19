@@ -1,5 +1,5 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications';
 
 export const EmailConfirmationPopup = ({email, waitingForEmailConfirmation, setWaitingForEmailConfirmation, attemptSignUp}) => {

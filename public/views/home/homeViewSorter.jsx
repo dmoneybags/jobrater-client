@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
-import { Job } from 'applicantiq_core/Core/job';
+import { Job } from '@applicantiq/applicantiq_core/Core/job';
 import { useSpring, animated } from '@react-spring/web';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
-import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
+import { RatingFunctions } from '@applicantiq/applicantiq_core/Core/ratingFunctions';
 
 export const HomeViewSorter = ({jobs, setJobs, user, bestResumeScores}) => {
     const [isExpanded, setExpanded] = useState(false);

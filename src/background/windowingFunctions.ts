@@ -1,5 +1,3 @@
-import { LocalStorageHelper } from "applicantiq_core/Core/localStorageHelper";
-
 const POPUPTITLE = "ApplicantIQ";
 
 export class WindowingFunctions {

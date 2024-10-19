@@ -1,7 +1,7 @@
 //(c) 2024 Daniel DeMoney. All rights reserved.
-import { ScrapingError } from "applicantiq_core/Core/errors";
-import { HelperFunctions } from "applicantiq_core/Core/helperFunctions";
-import { Job, JobFactory } from "applicantiq_core/Core/job";
+import { ScrapingError } from "@applicantiq/applicantiq_core/Core/errors";
+import { HelperFunctions } from "@applicantiq/applicantiq_core/Core/helperFunctions";
+import { Job, JobFactory } from "@applicantiq/applicantiq_core/Core/job";
 
 export class LinkedInScrapingFunctions {
     /**

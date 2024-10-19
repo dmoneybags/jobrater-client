@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
 import { HorizontalBubbleRaterView } from '../helperViews/horizontalBubbleRaterView';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
 import glassdoorLogo from '../../../src/assets/images/cdnlogo.com_glassdoor.svg';
 
 const ratingAttributeNames = ["businessOutlookRating", "careerOpportunitiesRating",

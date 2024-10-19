@@ -1,7 +1,7 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { HighlightedResumeView } from '../helperViews/highlightedResumeView';
 import { HorizontalBubbleRaterView } from '../helperViews/horizontalBubbleRaterView';
 import { showError } from '../helperViews/notifications'

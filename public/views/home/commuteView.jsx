@@ -1,5 +1,5 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
-import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
+import { RatingFunctions } from '@applicantiq/applicantiq_core/Core/ratingFunctions';
 import { HorizontalBubbleRaterView } from '../helperViews/horizontalBubbleRaterView';
 
 export const CommuteView = ({mapUrl, commuteData, user, job}) => {

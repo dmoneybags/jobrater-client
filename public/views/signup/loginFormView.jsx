@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { login, getSalt } from 'applicantiq_core/Core/auth';
+import { login, getSalt } from '@applicantiq/applicantiq_core/Core/auth';
 import { showError } from '../helperViews/notifications';
 import { useNavigate } from 'react-router-dom';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { ForgotPasswordPopup } from './forgotPasswordPopup'
 
 export const LoginFormView = () => {

@@ -1,5 +1,5 @@
-import { DatabaseCalls } from "applicantiq_core/Core/databaseCalls";
-import { GlassdoorScraperError } from "../../../applicantiq_core/Core/errors";
+import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
+import { GlassdoorScraperError } from "@applicantiq/applicantiq_core/Core/errors";
 
 export class GlassdoorScrapingFunctions {
     static getCompaniesJson = async (company: string):Promise<[Record<string, any>]> => {

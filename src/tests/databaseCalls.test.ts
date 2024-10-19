@@ -1,18 +1,18 @@
 //Tests for the file databaseCalls
 import { execSync } from 'child_process';
-import { DatabaseCalls } from "applicantiq_core/Core/databaseCalls";
-import { Company, CompanyFactory } from 'applicantiq_core/Core/company';
-import { Job, JobFactory, Mode, PaymentFrequency } from 'applicantiq_core/Core/job';
-import { User } from 'applicantiq_core/Core/user';
-import { register } from 'applicantiq_core/Core/auth';
+import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
+import { Company, CompanyFactory } from '@applicantiq/applicantiq_core/Core/company';
+import { Job, JobFactory, Mode, PaymentFrequency } from '@applicantiq/applicantiq_core/Core/job';
+import { User } from '@applicantiq/applicantiq_core/Core/user';
+import { register } from '@applicantiq/applicantiq_core/Core/auth';
 import { genSaltSync } from 'bcryptjs';
-import { LocationObject } from 'applicantiq_core/Core/location';
+import { LocationObject } from '@applicantiq/applicantiq_core/Core/location';
 import { MockObjects } from './mocks/objects';
 import { promisify } from 'util';
 import * as fs from 'fs';
-import { Resume, ResumeFactory } from 'applicantiq_core/Core/resume';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
-import { ResumeComparison } from 'applicantiq_core/Core/resumeComparison';
+import { Resume, ResumeFactory } from '@applicantiq/applicantiq_core/Core/resume';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
+import { ResumeComparison } from '@applicantiq/applicantiq_core/Core/resumeComparison';
 
 const readFile = promisify(fs.readFile);
 

@@ -28,8 +28,10 @@ module.exports = (env) => {
         },
         {
           test: /\.tsx?$/,
-          exclude: /node_modules/,
-          use: 'ts-loader'
+          use: 'ts-loader',
+          include: [
+            path.resolve(__dirname, 'node_modules/@applicantiq')
+          ]
         },
         {
           test: /\.(png|jpe?g|gif|svg)$/i,

@@ -1,11 +1,11 @@
 import { execSync } from 'child_process';
-import { login, register, getSalt } from 'applicantiq_core/Core/auth';
+import { login, register, getSalt } from '@applicantiq/applicantiq_core/Core/auth';
 import { genSaltSync } from 'bcryptjs';
 import { MockObjects } from './mocks/objects';
-import { UserPreferences } from 'applicantiq_core/Core/userPreferences';
-import { User } from 'applicantiq_core/Core/user';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
+import { UserPreferences } from '@applicantiq/applicantiq_core/Core/userPreferences';
+import { User } from '@applicantiq/applicantiq_core/Core/user';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
 
 describe("userPreferences.ts file tests", () => {
     beforeAll(() => {

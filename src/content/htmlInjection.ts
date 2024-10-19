@@ -1,5 +1,5 @@
 import { WindowingFunctions } from "../background/windowingFunctions";
-import { LocalStorageHelper } from "applicantiq_core/Core/localStorageHelper";
+import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStorageHelper";
 
 export class HtmlInjection {
     static addFontAwesome = () => {

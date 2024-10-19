@@ -1,14 +1,14 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { CircleRater } from '../helperViews/circleRater';
-import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
-import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
+import { RatingFunctions } from '@applicantiq/applicantiq_core/Core/ratingFunctions';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
 import { SelectResumeModal } from './selectResumeModal';
 import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { JobView } from './jobView';
 import { showFullscreenPopup, asynchronousBlockingPopup } from '../helperViews/popup';
-import { PaymentFrequency } from 'applicantiq_core/Core/job';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { PaymentFrequency } from '@applicantiq/applicantiq_core/Core/job';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications';
 
 export const LatestJobView = ({job, user, mainViewReloadFunc}) => {

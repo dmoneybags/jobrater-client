@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
-import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { showError, showSuccess } from '../helperViews/notifications';
 
 const MAXKEYWORDS = 5;
