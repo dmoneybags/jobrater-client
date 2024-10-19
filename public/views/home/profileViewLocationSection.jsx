@@ -1,10 +1,10 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
-import { validateLocation } from '../../../src/content/userValidation'
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { validateLocation } from 'applicantiq_core/Core/userValidation'
 import { showError, showSuccess } from '../helperViews/notifications';
-import { validateLocationData } from '../../../src/content/userValidation';
-import { LocationObjectFactory } from '../../../src/content/location'
+import { validateLocationData } from 'applicantiq_core/Core/userValidation';
+import { LocationObjectFactory } from 'applicantiq_core/Core/location'
 
 export const ProfileViewLocationSection = ({user, setShowingId, reloadFunc}) => {
     const [wontShareLocation, setWontShareLocation] = useState(user.location === null);

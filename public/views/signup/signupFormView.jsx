@@ -4,19 +4,19 @@ import { SignupEmailPwTabView } from './signupEmailPwTabView';
 import { PreferencesTabView } from './preferencesTabView';
 import { CareerStageTabView } from './careerStageTabView';
 import { LocationInputView } from './locationInputView';
-import { validateRawSignUpData, validateLocation , validateRawSignUpDataAllowEmpty} from '../../../src/content/userValidation'
+import { validateRawSignUpData, validateLocation , validateRawSignUpDataAllowEmpty} from 'applicantiq_core/Core/userValidation'
 import { showError } from '../helperViews/notifications';
-import { LocationObjectFactory } from '../../../src/content/location';
-import { User } from '../../../src/content/user';
-import { UserPreferences } from '../../../src/content/userPreferences';
-import { PaymentFrequency } from '../../../src/content/job';
-import { register } from '../../../src/content/auth';
+import { LocationObjectFactory } from 'applicantiq_core/Core/location';
+import { User } from 'applicantiq_core/Core/user';
+import { UserPreferences } from 'applicantiq_core/Core/userPreferences';
+import { PaymentFrequency } from 'applicantiq_core/Core/job';
+import { register } from 'applicantiq_core/Core/auth';
 import { useNavigate } from 'react-router-dom';
 import { genSaltSync } from 'bcryptjs';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { KeywordInputView } from './keywordInputView';
 import { EmailConfirmationPopup } from './emailConfirmationPopup';
-import { DatabaseCalls } from '../../../src/content/databaseCalls'
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls'
 
 const NUMTABS = 5
 

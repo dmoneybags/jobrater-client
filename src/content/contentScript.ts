@@ -29,9 +29,9 @@ Sends: a message for db to handle the job
 //deployment
 //question: what to do on addJob with no token?
 import { LinkedInScrapingFunctions } from "./linkedinScrapingFunctions";
-import { EMPTYJOB, Job, JobFactory } from "./job"
-import { DatabaseCalls } from "./databaseCalls";
-import { LocalStorageHelper } from "./localStorageHelper";
+import { EMPTYJOB, Job, JobFactory } from "applicantiq_core/Core/job"
+import { DatabaseCalls } from "applicantiq_core/Core/databaseCalls";
+import { LocalStorageHelper } from "applicantiq_core/Core/localStorageHelper";
 import { HtmlInjection } from "./htmlInjection";
 
 const handleJobPromise = async (promise:Promise<Job>) => {

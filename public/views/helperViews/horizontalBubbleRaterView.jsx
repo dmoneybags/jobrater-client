@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { useSpring, animated } from '@react-spring/web';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 
 export const HorizontalBubbleRaterView = ({width, height, rating, ratingDisplayFunc, invert=false, color1=null, color2=null}) => {
     const { animatedRating } = useSpring({

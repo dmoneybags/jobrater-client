@@ -48,3 +48,52 @@ export const showFullscreenPopup = (Component, props, title, subtitle, exitCallb
         popup.classList.add('show');
     });
 }
+/* Returns a promise that will be resolved*/
+/* Resolves true if user clicked the ok, false if they clicked false*/
+export const asynchronousBlockingPopup = (text, subtext, okText, okFunction, cancelText, cancelFunction) => {
+    return new Promise((resolve, reject) => {
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.style.zIndex = "10000";
+        popup.style.padding = "10px";
+        popup.style.minHeight = "200px";
+        popup.style.height = "150px";
+        document.body.prepend(popup);
+
+        ReactDOM.render(
+            <>
+                <p className='has-text-white'>{text}</p>
+                <p className='is-size-7'>{subtext}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: "10px"}}>
+                    <button 
+                    className="button is-focused" 
+                    style={{ margin: '0 10px' }}
+                    onClick={() =>{
+                        okFunction();
+                        popup.classList.remove('show');
+                        resolve(true);
+                    }}
+                    >
+                        {okText}
+                    </button>
+                    <button 
+                    className="button" 
+                    style={{ margin: '0 10px' }}
+                    onClick={()=>{
+                        cancelFunction();
+                        popup.classList.remove('show');
+                        resolve(false);
+                    }}
+                    >
+                        {cancelText}
+                    </button>
+                </div>
+            </>,
+            popup
+        );
+        // Trigger the animation
+        requestAnimationFrame(() => {
+            popup.classList.add('show');
+        });
+    })
+}

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { User } from '../../content/user';
-import { Resume, ResumeFactory } from '../../content/resume';
-import { ResumeComparison } from '../../content/resumeComparison';
-import { DatabaseCalls } from '../../content/databaseCalls';
-import { LocalStorageHelper } from '../../content/localStorageHelper';
-import { login, register, getSalt } from '../../content/auth';
+import { User } from 'applicantiq_core/Core/user';
+import { Resume, ResumeFactory } from 'applicantiq_core/Core/resume';
+import { ResumeComparison } from 'applicantiq_core/Core/resumeComparison';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { login, register, getSalt } from 'applicantiq_core/Core/auth';
 import { genSaltSync } from 'bcryptjs';
-import { EMPTYJOB } from '../../content/job';
+import { EMPTYJOB } from 'applicantiq_core/Core/job';
 import { loadResume } from './loadMockResumes';
 import { useNavigate } from 'react-router-dom';
 

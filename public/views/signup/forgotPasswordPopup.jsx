@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { showError, showSuccess } from '../helperViews/notifications';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { getStrengthValues } from '../../../src/content/userValidation';
-import { getSalt } from '../../../src/content/auth';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { getStrengthValues } from 'applicantiq_core/Core/userValidation';
+import { getSalt } from 'applicantiq_core/Core/auth';
 import bcrypt from 'bcryptjs';
 
 export const ForgotPasswordPopup = ({showingForgotPassword, setShowingForgotPassword}) => {

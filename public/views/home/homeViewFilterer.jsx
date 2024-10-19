@@ -1,6 +1,6 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
 import { useSpring, animated } from '@react-spring/web';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { showError } from '../helperViews/notifications';
 
 export const HomeViewFilterer = ({jobs, setJobs, user}) => {

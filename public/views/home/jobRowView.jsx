@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { CircleRater } from '../helperViews/circleRater';
-import { RatingFunctions } from '../../../src/content/ratingFunctions';
+import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { JobView } from './jobView';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { showError } from '../helperViews/notifications';
 import { LatestJobView } from './latestJobView';
-import { PaymentFrequency } from '../../../src/content/job';
+import { PaymentFrequency } from 'applicantiq_core/Core/job';
 
 export const JobRowView = ({ job, user, resumeScore, reloadFunc }) => {
     const [isExpanded, setIsExpanded] = useState(false);

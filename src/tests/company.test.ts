@@ -1,5 +1,5 @@
 //Tests for the file Company.ts
-import { Company, CompanyFactory } from "../content/company"
+import { Company, CompanyFactory } from "applicantiq_core/Core/company"
 import { MockObjects } from "./mocks/objects";
 describe("Company.ts file tests", () => {
     it("tests that companies can properly load values", () => {

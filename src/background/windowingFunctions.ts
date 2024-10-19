@@ -1,4 +1,4 @@
-import { LocalStorageHelper } from "../content/localStorageHelper";
+import { LocalStorageHelper } from "applicantiq_core/Core/localStorageHelper";
 
 const POPUPTITLE = "ApplicantIQ";
 

@@ -1,5 +1,5 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 
 export const ArrowRaterView = ({rating, width, text}) => {
     return (

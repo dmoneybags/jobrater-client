@@ -1,6 +1,6 @@
 //(c) 2024 Daniel DeMoney. All rights reserved.
-import { DatabaseCalls } from "./databaseCalls";
-import { LocalStorageHelper } from "./localStorageHelper";
+import { DatabaseCalls } from "applicantiq_core/Core/databaseCalls";
+import { LocalStorageHelper } from "applicantiq_core/Core/localStorageHelper";
 
 export class ScrapingHelperFunctions {
     static isAuthed = async():Promise<boolean> =>{

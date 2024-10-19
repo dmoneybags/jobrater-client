@@ -2,8 +2,8 @@ import React, { createElement, useState, useEffect } from 'react';
 import { HomeViewNavBar } from './homeViewNavBar';
 import { PreferenceRow } from './preferenceRow';
 import { ProfileViewDesiredPaySection } from './profileViewDesiredPaySection';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 import { showError } from '../helperViews/notifications';
 import { Spinner } from '../helperViews/loadingSpinner'
 import { ProfileViewDesiredCommuteSection } from './profileViewDesiredCommuteSection';

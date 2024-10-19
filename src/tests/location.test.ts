@@ -1,5 +1,5 @@
 //Tests for the file job.ts
-import { LocationObject } from "../content/location"
+import { LocationObject } from "applicantiq_core/Core/location"
 import { MockObjects } from "./mocks/objects";
 describe("Job.ts file tests", () => {
     it("tests that companies can properly load values", () => {

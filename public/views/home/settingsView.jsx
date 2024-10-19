@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomeViewNavBar } from './homeViewNavBar';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications'
 import '../../../src/assets/css/switch.css';
 
@@ -87,7 +87,7 @@ export const SettingsView = () => {
                         Auto-save every job
                         <div className='hoverable-icon-container ml-2'> 
                             <i className="fas fa-info-circle" style={{fontSize: "12px", marginLeft: "5px"}}></i>
-                            <div className="hover-text" style={{width: "200px"}}>Automatically saves every job to your profile that is loaded in the plugin. If not on you'll have to click on save job under the jobs score.</div>
+                            <div className="hover-text" style={{width: "200px"}}>Automatically saves every job to your profile that is loaded in the plugin. If not on, you'll have to click on save job under the jobs score.</div>
                         </div>
                     </p>
                     <div className='setting-switch'>

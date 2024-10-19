@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import 'pdfjs-dist/build/pdf.worker.mjs';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 
 //height and width are passed numbers but represent pixels
 export const HighlightedResumeView = ({resumeComparison, resume, width, height}) => {

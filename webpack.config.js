@@ -58,7 +58,8 @@ module.exports = (env) => {
         'CLIENT_ENV.ENVIRONMENT': JSON.stringify('development'),
         'CLIENT_ENV.PROD_API_URL': JSON.stringify('https://api.applicantiq.org/'),
         'CLIENT_ENV.DEV_API_URL': JSON.stringify('http://localhost:5001/'),
+        'CLIENT_ENV.CONTEXT': JSON.stringify('extension')
       }),
-    ]
+    ],
   };
 };

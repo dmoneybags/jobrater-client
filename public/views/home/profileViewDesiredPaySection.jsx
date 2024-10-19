@@ -1,7 +1,7 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { ArrowSliderSelectorView } from '../helperViews/arrowSliderSelectorView'
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { showError, showSuccess } from '../helperViews/notifications';
 
 export const ProfileViewDesiredPaySection = ({user, setShowingId, reloadFunc}) => {

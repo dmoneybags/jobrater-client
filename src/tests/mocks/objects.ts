@@ -1,8 +1,8 @@
-import { User } from "../../content/user";
-import { Company, CompanyFactory } from "../../content/company";
-import { LocationObject } from "../../content/location"
-import { PaymentFrequency, Mode, Job } from "../../content/job";
-import { UserPreferences } from "../../content/userPreferences";
+import { User } from "applicantiq_core/Core/user";
+import { Company, CompanyFactory } from "applicantiq_core/Core/company";
+import { LocationObject } from "applicantiq_core/Core/location"
+import { PaymentFrequency, Mode, Job } from "applicantiq_core/Core/job";
+import { UserPreferences } from "applicantiq_core/Core/userPreferences";
 
 //Mock file for objects used in our tests
 export class MockObjects {

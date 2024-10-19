@@ -1,4 +1,4 @@
-import { Resume, ResumeFactory } from "../../content/resume"
+import { Resume, ResumeFactory } from "applicantiq_core/Core/resume"
 
 
 export const loadResume = async(file: File): Promise<Resume> => {

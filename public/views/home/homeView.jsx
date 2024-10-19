@@ -3,10 +3,9 @@ import { useLocation } from "react-router-dom";
 import { HomeViewNavBar } from './homeViewNavBar';
 import { JobRowView } from './jobRowView';
 import { WelcomePopupView } from './welcomePopupView';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper'
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper'
 import { Spinner } from '../helperViews/loadingSpinner'
-import { HelperFunctions } from '../../../src/content/helperFunctions';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { LatestJobView } from './latestJobView';
 import { LoadingJobRowView } from './loadingJobRowView';

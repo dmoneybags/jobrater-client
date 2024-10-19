@@ -1,11 +1,11 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { CircleRater } from "../helperViews/circleRater";
-import { RatingFunctions } from '../../../src/content/ratingFunctions';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 import { RatingBulletPointsGenerator } from '../helperViews/ratingBulletsGenerator';
-import { PaymentFrequency } from '../../../src/content/job';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { PaymentFrequency } from 'applicantiq_core/Core/job';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications';
 import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
 

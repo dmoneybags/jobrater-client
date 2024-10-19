@@ -1,19 +1,57 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { CircleRater } from '../helperViews/circleRater';
-import { RatingFunctions } from '../../../src/content/ratingFunctions';
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { RatingFunctions } from 'applicantiq_core/Core/ratingFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 import { SelectResumeModal } from './selectResumeModal';
 import glassdoorIcon from '../../../src/assets/images/glassdoor_icon.png';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { JobView } from './jobView';
-import { showFullscreenPopup } from '../helperViews/popup';
-import { PaymentFrequency } from '../../../src/content/job';
+import { showFullscreenPopup, asynchronousBlockingPopup } from '../helperViews/popup';
+import { PaymentFrequency } from 'applicantiq_core/Core/job';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { showError, showSuccess } from '../helperViews/notifications';
 
 export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
     const [showingPopup, setShowingPopup] = useState(false);
+    const saveJobInLs = () => {
+        const asyncSaveJob = async () => {
+            try {
+                console.log("Adding Job");
+                console.log(job);
+                const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
+                console.log("Returned job of");
+                console.log(reReadJob);
+                LocalStorageHelper.addJob(reReadJob);
+            } catch (err) {
+                showError(err)
+            }
+            mainViewReloadFunc({force: true, showLatestJob: false});
+        }
+        asyncSaveJob();
+    }
+    const showJob = () => {
+        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
+            LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
+            const promptSave = async () => {
+                const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId);
+                if (!jobExists){
+                    asynchronousBlockingPopup(
+                        `Save ${job.jobName} at ${job.company?.companyName ?? "no company loaded"}?`, 
+                        "", 
+                        "Save", 
+                        ()=>{
+                            saveJobInLs();
+                        }, 
+                        "Exit", 
+                        ()=>{});
+                }
+            }
+            promptSave();
+        })
+    }
     return (
         <div className='latest-job-container p-3'>
-            <SelectResumeModal showingPopup={showingPopup} setShowingPopup={setShowingPopup} callbackFunction={()=>showFullscreenPopup(JobView, {job: job, user: user}, job.jobName, job.company.companyName, ()=>{})}/>
+            <SelectResumeModal showingPopup={showingPopup} setShowingPopup={setShowingPopup} callbackFunction={showJob}/>
             <p className='job-title mb-2' style={{color: 'white', fontSize: '20px'}}>Job Score:</p>
             <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                 <div>
@@ -88,16 +126,16 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                 id="evaluateButton" 
                 className="button is-focused is-centered "
                 onClick={async ()=>{
+                    //if no resumes are uploaded we prompt to upload a resume
                     const resumes = await LocalStorageHelper.readResumes();
                     console.log(`Found resumes of ${resumes}`);
                     if (!resumes || !resumes.length){
                         console.log("Showing popup");
                         setShowingPopup(true);
+                    //ok they've uploaded a resume lets show them the actual job view
                     } else {
                         console.log("Loading job view");
-                        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
-                            LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
-                        })
+                        showJob();
                     }
                 }}
                 >

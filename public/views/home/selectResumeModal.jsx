@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
 import { loadResume } from '../../../src/tests/debugView/loadMockResumes';
 import { showError } from '../helperViews/notifications';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 
 export const SelectResumeModal = ({showingPopup, setShowingPopup, callbackFunction}) => {
     const popupRef = useRef(null);

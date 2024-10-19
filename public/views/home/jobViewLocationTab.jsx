@@ -1,10 +1,10 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
 import { CommuteView } from './commuteView';
 import { RelocationView } from './relocationView';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
 import { showError } from '../helperViews/notifications';
 import { Spinner } from '../helperViews/loadingSpinner';
-import { LocationHelperFunctions } from '../../../src/content/locationHelperFunctions'
+import { LocationHelperFunctions } from 'applicantiq_core/Core/locationHelperFunctions'
 import { Link } from 'react-router-dom';
 
 export const LocationViewJobTab = ({job, user}) => {

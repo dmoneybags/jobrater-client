@@ -1,10 +1,10 @@
 import React, { createElement, useState, useEffect } from 'react';
 import { HomeViewNavBar } from './homeViewNavBar';
-import { LocalStorageHelper } from '../../../src/content/localStorageHelper';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper';
 import { Spinner } from '../helperViews/loadingSpinner'
-import { HelperFunctions } from '../../../src/content/helperFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 import { loadResume } from '../../../src/tests/debugView/loadMockResumes';
-import { DatabaseCalls } from '../../../src/content/databaseCalls';
+import { DatabaseCalls } from 'applicantiq_core/Core/databaseCalls';
 import { showError } from '../helperViews/notifications';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { HighlightedResumeView } from '../helperViews/highlightedResumeView';

@@ -1,8 +1,8 @@
 import React, { createElement, useState, useEffect } from 'react';
-import { HelperFunctions } from "../../../src/content/helperFunctions";
-import { Job } from "../../../src/content/job";
-import { RatingFunctions } from "../../../src/content/ratingFunctions";
-import { UserPreferences } from "../../../src/content/userPreferences";
+import { HelperFunctions } from "applicantiq_core/Core/helperFunctions";
+import { Job } from "applicantiq_core/Core/job";
+import { RatingFunctions } from "applicantiq_core/Core/ratingFunctions";
+import { UserPreferences } from "applicantiq_core/Core/userPreferences";
 
 export class RatingBulletPointsGenerator {
     static getGradientNumberSpan = (rating, shownRating, invert=false) =>{

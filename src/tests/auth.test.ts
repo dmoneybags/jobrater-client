@@ -1,11 +1,11 @@
 //Tests for the file auth.ts
 import { execSync } from 'child_process';
-import { login, register, getSalt } from '../content/auth';
-import { User } from '../content/user';
-import { LocalStorageHelper } from '../content/localStorageHelper'
+import { login, register, getSalt } from 'applicantiq_core/Core/auth';
+import { User } from 'applicantiq_core/Core/user';
+import { LocalStorageHelper } from 'applicantiq_core/Core/localStorageHelper'
 import { genSaltSync } from 'bcryptjs';
 import { MockObjects } from './mocks/objects';
-import { HelperFunctions } from '../content/helperFunctions';
+import { HelperFunctions } from 'applicantiq_core/Core/helperFunctions';
 
 describe("Auth.ts file tests", () => {
   beforeAll(() => {
