@@ -6,12 +6,15 @@ import { showError } from '../helperViews/notifications';
 import { Spinner } from '../helperViews/loadingSpinner';
 import { LocationHelperFunctions } from '@applicantiq/applicantiq_core/Core/locationHelperFunctions'
 import { Link } from 'react-router-dom';
+import { ProPopupView } from './proPopupView';
 
 export const LocationViewJobTab = ({job, user}) => {
     const [commuteData, setCommuteData] = useState(null);
     const [relocationData, setRelocationData] = useState(null);
     const [mapUrl, setMapUrl] = useState(null);
     const [isCommutable, setIsCommutable] = useState(true);
+    const [isSubscribed, setIsSubscribed] = useState(true);
+    const [showingProPopup, setShowingProPopup] = useState(false);
     const getCommuteData = async () => {
         try {
             const originLat = user.location.latitude;
@@ -23,7 +26,12 @@ export const LocationViewJobTab = ({job, user}) => {
             setMapUrl(commuteData.mapUrl);
         } catch (err) {
             //Need to stop spinner on error
-            showError(err);
+            if (err === "402"){
+                setIsSubscribed(false);
+                setShowingProPopup(true);
+            } else {
+                showError(err);
+            }
         }
     }
     const getRelocationData = async () => {
@@ -34,8 +42,13 @@ export const LocationViewJobTab = ({job, user}) => {
             setRelocationData(relocationData);
             setMapUrl(relocationData.mapUrl);
         } catch (err) {
-            //Need to stop spinner on error
-            showError(err);
+            if (err === "402"){
+                setIsSubscribed(false);
+                setShowingProPopup(true);
+            } else {
+                //Need to stop spinner on error
+                showError(err);
+            }
         }
     }
 
@@ -59,27 +72,35 @@ export const LocationViewJobTab = ({job, user}) => {
         <>
         {(job.location && job.mode?.str !== "Remote") &&
             <div className='pr-2 pl-2'>
-                {job.location && user.location && <>
-                    {isCommutable && mapUrl && user.location &&
-                    <CommuteView mapUrl={mapUrl} commuteData={commuteData} user={user} job={job}/>
+                <ProPopupView showingPopup={showingProPopup} setShowingPopup={setShowingProPopup}/>
+                {isSubscribed && <>
+                    {job.location && user.location && <>
+                        {isCommutable && mapUrl && user.location &&
+                        <CommuteView mapUrl={mapUrl} commuteData={commuteData} user={user} job={job}/>
+                        }
+                        {!isCommutable && mapUrl && 
+                        <RelocationView mapUrl={mapUrl} relocationData={relocationData} user={user} job={job}/>
+                        }
+                        {!mapUrl && <Spinner/>}
+                    </>}
+                    {job.location && !user.location &&
+                        <>
+                            <div style={{display: "flex", justifyContent: "center"}}>
+                                <p className='has-text-white is-size-5' style={{textAlign: "center"}}>Share your location to get data on commute times and traffic</p>
+                            </div>
+                        </>
                     }
-                    {!isCommutable && mapUrl && 
-                    <RelocationView mapUrl={mapUrl} relocationData={relocationData} user={user} job={job}/>
-                    }
-                    {!mapUrl && <Spinner/>}
-                </>}
-                {job.location && !user.location &&
-                    <>
+                    {!job.location && <>
                         <div style={{display: "flex", justifyContent: "center"}}>
-                            <p className='has-text-white is-size-5' style={{textAlign: "center"}}>Share your location to get data on commute times and traffic</p>
+                            <p className='has-text-white is-size-3'>No Location Found</p>
                         </div>
-                    </>
-                }
-                {!job.location && <>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <p className='has-text-white is-size-3'>No Location Found</p>
-                    </div>
+                    </>}
                 </>}
+                {!isSubscribed && <div className='pr-2 pl-2'>
+                    <div style={{display: "flex", justifyContent: "center"}}>
+                        <p className='has-text-white is-size-3' style={{textAlign: "center"}}>Location data is a Pro feature.</p>
+                    </div>
+                </div>}
             </div>
         }
         {job.mode?.str === "Remote" &&

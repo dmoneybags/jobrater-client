@@ -218,6 +218,11 @@
     text-overflow: ellipsis; /* Optional: adds "..." if the text overflows */
     font-size: 5vw; 
 }
+.gradient-text{
+    background-image: linear-gradient(to right, var(--color1, #72ff5f), var(--color2, #d4fe7b));
+    -webkit-background-clip: text;
+    color: transparent;
+  }
 .job-nav-bar{
     width: 100%;
     margin: 0;
@@ -280,7 +285,10 @@
 .setting-row{
     position: relative;
     width: 100%;
-    padding: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 .setting-switch{
     position: absolute;

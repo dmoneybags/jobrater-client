@@ -8,6 +8,7 @@ import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls'
 import { showError } from '../helperViews/notifications';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { HighlightedResumeView } from '../helperViews/highlightedResumeView';
+import { ProPopupView } from './proPopupView';
 
 export const ResumesView = () => {
     const [resumes, setResumes] = useState(null);
@@ -15,6 +16,7 @@ export const ResumesView = () => {
     const [uploadedResume, setUploadedResume] = useState(null);
     const [waitingForResumeReponse, setWaitingForResumeResponse] = useState(false);
     const [showingPopup, setShowingPopup] = useState(false);
+    const [showingProPopup, setShowingProPopup]= useState(false);
     const [uploadedResumeName, setUploadedResumeName] = useState(null);
     const [nameInvalid, setNameInvalid] = useState(false);
 
@@ -63,7 +65,11 @@ export const ResumesView = () => {
             await LocalStorageHelper.addResume(finishedResume);
             await asyncLoadData();
         } catch (err) {
-            showError(err);
+            if (err === "402"){
+                setShowingProPopup(true);
+            } else {
+                showError(err);
+            }
         } finally {
             //cleanup
             setWaitingForResumeResponse(false);
@@ -119,6 +125,7 @@ export const ResumesView = () => {
     }, [])
     return (
         <div className='main-container main-home-view'>
+            <ProPopupView showingPopup={showingProPopup} setShowingPopup={setShowingProPopup} sender='resumeUpload'/>
             {/* begin popup */}
             <div className={`popup ${showingPopup ? 'show' : ''}`}>
                 <p>Enter a name for this resume</p>

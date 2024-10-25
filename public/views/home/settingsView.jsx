@@ -4,6 +4,7 @@ import { HomeViewNavBar } from './homeViewNavBar';
 import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { showError, showSuccess } from '../helperViews/notifications'
+import { FreeUserDataHelperFunctions } from '@applicantiq/applicantiq_core/Core/freeUserDataHelperFunctions';
 import '../../../src/assets/css/switch.css';
 
 export const SettingsView = () => {
@@ -11,6 +12,13 @@ export const SettingsView = () => {
     const [showingDeletePopup, setShowingDeletePopup] = useState(false);
     const [saveEveryJobByDefault, setSaveEveryJobByDefault] = useState(false);
     const [loadEveryJobByDefault, setLoadEveryJobByDefault] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [subscriptionData, setSubscriptionData] = useState(null);
+    //data if they dont have a subscription, free resume ratings left, etc
+    const [freeData, setFreeData] = useState(null);
+    const capitalizeFirstLetter = (val) => {
+        return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    }
     const signOut = async () => {
         setShowingSignOutPopup(true);
         await LocalStorageHelper.__sendMessageToBgScript(
@@ -18,12 +26,26 @@ export const SettingsView = () => {
         )
     }
     useEffect(()=>{
+        const asyncLoadSubscriptionData = async () => {
+            const subscription = await DatabaseCalls.sendMessageToGetSubscription();
+            console.log(subscription);
+            if (Object.keys(subscription).length === 0 || Math.floor(Date.now() / 1000) > subscription?.currentPeriodEnd){
+                setIsSubscribed(false)
+                const freeData = await DatabaseCalls.sendMessageToGetFreeUserData();
+                console.log(freeData);
+                setFreeData(freeData);
+            } else {
+                setIsSubscribed(true);
+                setSubscriptionData(subscription);
+            }
+        }
         const asyncGetPreferences = async () => {
             const activeUser = await LocalStorageHelper.getActiveUser();
             setLoadEveryJobByDefault(activeUser.preferences.autoActiveOnNewJobLoaded);
             setSaveEveryJobByDefault(activeUser.preferences.saveEveryJobByDefault);
         }
         asyncGetPreferences();
+        asyncLoadSubscriptionData();
     }, [])
     return (
         <div className='main-container main-home-view'>
@@ -82,6 +104,32 @@ export const SettingsView = () => {
             {/* end popup */}
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
                 <p className='has-text-white is-size-3' style={{ textAlign: "center" }}>Settings:</p>
+                <div className='setting-row' style={{display: "flex", width: "400px", alignItems: "flex-start"}}>
+                    <p className='is-size-4 pr-4 has-text-white'>Plan:</p>
+                    <div>
+                        <p className='is-size-4 has-text-white'>{
+                        // hacky
+                        isSubscribed ? capitalizeFirstLetter(subscriptionData?.subscriptionObject?.subscriptionType) : "Basic"
+                        }</p>
+                        <ul className='is-size-7' style={{width: "180px"}}>
+                            {!isSubscribed && 
+                            <>
+                            {/* capital casing is a relic of the sql column, sorry not sorry */}
+                            <li className='mb-2'>{freeData?.FreeRatingsLeft} free resume ratings left, resets on {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.LastReload, 1)}</li>
+                            {FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>$6.99 lifetime subscription offer still valid until {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.CreatedAt, 7)}</li>}
+                            {!FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>Get unlimited ratings with Pro for $9.99/month</li>}
+                            </>}
+                            {isSubscribed && 
+                            <>
+                            <li className='mb-2'>{FreeUserDataHelperFunctions.centsToDollar(subscriptionData?.subscriptionObject?.price)} per month</li>
+                            <li>{subscriptionData?.isActive ? "Renewing" : "Expiring"} on {FreeUserDataHelperFunctions.getRenewDateStr(subscriptionData.currentPeriodEnd)}</li>
+                            </>}
+                        </ul>
+                    </div>
+                    <div className='setting-switch' style={{left: "285px", marginTop: "20px", top: "unset"}}>
+                        <a className='button is-link' href="https://applicantiq.org/account" target='_blank'>{isSubscribed ? "Change" : "Upgrade"}</a>
+                    </div>
+                </div>
                 <div className='setting-row'>
                     <p className='setting-text has-text-white is-size-4'>
                         Auto-save every job

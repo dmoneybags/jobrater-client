@@ -9,6 +9,7 @@ import { ResumeTabView } from './resumeTabView';
 import { showFullscreenPopup } from '../helperViews/popup';
 import { Spinner } from '../helperViews/loadingSpinner'
 import { loadResume } from '../../../src/tests/debugView/loadMockResumes';
+import { ProPopupView } from './proPopupView';
 
 export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingComparison, mainViewReloadFunc}) => {
     const [resumes, setResumes] = useState(null);
@@ -19,6 +20,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
     const [loadedData, setLoadedData] = useState(false);
     //popup vars
     const [showingUploadResumePopup, setShowingUploadResumePopup] = useState(false);
+    const [showingProPopup, setShowingProPopup] = useState(false);
     const [uploadedResumeName, setUploadedResumeName] = useState(null);
     const [isReplacing, setIsReplacing] = useState(false);
     const [reuploadedResume, setReuploadedResume] = useState(null);
@@ -97,8 +99,13 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             }});
             
         } catch (err){
+            //Not paying
+            if (err === '402'){
+                setShowingProPopup(true);
+            }else{
+                showError(err);
+            }
             setIsLoadingComparison(false);
-            showError(err);
         }
         mainViewReloadFunc({force: true, showLatestJob: false});
     }
@@ -186,6 +193,9 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
     }, [isLoadingComparison])
     return (
         <div className='pr-2 pl-2'>
+            {/* so this is the popup to show if when the user gets a 402 */}
+            <ProPopupView showingPopup={showingProPopup} setShowingPopup={setShowingProPopup} sender='resumeRating'/>
+            {/* and this is the inline popup for uploading a resume (should be moved to another file) */}
             {/* begin popup */}
             <div 
             className={`popup ${showingUploadResumePopup ? 'show' : ''}`}
