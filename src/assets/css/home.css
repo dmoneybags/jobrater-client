@@ -222,7 +222,17 @@
     background-image: linear-gradient(to right, var(--color1, #72ff5f), var(--color2, #d4fe7b));
     -webkit-background-clip: text;
     color: transparent;
-  }
+}
+.gradient-text-negative{
+    background-image: linear-gradient(to right, var(--color1, red), var(--color2, orange));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.gradient-text-neutral{
+    background-image: linear-gradient(to right, var(--color1, rgb(166, 255, 0)), var(--color2, rgb(255, 234, 0)));
+    -webkit-background-clip: text;
+    color: transparent;
+}
 .job-nav-bar{
     width: 100%;
     margin: 0;

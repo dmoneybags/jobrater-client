@@ -1,5 +1,6 @@
 import React, { createElement, useState, useEffect, useRef } from 'react';
 import { RatingFunctions } from '@applicantiq/applicantiq_core/Core/ratingFunctions';
+import { HelperFunctions } from '@applicantiq/applicantiq_core/Core/helperFunctions';
 import { HorizontalBubbleRaterView } from '../helperViews/horizontalBubbleRaterView';
 
 export const CommuteView = ({mapUrl, commuteData, user, job}) => {
@@ -12,13 +13,20 @@ export const CommuteView = ({mapUrl, commuteData, user, job}) => {
         const trafficSeconds = commuteData.leavingTrafficDuration.value - commuteData.leavingDuration.value;
         return String(Math.abs(Math.floor(trafficSeconds/60)));
     }
+    const getTrafficColors = (minutesInTraffic) => {
+        const maxMinutes = 30
+        const rating = (1 - Math.min(Number(minutesInTraffic)/maxMinutes, 1)) + 0.01
+        return {"--color1": HelperFunctions.ratingToColor(rating), "--color2": HelperFunctions.ratingToColor(Math.min(rating + 0.1, 1))}
+    }
+    const getCommuteColors = (secondsInCommute) => {
+        const maxMinutes = user.preferences.desiredCommute + 20;
+        const rating = (1 - Math.min(Number(secondsInCommute/60)/maxMinutes, 1)) + 0.01
+        return {"--color1": HelperFunctions.ratingToColor(rating), "--color2": HelperFunctions.ratingToColor(Math.min(rating + 0.1, 1))}
+    }
     useEffect(()=>{
         console.log("loading commute view with data of");
         console.log(commuteData);
     },[])
-    const gradientColorStyles = isMorning
-    ? {}
-    : { "--color1": "#6500FF", "--color2": "#2800FF" };
     return <>
         <div style={{
         display: "flex", 
@@ -50,7 +58,7 @@ export const CommuteView = ({mapUrl, commuteData, user, job}) => {
                         setIsMorning(true);
                     }}
                     >
-                        <p className='job-view-rating-number'>Morning</p>
+                        <p className='has-text-white'>Morning</p>
                     </button>
                 </p>
                 <p className='control job-nav-bar-item' style={{width: "50vw"}}>
@@ -61,29 +69,37 @@ export const CommuteView = ({mapUrl, commuteData, user, job}) => {
                         setIsMorning(false);
                     }}
                     >
-                        <p className='job-view-rating-number' style={{"--color1": "#6500FF", "--color2": "#00EFFF"}}>Evening</p>
+                        <p className='has-text-white'>Evening</p>
                     </button>
                 </p>
             </div>
             <div className='p-2'>
-                <p className='is-size-5'><span className='is-size-4'>Traffic:</span> on average adds <span className='job-view-rating-number is-size-4' style={gradientColorStyles}>{getTrafficMinutes()}</span> minutes</p>
-                <p className='is-size-5'>
+                <p className='is-size-5 has-text-white'>
                     <span className='is-size-4'>Time: </span>
                     <span className='job-view-rating-number is-size-4' 
-                    style={gradientColorStyles}>{isMorning ? commuteData.arrivingTrafficDuration.text : commuteData.leavingTrafficDuration.text}</span>
-                    </p>
-                <div className='p-2 has-text-centered'>
-                    <div>
-                        <HorizontalBubbleRaterView width={362.5} height={15} rating={
-                            1 - RatingFunctions.getCommuteRating(isMorning ? 
-                            commuteData.arrivingTrafficDuration.value : commuteData.leavingTrafficDuration.value, 
-                            user.preferences)}
-                            invert={true}
-                            color1={isMorning ? "#ff7e5f" : "#6500FF"}
-                            color2={isMorning ? "#feb47b" : "#00EFFF"}
-                        />
-                    </div>
-                </div>
+                    style={getCommuteColors(isMorning ? commuteData.arrivingTrafficDuration.value : commuteData.leavingTrafficDuration.value)}>
+                        {isMorning ? commuteData.arrivingTrafficDuration.text : commuteData.leavingTrafficDuration.text}
+                    </span>
+                </p>
+                <p className='is-size-4 has-text-white'>Traffic Flow<div className='hoverable-icon-container'> 
+                        <i className="fas fa-info-circle ml-1 mr-1" style={{fontSize: "12px"}}></i>
+                        <div className="hover-text" style={{width: "200px", bottom: "100%"}}>Traffic Flow is the direction the commute goes relative to traffic. Going with traffic means you will be caught in traffic more often and going against traffic means you are less likely to be caught in traffic.</div>
+                    </div>:&nbsp;
+                    <span className={`
+                    ${(isMorning ? commuteData.arrivingTrafficDirection: commuteData.leavingTrafficDirection) === "Against" ? "gradient-text":""}
+                    ${(isMorning ? commuteData.arrivingTrafficDirection: commuteData.leavingTrafficDirection) === "With" ? "gradient-text-negative":""}
+                    ${(isMorning ? commuteData.arrivingTrafficDirection: commuteData.leavingTrafficDirection) === "Neutral" ? "gradient-text-neutral":""}
+                    `}>
+                        {isMorning ? commuteData.arrivingTrafficDirection : commuteData.leavingTrafficDirection}
+                    </span>
+                </p>
+                <p className='is-size-5'>
+                    <span className='is-size-4 has-text-white'>
+                        Traffic:
+                    </span> on average adds 
+                    <span className='job-view-rating-number is-size-4' style={getTrafficColors(getTrafficMinutes())}>&nbsp;{getTrafficMinutes()}&nbsp;</span> 
+                    minutes
+                </p>
             </div>
         </div>
     </>
