@@ -171,9 +171,9 @@ export class RatingBulletPointsGenerator {
         if (job.applicants){
             RatingBulletPointsGenerator.addApplicantsBulletPoint(job, ratings);
         }
-        // if (job.company.overallRating){
-        //     RatingBulletPointsGenerator.addCompanyRatingBulletPoint(job, ratings);
-        // }
+        if (job.company.overallRating && CLIENT_ENV.SCRAPEGLASSDOOR){
+            RatingBulletPointsGenerator.addCompanyRatingBulletPoint(job, ratings);
+        }
         if (job.jobPostedAt){
             RatingBulletPointsGenerator.addTimePostedAgoBulletPoint(job, ratings);
         }

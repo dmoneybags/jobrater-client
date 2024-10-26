@@ -171,7 +171,11 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             getResumeComparison({id: rereadResume.id});
         } catch (err) {
             setWaitingForReupload(false);
-            showError(err);
+            if (err === "402"){
+                setShowingProPopup(true);
+            } else {
+                showError(err);
+            }
         }
     }
     useEffect(()=>{

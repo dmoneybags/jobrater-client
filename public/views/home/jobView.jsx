@@ -31,7 +31,7 @@ export const JobView = ({job, user, mainViewReloadFunc}) => {
                         Resume
                     </button>
                 </p>
-                {/* <p className={`control job-nav-bar-item ${activeTab === "company" ? "is-focused":""}`}>
+                {CLIENT_ENV.SCRAPEGLASSDOOR && <p className={`control job-nav-bar-item ${activeTab === "company" ? "is-focused":""}`}>
                     <button 
                     className={`button ${activeTab === "company" ? "is-focused":""}`} 
                     style={{width: "100%"}}
@@ -41,7 +41,7 @@ export const JobView = ({job, user, mainViewReloadFunc}) => {
                     >
                         Company
                     </button>
-                </p> */}
+                </p>}
                 <p className={`control job-nav-bar-item ${activeTab === "location" ? "is-focused":""}`}>
                     <button 
                     className={`button ${activeTab === "location" ? "is-focused":""}`} 
@@ -56,7 +56,7 @@ export const JobView = ({job, user, mainViewReloadFunc}) => {
             </div>
             {activeTab === "job" && <JobViewJobTab job={job} user={user} mainViewReloadFunc={mainViewReloadFunc}/>}
             {activeTab === "resume" && <ResumeViewJobTab job={job} user={user} isLoadingComparison={isLoadingComparison} setIsLoadingComparison={setIsLoadingComparison} mainViewReloadFunc={mainViewReloadFunc}/>}
-            {/* {activeTab === "company" && <CompanyViewJobTab job={job}/>} */}
+            {activeTab === "company" && <CompanyViewJobTab job={job}/>}
             {activeTab === "location" && <LocationViewJobTab job={job} user={user}/>}
         </div>
     )
