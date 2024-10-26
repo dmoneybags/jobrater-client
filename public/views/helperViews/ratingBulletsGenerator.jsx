@@ -180,7 +180,7 @@ export class RatingBulletPointsGenerator {
         if (job.location && user.location){
             RatingBulletPointsGenerator.addNearbyBulletPoint(job, user, ratings)
         }
-        if (ratings.pros.length + ratings.cons.length < 3){
+        if (ratings.pros.length + ratings.cons.length < 4){
             ratings.cons.push(<p className="rating-bp con">Limited information</p>)
         }
         return ratings;

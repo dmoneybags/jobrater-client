@@ -34,6 +34,21 @@ import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls"
 import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStorageHelper";
 import { HtmlInjection } from "./htmlInjection";
 
+window.addEventListener('message', async function(event) {
+    if (event.origin !== 'https://applicantiq.org') return;
+
+    // Check if the message is from your signup page
+    if (event.data.type && event.data.type === 'FROM_SIGNUP') {
+        const token = event.data.token;
+        const tokenExpiration = event.data.tokenExpiration;
+        
+        // Save the token in Chrome storage
+        await LocalStorageHelper.setToken(token, tokenExpiration);
+
+        chrome.runtime.sendMessage({ action: 'openPopup' , options: {firstLogin: true}});
+    }
+});
+
 const handleJobPromise = async (promise:Promise<Job>) => {
     try {
         const jobread = await promise;

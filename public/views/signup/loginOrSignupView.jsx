@@ -5,13 +5,19 @@ import { PrivacyStatement } from '../footer/privacyStatement';
 import { Link } from 'react-router-dom';
 import { LoginFormView } from './loginFormView';
 import { SignupFormView } from './signupFormView';
+import { WaitingForSignupView } from './waitingForSignupView';
 
 export const LoginOrSignupView = () => {
+    //Legacy
     const [isSigningIn, setIsSigningIn] = useState(false);
+    //current
+    const [showingSignUpPopup, setShowingSignUpPopup] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleSignInClick = () => {
-        setIsSigningIn(true);
+        const signupUrl = 'https://applicantiq.org/signup';
+        chrome.tabs.create({ url: signupUrl });
+        setShowingSignUpPopup(true);
     };
     const handleLogInClick = () => {
         setIsLoggingIn(true);
@@ -19,6 +25,7 @@ export const LoginOrSignupView = () => {
     return (
         <div>
             <LogoView/>
+            <WaitingForSignupView showingPopup={showingSignUpPopup} setShowingPopup={setShowingSignUpPopup}/>
             <hr />
             {(!isSigningIn && !isLoggingIn) && <p className='tag-line'>
                 <span className='typing-text'>Now the powers back in your hands...</span>

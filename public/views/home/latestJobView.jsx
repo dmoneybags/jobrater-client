@@ -110,7 +110,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         </i>
                         <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
                     </div>
-                    {/* <div className='latest-job-item'>
+                    {CLIENT_ENV.SCRAPEGLASSDOOR && <div className='latest-job-item'>
                         <img 
                         src={glassdoorIcon}
                         className='latest-job-item-icon'
@@ -118,7 +118,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         >
                         </img>
                         <p className='latest-job-item-text'>{job.company.overallRating > 0.01 ? job.company.overallRating + "/5 Glassdoor": "No Glassdoor info"}</p>
-                    </div> */}
+                    </div>}
                 </div>
             </div>
             <div class="buttons is-centered" style={{marginTop: "-10px", marginBottom: "7px"}}>

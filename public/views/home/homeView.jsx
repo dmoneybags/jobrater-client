@@ -84,10 +84,17 @@ export const HomeView = () => {
             setLoadingCompanyName(message.payload.companyName);
         }
     }
-
+    //You can pass first login through location state or search params
+    //this is the search params way
+    const isLoadingFirstTime = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const firstLoginParam = urlParams.get('firstLogin');
+        setShowingWelcomePopup(firstLoginParam === 'true');
+    }
     useEffect(() => {
         chrome.runtime.onMessage.addListener(handleMessage);
         asyncLoadData();
+        isLoadingFirstTime();
     }, [])
     return (
         <div className='main-container has-navbar-fixed-top'>

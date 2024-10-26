@@ -20,7 +20,9 @@ export const ProPopupView = ({showingPopup, setShowingPopup, sender=""}) => {
             style={{
                 position: "absolute", 
                 left: "5%", 
-                top: "5%"}}
+                top: "5%",
+                pointer: "cursor"
+            }}
             onClick={()=>{
                 setShowingPopup(false);
             }}></i>
