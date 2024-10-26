@@ -44,7 +44,7 @@ window.addEventListener('message', async function(event) {
         
         // Save the token in Chrome storage
         await LocalStorageHelper.setToken(token, tokenExpiration);
-
+        
         chrome.runtime.sendMessage({ action: 'openPopup' , options: {firstLogin: true}});
     }
 });

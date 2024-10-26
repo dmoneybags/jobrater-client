@@ -11,6 +11,7 @@ import { LatestJobView } from './latestJobView';
 import { LoadingJobRowView } from './loadingJobRowView';
 import { HomeViewSorter } from './homeViewSorter';
 import { HomeViewFilterer } from './homeViewFilterer';
+import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 
 export const HomeView = () => {
     const [jobs, setJobs] = useState(undefined);
@@ -25,7 +26,18 @@ export const HomeView = () => {
     const firstLogin = location.state?.firstLogin ?? false;
     const [showingWelcomePopup, setShowingWelcomePopup] = useState(firstLogin);
 
+    //You can pass first login through location state or search params
+    //this is the search params way
+    const isLoadingFirstTime = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const firstLoginParam = urlParams.get('firstLogin');
+        const firstTime = firstLoginParam === 'true'
+        setShowingWelcomePopup(firstTime);
+        await HelperFunctions.downloadDataIfNecessary(true);
+    }
+
     const asyncLoadData = async ({force=false, showLatestJob=true} = {}) => {
+        await isLoadingFirstTime();
         await HelperFunctions.downloadDataIfNecessary(force);
         const curJobs = await LocalStorageHelper.readJobs();
         console.log("Setting jobs to:");
@@ -84,17 +96,9 @@ export const HomeView = () => {
             setLoadingCompanyName(message.payload.companyName);
         }
     }
-    //You can pass first login through location state or search params
-    //this is the search params way
-    const isLoadingFirstTime = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const firstLoginParam = urlParams.get('firstLogin');
-        setShowingWelcomePopup(firstLoginParam === 'true');
-    }
     useEffect(() => {
         chrome.runtime.onMessage.addListener(handleMessage);
         asyncLoadData();
-        isLoadingFirstTime();
     }, [])
     return (
         <div className='main-container has-navbar-fixed-top'>
