@@ -5,7 +5,7 @@ import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls'
 import { showError } from '../helperViews/notifications';
 import { Spinner } from '../helperViews/loadingSpinner';
 import { LocationHelperFunctions } from '@applicantiq/applicantiq_core/Core/locationHelperFunctions'
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ProPopupView } from './proPopupView';
 
 export const LocationViewJobTab = ({job, user}) => {
@@ -15,6 +15,11 @@ export const LocationViewJobTab = ({job, user}) => {
     const [isCommutable, setIsCommutable] = useState(true);
     const [isSubscribed, setIsSubscribed] = useState(true);
     const [showingProPopup, setShowingProPopup] = useState(false);
+    const navigate = useNavigate();
+    const goToPreferences = () => {
+        navigate('/profile', { replace: true });
+        window.location.reload();
+    }
     const getCommuteData = async () => {
         try {
             const originLat = user.location.latitude;
@@ -85,8 +90,15 @@ export const LocationViewJobTab = ({job, user}) => {
                     </>}
                     {job.location && !user.location &&
                         <>
-                            <div style={{display: "flex", justifyContent: "center"}}>
+                            <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                                 <p className='has-text-white is-size-5' style={{textAlign: "center"}}>Share your location to get data on commute times and traffic</p>
+                                <button 
+                                className='button is-link m-3'
+                                onClick={()=>{
+                                    goToPreferences();
+                                }}
+                                >Edit Location
+                                </button>
                             </div>
                         </>
                     }

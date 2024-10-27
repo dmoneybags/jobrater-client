@@ -38,6 +38,7 @@ export const HomeView = () => {
         if (firstTime){
             await HelperFunctions.downloadDataIfNecessary(true);
         }
+        return firstTime;
     }
 
     const asyncLoadData = async ({force=false, showLatestJob=true} = {}) => {
@@ -122,8 +123,8 @@ export const HomeView = () => {
         //before we load the rest
         //Would prefer asyn await
         isLoadingFirstTime()
-        .then(()=>{
-            asyncLoadData();
+        .then((firstTime)=>{
+            asyncLoadData({showLatestJob: !firstTime});
         })
     }, [])
     return (

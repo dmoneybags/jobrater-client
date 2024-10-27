@@ -28,6 +28,7 @@ export const ResumesView = () => {
         setResumesLoaded(true);
     };
     const handleFileChange = async (event) => {
+        console.log("Handling file change");
         if (event.target.files.length > 0) {
             try {
                 //Make our button show the loading
@@ -39,6 +40,7 @@ export const ResumesView = () => {
                 //set our state uploaded resume value to the resume uploaded
                 //needed because we'll need it when we submit
                 setUploadedResume(resume);
+                event.target.value = null;
                 setShowingPopup(true);
             } catch (err) {
                 //cleanup
@@ -48,6 +50,8 @@ export const ResumesView = () => {
                 setWaitingForResumeResponse(false);
                 showError(err);
             }
+        } else {
+            console.log("Event files are 0");
         }
     };
     const handleResumeSubmit = async() => {
