@@ -31,7 +31,7 @@ export const WaitingForSignupView = ({showingPopup, setShowingPopup}) => {
             </div>
             <button 
             className='button is-link mt-3' 
-            style={{width: "200px", textWrap: "auto"}}
+            style={{width: "200px", textWrap: "wrap"}}
             onClick={()=>{
                 const signupUrl = 'https://applicantiq.org/signup';
                 chrome.tabs.create({ url: signupUrl });

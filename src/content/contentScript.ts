@@ -49,11 +49,58 @@ window.addEventListener('message', async function(event) {
     }
 });
 
+const handleJobPromiseErr = (err: string) => {
+    console.log("ERR executing scrape");
+    console.warn(err);
+
+    let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: null };
+    chrome.runtime.sendMessage(bgMessage)
+    .then(response => {
+        console.log("Sent message to background script");
+        console.log("Response from background:", response);
+    })
+}
+
 const handleJobPromise = async (promise:Promise<Job>) => {
+    const jobread = await promise;
+
+    let popupMessage : Record<string, any> = {action: 'NEW_JOB_LOADING', payload: {
+        jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"}};
+    //Send out message to our popup
+    chrome.runtime.sendMessage(popupMessage)
+    .then(response => {
+        console.log("Sent message to popup script");
+        console.log("Response from popup:", response);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
+        isLoading: true, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
     try {
-        const jobread = await promise;
-        let popupMessage : Record<string, any> = {action: 'NEW_JOB_LOADING', payload: {
-            jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"}};
+        const responseJson = await DatabaseCalls.sendMessageToAddJob(jobread)
+        const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
+        const activeUser = await LocalStorageHelper.getActiveUser();
+        if (activeUser.preferences.saveEveryJobByDefault){
+            await LocalStorageHelper.addJob(completeJob);
+        }
+        //if its not loaded it wont show so lets store it in our bg script too
+
+        LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
+            isLoading: false, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
+        let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: completeJob };
+
+        chrome.runtime.sendMessage(bgMessage)
+        .then(response => {
+            console.log("Sent message to background script");
+            console.log("Response from background:", response);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+
+        let popupMessage : Record<string, any> = {action: 'NEW_JOB', payload: completeJob };
         //Send out message to our popup
         chrome.runtime.sendMessage(popupMessage)
         .then(response => {
@@ -64,79 +111,35 @@ const handleJobPromise = async (promise:Promise<Job>) => {
             console.error("Error:", error);
         });
 
-        LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
-            isLoading: true, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
-        try {
-            const responseJson = await DatabaseCalls.sendMessageToAddJob(jobread)
-            const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
-            const activeUser = await LocalStorageHelper.getActiveUser();
-            if (activeUser.preferences.saveEveryJobByDefault){
-                await LocalStorageHelper.addJob(completeJob);
-            }
-            //if its not loaded it wont show so lets store it in our bg script too
-
-            LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
-                isLoading: false, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} })
-            let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: completeJob };
-            chrome.runtime.sendMessage(bgMessage)
-            .then(response => {
-                console.log("Sent message to background script");
-                console.log("Response from background:", response);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-
-            let popupMessage : Record<string, any> = {action: 'NEW_JOB', payload: completeJob };
-            //Send out message to our popup
-            chrome.runtime.sendMessage(popupMessage)
-            .then(response => {
-                console.log("Sent message to popup script");
-                console.log("Response from popup:", response);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-            let notificationMessage : Record<string, any> = {
-                action: "showNotification", 
-                notificationTitle: jobread.jobName + " loaded in ApplicantIQ",
-                notifactionText: "Check the popup window to see the jobs ratings"
-            }
-            chrome.runtime.sendMessage(notificationMessage)
-            .then(response => {
-                console.log("Sent message to bg script to show notification");
-                console.log("Response from bg:", response);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-        } catch(err){
-            LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
-                isLoading: false, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} });
-                
-            console.log("ERR sending message to add job");
-            console.warn(err);
-            //user went on the same job twice
-            if (err === "409"){
-                //need to get job by id and move it to the front
-                //we do this earlier before we send the message
-                //here we can just return
-                return
-            }
-            let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: null };
-
-            chrome.runtime.sendMessage(bgMessage)
-            .then(response => {
-                console.log("Sent message to background script");
-                console.log("Response from background:", response);
-            })
-
+        let notificationMessage : Record<string, any> = {
+            action: "showNotification", 
+            notificationTitle: jobread.jobName + " loaded in ApplicantIQ",
+            notifactionText: "Check the popup window to see the jobs ratings"
         }
-    } catch(err) {
-        console.log("ERR executing scrape");
-        console.warn(err);
 
+        chrome.runtime.sendMessage(notificationMessage)
+        .then(response => {
+            console.log("Sent message to bg script to show notification");
+            console.log("Response from bg:", response);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    } catch(err){
+        LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "loadingJob", value: {
+            isLoading: false, jobName: jobread.jobName, companyName: jobread?.company?.companyName ?? "No Company"} });
+            
+        console.log("ERR sending message to add job");
+        console.warn(err);
+        //user went on the same job twice
+        if (err === "409"){
+            //need to get job by id and move it to the front
+            //we do this earlier before we send the message
+            //here we can just return
+            return
+        }
         let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: null };
+
         chrome.runtime.sendMessage(bgMessage)
         .then(response => {
             console.log("Sent message to background script");
@@ -178,19 +181,9 @@ const handleJobPromise = async (promise:Promise<Job>) => {
         console.log("job Id loaded" + jobId);
         response({ status: 'acknowledged' });
         if (type === "NEW") {
-            try {
-                switch (company){
-                    case "LINKEDIN":
-                        handleJobPromise(LinkedInScrapingFunctions.LinkedInJobLoaded(jobId));
-                }
-            } catch (error){
-                console.error('error adding job:', error);
-                let message : Record<string, any> = {type: 'NEW_JOB', payload: ""};
-                chrome.runtime.sendMessage(message)
-                .then(() => {
-                    console.log("Sent new job message to UI");
-                })
-                throw error;
+            switch (company){
+                case "LINKEDIN":
+                    await handleJobPromise(LinkedInScrapingFunctions.LinkedInJobLoaded(jobId));
             }
         }
         return true;

@@ -12,12 +12,14 @@ import { LoadingJobRowView } from './loadingJobRowView';
 import { HomeViewSorter } from './homeViewSorter';
 import { HomeViewFilterer } from './homeViewFilterer';
 import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
+import { showError } from '../helperViews/notifications';
 
 export const HomeView = () => {
     const [jobs, setJobs] = useState(undefined);
     const [user, setUser] = useState(undefined);
     const [jobsSet, setJobsSet] = useState(false);
     const [loadingJob, setLoadingJob] = useState(false);
+    const [loadingJobTimeout, setLoadingJobTimeout] = useState(null);
     const [loadingJobName, setLoadingJobName] = useState('');
     const [loadingCompanyName, setLoadingCompanyName] = useState('');
     const [latestJob, setLatestJob] = useState(null);
@@ -33,11 +35,12 @@ export const HomeView = () => {
         const firstLoginParam = urlParams.get('firstLogin');
         const firstTime = firstLoginParam === 'true'
         setShowingWelcomePopup(firstTime);
-        await HelperFunctions.downloadDataIfNecessary(true);
+        if (firstTime){
+            await HelperFunctions.downloadDataIfNecessary(true);
+        }
     }
 
     const asyncLoadData = async ({force=false, showLatestJob=true} = {}) => {
-        await isLoadingFirstTime();
         await HelperFunctions.downloadDataIfNecessary(force);
         const curJobs = await LocalStorageHelper.readJobs();
         console.log("Setting jobs to:");
@@ -97,8 +100,31 @@ export const HomeView = () => {
         }
     }
     useEffect(() => {
+        if (loadingJob){
+            const timeoutId = setTimeout(() => {
+                setLoadingJob(false);
+                setLoadingJobName('');
+                setLoadingCompanyName('');
+                showError("Failed To Job Load");
+            }, 15000)
+            setLoadingJobTimeout(timeoutId);
+        } else {
+            if (loadingJobTimeout){
+                clearTimeout(loadingJobTimeout);
+                setLoadingJobTimeout(null);
+            }
+        }
+    }, [loadingJob]);
+    useEffect(() => {
         chrome.runtime.onMessage.addListener(handleMessage);
-        asyncLoadData();
+        //Not the prettiest but we need to make sure we download
+        //the data from the server if its the users first time,
+        //before we load the rest
+        //Would prefer asyn await
+        isLoadingFirstTime()
+        .then(()=>{
+            asyncLoadData();
+        })
     }, [])
     return (
         <div className='main-container has-navbar-fixed-top'>
