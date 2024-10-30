@@ -1,7 +1,7 @@
 import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
 import { GlassdoorScraperError } from "@applicantiq/applicantiq_core/Core/errors";
 
-export class GlassdoorScrapingFunctions {
+export class GlassdoorRequestingFunctions {
     static getCompaniesJson = async (company: string):Promise<[Record<string, any>]> => {
         const headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
@@ -75,16 +75,16 @@ export class GlassdoorScrapingFunctions {
         
         return url;
     }
-    static scrape = async (company: string):Promise<Record<string, any>> => {
-        const companiesJson: [Record<string, any>] = await GlassdoorScrapingFunctions.getCompaniesJson(company);
+    static request = async (company: string):Promise<Record<string, any>> => {
+        const companiesJson: [Record<string, any>] = await GlassdoorRequestingFunctions.getCompaniesJson(company);
         console.debug("Got companies back of:");
         console.debug(companiesJson);
         if (!companiesJson.length){
             return {pageSource: null, url: null, noCompanies: true};
         }
         const bestMatch = companiesJson[0];
-        const overviewUrl = GlassdoorScrapingFunctions.overview(bestMatch["label"], bestMatch["id"]);
-        const pageSource = await GlassdoorScrapingFunctions.getPageSource(overviewUrl);
+        const overviewUrl = GlassdoorRequestingFunctions.overview(bestMatch["label"], bestMatch["id"]);
+        const pageSource = await GlassdoorRequestingFunctions.getPageSource(overviewUrl);
         return {pageSource: pageSource, url: overviewUrl, noCompanies: false};
     }
 } 

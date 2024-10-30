@@ -2,7 +2,7 @@
 import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
 import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStorageHelper";
 
-export class ScrapingHelperFunctions {
+export class ReadingHelperFunctions {
     static isAuthed = async():Promise<boolean> =>{
         console.log("Checking if user is authorized");
         if (await LocalStorageHelper.getToken() === null || await LocalStorageHelper.getToken() === undefined){

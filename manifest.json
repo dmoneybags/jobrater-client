@@ -1,20 +1,16 @@
 {
-    "name": "ApplicantIQ Beta",
-    "version": "0.5",
-    "description": "Get the real information on job postings BEFORE you apply.",
+    "name": "ApplicantIQ",
+    "version": "0.0.6",
+    "description": "Get AI resume ratings and accurate job ratings for jobs on LinkedIn.",
     "permissions": [
-    "cookies",
     "storage",
     "tabs",
-    "activeTab",
-    "scripting",
-    "webRequest",
-    "background",
     "notifications"
     ],
     "host_permissions" : [
-    "http://*/*",
-    "https://*/*"
+    "https://*.linkedin.com/*",
+    "https://applicantiq.org/*",
+    "https://*.glassdoor.com/*"
     ],
     "background": {
         "service_worker": "dist/background.bundle.js",
@@ -29,7 +25,7 @@
         }
     ],
     "action": {
-        "default_title": "Job Rater",
+        "default_title": "ApplicantIQ",
         "default_popup": "dist/popup.html",
         "default_icon": {
           "16": "icons/logo_16.png",
@@ -42,14 +38,5 @@
         "48": "icons/logo_48.png",
         "128": "icons/logo_128.png"
     },
-    "web_accessible_resources": [
-    {
-      "resources": [
-        "icons/logo_128.png",
-        "src/assets/fonts/GeistVF.ttf"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
   "manifest_version": 3
 }

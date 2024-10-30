@@ -5,7 +5,7 @@ Execution
 background.js
 Listens for: tab changes with the required linkedin urls 
 Executes: processing the query to get the job id 
-Sends: a message to contentscript to scrape the job
+Sends: a message to contentscript to get the job
 \/
 \/
 contentScript.js
@@ -28,7 +28,7 @@ Sends: a message for db to handle the job
 //Payments
 //deployment
 //question: what to do on addJob with no token?
-import { LinkedInScrapingFunctions } from "./linkedinScrapingFunctions";
+import { LinkedInFunctions } from "./linkedinFunctions";
 import { EMPTYJOB, Job, JobFactory } from "@applicantiq/applicantiq_core/Core/job"
 import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
 import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStorageHelper";
@@ -50,7 +50,7 @@ window.addEventListener('message', async function(event) {
 });
 
 const handleJobPromiseErr = (err: string) => {
-    console.log("ERR executing scrape");
+    console.log("ERR executing");
     console.warn(err);
 
     let bgMessage : Record<string, any> = {action: 'storeData', key: "latestJob", value: null };
@@ -183,7 +183,7 @@ const handleJobPromise = async (promise:Promise<Job>) => {
         if (type === "NEW") {
             switch (company){
                 case "LINKEDIN":
-                    await handleJobPromise(LinkedInScrapingFunctions.LinkedInJobLoaded(jobId));
+                    await handleJobPromise(LinkedInFunctions.LinkedInJobLoaded(jobId));
             }
         }
         return true;

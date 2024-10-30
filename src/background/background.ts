@@ -5,10 +5,10 @@ Execution
 background.js
 Listens for: tab changes with the required linkedin urls 
 Executes: processing the query to get the job id 
-Sends: a message to contentscript to scrape the job
+Sends: a message to contentscript to get the job
 */
 
-import { GlassdoorScrapingFunctions } from "../content/glassdoor";
+import { GlassdoorRequestingFunctions } from "../content/glassdoor";
 import { WindowingFunctions } from "./windowingFunctions";
 
 /*
@@ -63,8 +63,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             
             if (jobId) {
                 console.log("Job ID found:", jobId);
-                // Send a message to contentScript to scrape pages and enter it in the DB
-                console.log("Sending message to content script to scrape");
+                // Send a message to contentScript to get pages and enter it in the DB
+                console.log("Sending message to content script");
                 chrome.tabs.sendMessage(tabId, {
                     type: "NEW",
                     company: "LINKEDIN",
@@ -121,13 +121,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             sendResponse({ success: false, message: 'Failed to store data', error: error.message });
         }
         return true;
-    } else if (message.action === 'scrapeGd'){
-        console.log("Got message to scrape glassdoor");
+    } else if (message.action === 'requestGD'){
+        console.log("Got message to request glassdoor");
         const company = message.company;
         if (!company){
             sendResponse({ success: false, message: 'Failed to read company arg', error: "NO COMPANY" });
         }
-        GlassdoorScrapingFunctions.scrape(company)
+        GlassdoorRequestingFunctions.request(company)
         .then((companyData) => {
             const gdPageSource = companyData.pageSource;
             const gdUrl = companyData.url;
@@ -135,7 +135,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             sendResponse({gdPageSource: gdPageSource, gdUrl: gdUrl, noCompanies: noCompanies})
         })
         .catch((err) => {
-            console.error("Got error while scraping gd");
+            console.error("Got error while asking for gd");
             console.error(err);
             sendResponse({gdPageSource: null, gdUrl: null, noCompanies: false})
         })

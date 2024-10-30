@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { JobDebugView } from '../src/tests/debugView/debugView'
-import { ScrapingHelperFunctions } from '../src/content/scrapingHelperFunctions'
+import { ReadingHelperFunctions } from '../src/content/readingHelperFunctions'
 import '../src/assets/css/base.css'
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { HomeView } from './views/home/homeView';
@@ -42,7 +42,7 @@ const MainView = ({ContentView}) => {
       console.log(params.get("latestJob"));
       const asyncSetLatestJob = async () => {
         //spaghetti code but basically first we check if the job is in local storage
-        //if its a new job we first check if content script is loading it, else we send a request to scrape
+        //if its a new job we first check if content script is loading it, else we send a request to read
         const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(params.get("latestJob"));
         if (jobExists){
           //get the jobs from localstorage
@@ -62,7 +62,7 @@ const MainView = ({ContentView}) => {
           const currrentTabMessage = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "currentTab"});
           const currentTab = currrentTabMessage.message;
           if (!isLoading && currentTab){
-            console.log("Sending message to content script to scrape");
+            console.log("Sending message to content script to read");
             console.log(currentTab);
             chrome.tabs.sendMessage(currentTab, {
                 type: "NEW",
@@ -80,7 +80,7 @@ const MainView = ({ContentView}) => {
     }
     // Check if the user is authorized when the component mounts
     const checkAuth = async () => {
-      const authStatus = await ScrapingHelperFunctions.isAuthed();
+      const authStatus = await ReadingHelperFunctions.isAuthed();
       //Remove after testing auth routes
       setIsAuthed(authStatus);
     };

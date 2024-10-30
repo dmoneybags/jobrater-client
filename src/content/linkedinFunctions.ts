@@ -3,13 +3,13 @@ import { ScrapingError } from "@applicantiq/applicantiq_core/Core/errors";
 import { HelperFunctions } from "@applicantiq/applicantiq_core/Core/helperFunctions";
 import { Job, JobFactory } from "@applicantiq/applicantiq_core/Core/job";
 
-export class LinkedInScrapingFunctions {
+export class LinkedInFunctions {
     /**
      * getTextContentWithNewlines
      * 
      * Gets the text content of an element placing a newline between each different element
      * 
-     * Used for scraping the job descriptions
+     * Used for reading the job descriptions
      * 
      * @param {ChildNode} element: the element to get the text of
      * @returns {string} the text separated by newlines
@@ -25,9 +25,9 @@ export class LinkedInScrapingFunctions {
                 const elementNode = node as HTMLElement;
                 if (elementNode.tagName.toLowerCase() === 'strong') {
                     // Directly append the content without a newline for <strong> tags
-                    result += LinkedInScrapingFunctions.getTextContentWithNewlines(elementNode);
+                    result += LinkedInFunctions.getTextContentWithNewlines(elementNode);
                 } else {
-                    const text = LinkedInScrapingFunctions.getTextContentWithNewlines(elementNode);
+                    const text = LinkedInFunctions.getTextContentWithNewlines(elementNode);
                     if (text.trim()) {
                         result += text + '\n';
                     }
@@ -40,7 +40,7 @@ export class LinkedInScrapingFunctions {
     /**
      * getJobInfoData
      * 
-     * scrapes the little job info container below the job title and returns json containing
+     * reads the little job info container below the job title and returns json containing
      * 
      * @returns {Record<string, any>}: {paymentFreq: string, paymentBase: number, }
      */
@@ -116,7 +116,7 @@ export class LinkedInScrapingFunctions {
     /**
      * getCompany
      * 
-     * scrapes the company name from the linkedIn job posting
+     * reads the company name from the linkedIn job posting
      * 
      * @returns {string} company
      */
@@ -139,7 +139,7 @@ export class LinkedInScrapingFunctions {
     /**
      * getJob
      * 
-     * scrapes the job name from the linkedIn job posting
+     * reads the job name from the linkedIn job posting
      * 
      * @returns {string} job
      */
@@ -164,14 +164,14 @@ export class LinkedInScrapingFunctions {
      * @returns {string[]} [companyName, jobName]
      */
     static getCompanyAndJob = ():string[] => {
-        const company: string = LinkedInScrapingFunctions.getCompany();
-        const job: string = LinkedInScrapingFunctions.getJob();
+        const company: string = LinkedInFunctions.getCompany();
+        const job: string = LinkedInFunctions.getJob();
         return [company, job];
     }
     /**
      * getJobDescription
      * 
-     * scrapes the page for the job description
+     * reads the page for the job description
      * 
      * @returns {string} job description
      */
@@ -180,7 +180,7 @@ export class LinkedInScrapingFunctions {
         if (!jobDescriptionElem){
             throw new ScrapingError("Could not get description");
         }
-        const text = LinkedInScrapingFunctions.getTextContentWithNewlines(jobDescriptionElem);
+        const text = LinkedInFunctions.getTextContentWithNewlines(jobDescriptionElem);
         //Sometimes only grabs the title when you load in too quick
         if (text.length < 100){
             throw new ScrapingError("Could not get description");
@@ -260,27 +260,27 @@ export class LinkedInScrapingFunctions {
         return topBoxData;
     }
     /**
-     * scrapeJobInfo
+     * getJobInfo
      * 
-     * Main scraping function for linkedin job, scapes the page and creates the json for all the job data we need
+     * Main reading function for linkedin job, scapes the page and creates the json for all the job data we need
      * 
      * @returns {Record<string, any>} jobData
      */
-    static scrapeJobInfo = (): Record<string, any> => {
+    static getJobInfo = (): Record<string, any> => {
         //jobData is the main dict, we start with it and compile the other subDicts into it
         let jobData: Record<string, any> = {
             "company": {companyName: ""},
             "job": ""
         };
-        let [company, job]: string[] = LinkedInScrapingFunctions.getCompanyAndJob();
+        let [company, job]: string[] = LinkedInFunctions.getCompanyAndJob();
         //Load the info it
         jobData["company"]["companyName"] = company;
         jobData["jobName"] = job;
-        let description = LinkedInScrapingFunctions.getJobDescription();
+        let description = LinkedInFunctions.getJobDescription();
         jobData["description"] = description;
         //Top box shows location, days posted ago, and applicants
-        const topBoxData = LinkedInScrapingFunctions.getTopBoxData();
-        const descriptionData = LinkedInScrapingFunctions.getJobInfoData();
+        const topBoxData = LinkedInFunctions.getTopBoxData();
+        const descriptionData = LinkedInFunctions.getJobInfoData();
         return { ...jobData, ...topBoxData, ...descriptionData };
     }
     //Called every single time a new job is loaded. Grabs information on the job and sets it in the DB. 
@@ -293,10 +293,10 @@ export class LinkedInScrapingFunctions {
                     //Grabs the data directly from the linkedin website
                     var jobDataJson: Record<string, any> = {};
                     try{
-                        jobDataJson = await HelperFunctions.tryWithRetry(LinkedInScrapingFunctions.scrapeJobInfo, attempts);
+                        jobDataJson = await HelperFunctions.tryWithRetry(LinkedInFunctions.getJobInfo, attempts);
                     } catch (error){
                         if (error instanceof ScrapingError){
-                            console.error(`Failed to scrape linkedin after ${attempts} retries`);
+                            console.error(`Failed to get linkedin after ${attempts} retries`);
                             reject(error)
                         } 
                         throw error;
@@ -311,9 +311,3 @@ export class LinkedInScrapingFunctions {
         })
     }
 }
-/*
-scrapeCompanyInfoIfNeeded(jobDataJson)
-    .then((jobDataJson) => {
-        sendMessageToAddJob(jobDataJson)
-    })
-*/

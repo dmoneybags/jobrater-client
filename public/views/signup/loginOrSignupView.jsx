@@ -28,7 +28,7 @@ export const LoginOrSignupView = () => {
             <WaitingForSignupView showingPopup={showingSignUpPopup} setShowingPopup={setShowingSignUpPopup}/>
             <hr />
             {(!isSigningIn && !isLoggingIn) && <p className='tag-line'>
-                <span className='typing-text'>Now the powers back in your hands...</span>
+                <span className='typing-text'>Now the power's back in your hands...</span>
             </p>}
             <div 
             className='auth-container'
