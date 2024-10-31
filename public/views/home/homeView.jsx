@@ -33,13 +33,20 @@ export const HomeView = () => {
     const isLoadingFirstTime = async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const firstLoginParam = urlParams.get('firstLogin');
-        const firstTime = firstLoginParam === 'true'
+        const firstTime = firstLoginParam === 'true';
         setShowingWelcomePopup(firstTime);
-        if (firstTime){
+    
+        if (firstTime) {
             await HelperFunctions.downloadDataIfNecessary(true);
+    
+            // Remove 'firstLogin' parameter from the URL
+            urlParams.delete('firstLogin');
+            const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+            window.history.replaceState({}, document.title, newUrl);
         }
+        
         return firstTime;
-    }
+    };
 
     const asyncLoadData = async ({force=false, showLatestJob=true} = {}) => {
         await HelperFunctions.downloadDataIfNecessary(force);

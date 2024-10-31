@@ -47,6 +47,16 @@ window.addEventListener('message', async function(event) {
         
         chrome.runtime.sendMessage({ action: 'openPopup' , options: {firstLogin: true}});
     }
+    // Check if the message is from your signup page
+    if (event.data.type && event.data.type === 'FROM_LOGIN') {
+        const token = event.data.token;
+        const tokenExpiration = event.data.tokenExpiration;
+        
+        // Save the token in Chrome storage
+        await LocalStorageHelper.setToken(token, tokenExpiration);
+        
+        chrome.runtime.sendMessage({ action: 'openPopup' });
+    }
 });
 
 const handleJobPromiseErr = (err: string) => {

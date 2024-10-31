@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import { LoginFormView } from './loginFormView';
 import { SignupFormView } from './signupFormView';
 import { WaitingForSignupView } from './waitingForSignupView';
+import { WaitingForLoginView } from './waitingForLoginView';
 
 export const LoginOrSignupView = () => {
     //Legacy
     const [isSigningIn, setIsSigningIn] = useState(false);
     //current
     const [showingSignUpPopup, setShowingSignUpPopup] = useState(false);
+    const [showingLoginPopup, setShowingLoginPopup] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleSignInClick = () => {
@@ -20,12 +22,15 @@ export const LoginOrSignupView = () => {
         setShowingSignUpPopup(true);
     };
     const handleLogInClick = () => {
-        setIsLoggingIn(true);
+        const loginUrl = 'https://applicantiq.org/login';
+        chrome.tabs.create({ url: loginUrl });
+        setShowingLoginPopup(true);
     };
     return (
         <div>
             <LogoView/>
             <WaitingForSignupView showingPopup={showingSignUpPopup} setShowingPopup={setShowingSignUpPopup}/>
+            <WaitingForLoginView showingPopup={showingLoginPopup} setShowingPopup={setShowingLoginPopup}/>
             <hr />
             {(!isSigningIn && !isLoggingIn) && <p className='tag-line'>
                 <span className='typing-text'>Now the power's back in your hands...</span>
@@ -57,7 +62,6 @@ export const LoginOrSignupView = () => {
                     Log In
                 </button>}   
                 {isLoggingIn && <LoginFormView/>}
-                {isSigningIn && <SignupFormView/>}
             </div>
             {(!isSigningIn && !isLoggingIn) && <PrivacyStatement/>}
         </div>
