@@ -172,6 +172,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
         } catch (err) {
             setWaitingForReupload(false);
             if (err === "402"){
+                setShowingUploadResumePopup(false);
                 setShowingProPopup(true);
             } else {
                 showError(err);
