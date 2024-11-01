@@ -68,7 +68,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 chrome.tabs.sendMessage(tabId, {
                     type: "NEW",
                     company: "LINKEDIN",
-                    jobId: jobId
+                    //prefix for linkedIn jobs
+                    jobId: "li" + jobId
                 }).then(response => {
                     console.log('Message sent successfully:', response);
                 }).catch(error => {

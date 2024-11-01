@@ -203,7 +203,7 @@ export const ResumesView = () => {
                                                 width: 400
                                                 }, 
                                                 fullResume.name ?? fullResume.fileName, "",
-                                                () => {}, false);
+                                                () => {}, true);
                                         }}
                                         >
                                             View
