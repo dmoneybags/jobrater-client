@@ -9,13 +9,11 @@ export const HomeViewNavBar = () => {
             <Link to="/" className='nav-logo-container'>
                 <SmallLogoView color={"white"}/>
             </Link>
-            <i class="fa-solid fa-minimize icon minimize-icon fa-xl absolute-hoverable-icon"
-            style={{cursor: "pointer"}}
-            onClick={() => window.close()}>
-                <div className="hover-text" style={{marginTop: "20px", padding: "8px"}}>
-                    Minimize
+            <Link to="/feedback" className="fa-solid fa-comment-alt icon feedback-icon fa-xl absolute-hoverable-icon">
+                <div className="hover-text" style={{marginTop: "20px", marginLeft: "18px", padding: "8px"}}>
+                    Feedback
                 </div>
-            </i>
+            </Link>
             <Link to="/resumes" class="fa-solid fa-address-book icon home-icon fa-xl absolute-hoverable-icon">
                 <div className="hover-text" style={{marginTop: "20px", padding: "8px"}}>
                     Resumes

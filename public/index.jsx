@@ -12,6 +12,7 @@ import { LoginOrSignupView } from './views/signup/loginOrSignupView';
 import { ResumesView } from './views/home/resumesView';
 import { SettingsView } from './views/home/settingsView';
 import { ProfileView } from './views/home/profileView';
+import { FeedbackView } from './views/home/feedbackView';
 import { PopupLinkView } from './views/popup/popupLinkView';
 import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
 import { WindowingFunctions } from '../src/background/windowingFunctions';
@@ -124,6 +125,7 @@ const App = () => {
           <Route path="/resumes" element = {<MainView ContentView={ResumesView}/>}/>
           <Route path="/settings" element = {<MainView ContentView={SettingsView}/>}/>
           <Route path="/profile" element = {<MainView ContentView={ProfileView}/>}/>
+          <Route path="/feedback" element = {<MainView ContentView={FeedbackView}/>}/>
           <Route path="*" element={<p>{"404 " + location.href + " not found"}</p>} />            
       </Routes>
     </HashRouter>
