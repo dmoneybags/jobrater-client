@@ -1,5 +1,5 @@
-const { LocalStorageHelper } =  require("../content/localStorageHelper");
-const { localStorageMock } = require("./mocks/localStorageMock");
+import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/LocalStorageHelper";
+import { localStorageMock } from "./mocks/localStorageMock";
 
 global.CLIENT_ENV = {
     ENVIRONMENT: 'development',

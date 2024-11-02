@@ -12,7 +12,7 @@
     "include": [
       "src/**/*.ts",
       "public/**/*.ts", 
-      "src/tests/jest.setup.js",
+      "src/tests/jest.setup.mjs",
       "globals.d.ts"
     ],
     "exclude": [

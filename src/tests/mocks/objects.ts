@@ -1,8 +1,8 @@
-import { User } from "applicantiq_core/Core/user";
-import { Company, CompanyFactory } from "applicantiq_core/Core/company";
-import { LocationObject } from "applicantiq_core/Core/location"
-import { PaymentFrequency, Mode, Job } from "applicantiq_core/Core/job";
-import { UserPreferences } from "applicantiq_core/Core/userPreferences";
+import { User } from '@applicantiq/applicantiq_core/Core/user';
+import { Company, CompanyFactory } from "@applicantiq/applicantiq_core/Core/company";
+import { LocationObject } from "@applicantiq/applicantiq_core/Core/location"
+import { PaymentFrequency, Mode, Job } from "@applicantiq/applicantiq_core/Core/job";
+import { UserPreferences } from "@applicantiq/applicantiq_core/Core/userPreferences";
 
 //Mock file for objects used in our tests
 export class MockObjects {
@@ -111,4 +111,43 @@ export class MockObjects {
         false, false, [],[]
     )
     static ericdemoneyUserWithPreferences: User = new User(null, "ericdemoney@gmail.com", null, "Daniel", "DeMoney", null, MockObjects.preferences);
+    static oracleJobDescription = `Job Title: Entry-Level Sales Representative - HCM Software
+
+Location: San Jose
+
+Company: Oracle
+
+About Oracle:
+Oracle is a global leader in cloud solutions and enterprise software, dedicated to empowering businesses through innovative technologies. Our Human Capital Management (HCM) software helps organizations manage their workforce effectively, enabling them to drive growth and achieve strategic goals.
+
+Job Overview:
+We are seeking a motivated and enthusiastic Entry-Level Sales Representative to join our HCM software sales team. In this role, you will be responsible for engaging with mid-sized organizations to understand their human resource needs and promote Oracle’s HCM solutions. This position offers a great opportunity to kickstart your career in sales within the technology sector.
+
+Key Responsibilities:
+
+Identify and research potential clients within the mid-sized business sector to generate leads.
+Conduct outreach via phone, email, and social media to introduce Oracle's HCM software and its benefits.
+Develop and maintain relationships with prospective clients to understand their needs and provide tailored solutions.
+Assist in the preparation and delivery of sales presentations and product demonstrations.
+Collaborate with senior sales team members to strategize and implement sales initiatives.
+Track and manage sales activities and customer interactions using CRM software.
+Stay informed about industry trends, competitor offerings, and product updates.
+Participate in training programs to enhance product knowledge and sales skills.
+Qualifications:
+
+Bachelor’s degree in Business, Marketing, or a related field (or equivalent experience).
+Strong communication and interpersonal skills.
+Ability to learn quickly and adapt to changing environments.
+Proficient in using Microsoft Office Suite (Word, Excel, PowerPoint).
+Previous experience in sales or customer service is a plus but not required.
+A passion for technology and a desire to pursue a career in sales.
+What We Offer:
+
+Comprehensive training program to equip you with the knowledge and skills needed for success.
+Opportunities for career advancement within Oracle.
+Competitive salary and commission structure.
+Benefits package including health, dental, and retirement plans.
+A dynamic and supportive work environment.
+How to Apply:
+Interested candidates should submit their resume and a cover letter outlining their interest in the position to [Application Email/Link].`
 }
