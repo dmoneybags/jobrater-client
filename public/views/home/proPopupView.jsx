@@ -4,10 +4,19 @@ import React, { createElement, useEffect, useState } from 'react';
 
 export const ProPopupView = ({showingPopup, setShowingPopup, sender=""}) => {
     const [freeData, setFreeData] = useState(null);
+    const [trialExpired, setTrialExpired] = useState(false);
     useEffect(()=>{
         DatabaseCalls.sendMessageToGetFreeUserData()
         .then((freeData) => {
             setFreeData(freeData);
+            // Check if freeData.CreatedAt is 14 or more days ago
+            const createdAtDate = new Date(freeData.CreatedAt);
+            const currentDate = new Date();
+            const diffInDays = (currentDate - createdAtDate) / (1000 * 60 * 60 * 24);
+
+            if (diffInDays >= 14) {
+                setTrialExpired(true);
+            }
         })
     }, []);
     return (
@@ -67,7 +76,8 @@ export const ProPopupView = ({showingPopup, setShowingPopup, sender=""}) => {
                 textAlign: "center"
             }}
             > 
-                Your daily 3 ratings will reset on {FreeUserDataHelperFunctions.getDateFromStrDate(freeData.LastReload, 1)}
+                {!trialExpired && <>You've used your 3 daily resume ratings, {FreeUserDataHelperFunctions.getExpireOrResetStr(freeData)}</>}
+                {trialExpired && <>Your 2 week introductory period has passed, upgrade to pro to keep using resume ratings</>}
             </p>}
             </>}
         </div>

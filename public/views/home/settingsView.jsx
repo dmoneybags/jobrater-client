@@ -16,6 +16,7 @@ export const SettingsView = () => {
     const [subscriptionData, setSubscriptionData] = useState(null);
     //data if they dont have a subscription, free resume ratings left, etc
     const [freeData, setFreeData] = useState(null);
+    const [trialExpired, setTrialExpired] = useState(false);
     const capitalizeFirstLetter = (val) => {
         return String(val).charAt(0).toUpperCase() + String(val).slice(1);
     }
@@ -34,6 +35,13 @@ export const SettingsView = () => {
                 const freeData = await DatabaseCalls.sendMessageToGetFreeUserData();
                 console.log(freeData);
                 setFreeData(freeData);
+                const createdAtDate = new Date(freeData.CreatedAt);
+                const currentDate = new Date();
+                const diffInDays = (currentDate - createdAtDate) / (1000 * 60 * 60 * 24);
+
+                if (diffInDays >= 14) {
+                    setTrialExpired(true);
+                }
             } else {
                 setIsSubscribed(true);
                 setSubscriptionData(subscription);
@@ -115,7 +123,8 @@ export const SettingsView = () => {
                             {!isSubscribed && 
                             <>
                             {/* capital casing is a relic of the sql column, sorry not sorry */}
-                            <li className='mb-2'>{freeData?.FreeRatingsLeft} free resume ratings left, resets on {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.LastReload, 1)}</li>
+                            {!trialExpired && <li className='mb-2'>{freeData?.FreeRatingsLeft} free resume ratings left, {FreeUserDataHelperFunctions.getExpireOrResetStr(freeData)}</li>}
+                            {trialExpired && <li className='mb-2'>2 week trial period expired, upgrade to pro to to access resume rating.</li>}
                             {FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>$6.99 lifetime subscription offer still valid until {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.CreatedAt, 7)}</li>}
                             {!FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>Get unlimited ratings with Pro for $9.99/month</li>}
                             </>}
