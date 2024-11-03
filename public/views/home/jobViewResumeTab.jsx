@@ -125,9 +125,14 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
         if (event.target.files.length > 0) {
             console.log("Got Files");
             try {
-                const resume = await loadResume(event.target.files[0]);
+                const file = event.target.files[event.target.files.length - 1];
+                const resume = await loadResume(file);
                 if (resume.fileType !== "pdf"){
                     throw new Error("Only PDFs are accepted");
+                }
+                const numPages = await HelperFunctions.countPdfPages(file);
+                if (numPages > 5){
+                    throw new Error("Please upload a resume with 5 or less pages");
                 }
                 //set our state uploaded resume value to the resume uploaded
                 //needed because we'll need it when we submit
