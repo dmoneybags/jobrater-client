@@ -124,6 +124,7 @@ export const SettingsView = () => {
                             <>
                             {/* capital casing is a relic of the sql column, sorry not sorry */}
                             {!trialExpired && <li className='mb-2'>{freeData?.FreeRatingsLeft} free resume ratings left, {FreeUserDataHelperFunctions.getExpireOrResetStr(freeData)}</li>}
+                            {!trialExpired && <li className='mb-2'>Access to free resume ratings expires on {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.CreatedAt, 14)}</li>}
                             {trialExpired && <li className='mb-2'>2 week trial period expired, upgrade to pro to to access resume rating.</li>}
                             {FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>$6.99 lifetime subscription offer still valid until {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.CreatedAt, 7)}</li>}
                             {!FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>Get unlimited ratings with Pro for $9.99/month</li>}
