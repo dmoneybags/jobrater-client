@@ -113,18 +113,20 @@ export const ProfileViewLocationSection = ({user, setShowingId, reloadFunc}) => 
                     I do not wish to share my location
                 </label>
             </div>
-            <div className="field mt-4">
-                <label className="label">Street</label>
-                <div className="control is-expanded">
-                    <input
-                        className={`input signup-input is-small ${validationData.streetValid ? "":"is-danger"}`}
-                        name='street'
-                        value={street}
-                        onChange={(e) => setStreet(e.target.value)}
-                        required
-                        disabled={wontShareLocation}
-                    />
-                    {!validationData.streetValid && <p class="help is-danger">Invalid street</p>}
+            <div style={{display: "flex", justifyContent: "center", width: "100%"}}>
+                <div className="field mt-4" style={{minWidth: "365px", marginBottom: "10px"}}>
+                    <label className="label">Street</label>
+                    <div className="control is-expanded">
+                        <input
+                            className={`input signup-input is-small ${validationData.streetValid ? "":"is-danger"}`}
+                            name='street'
+                            value={street}
+                            onChange={(e) => setStreet(e.target.value)}
+                            required
+                            disabled={wontShareLocation}
+                        />
+                        {!validationData.streetValid && <p class="help is-danger">Invalid street</p>}
+                    </div>
                 </div>
             </div>
             <div className="field is-grouped is-grouped-centered">

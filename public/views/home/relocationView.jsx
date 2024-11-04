@@ -23,10 +23,10 @@ export const RelocationView = ({mapUrl, relocationData, user, job}) => {
                 View on Google Maps
             </button>
         </div>
-        <div id="map">
+        <div id="map" style={{display: "flex", justifyContent: "center"}}>
             <img id="mapImage" alt="Map displaying directions" src={mapUrl}/>
         </div>
-        <p className='has-text-white is-size-4'>{`${job.location.city}, ${job.location.stateCode}`}</p>
+        <p className='has-text-white is-size-4' style={{display: "flex", justifyContent: "center"}}>{`${job.location.city}, ${job.location.stateCode}`}</p>
         <div style={{
             display: "flex",
             justifyContent: "space-between", /* Ensure equal spacing */

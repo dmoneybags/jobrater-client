@@ -31,7 +31,7 @@ export const ResumeTabView = ({resumeComparison}) => {
         }
     }
     return (
-        <div style={{marginTop: "25px", height: "300px", backgroundColor: 'black', marginLeft: "-7px", width: "100vw"}}>
+        <div style={{marginTop: "25px", minHeight: "calc(100vh - 272px)", backgroundColor: 'black', marginLeft: "-7px", width: "100vw"}}>
             <div className="field has-addons job-nav-bar" style={{
                 width: "100vw",
                 margin: "auto",

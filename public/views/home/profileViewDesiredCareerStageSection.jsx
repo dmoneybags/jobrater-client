@@ -25,7 +25,7 @@ export const ProfileViewDesiredCareerStageSection = ({user, setShowingId, reload
     }
     return (
         <div className='p-2'>
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: "center" }}>
                 <div class="field">
                     <p class="control">
                         <button className={`button ${desiredCareerStage === "Entry level" ? "is-focused":""}`} name="Entry level" onClick={(e) => {handleCareerStageBtnClick(e)}}>

@@ -42,7 +42,7 @@ export const CommuteView = ({mapUrl, commuteData, user, job}) => {
                 View on Google Maps
             </button>
         </div>
-        <div id="map">
+        <div id="map" style={{display: "flex", justifyContent: "center"}}>
             <img id="mapImage" alt="Map displaying directions" src={mapUrl}/>
         </div>
         <div style={{height: "300px", backgroundColor: 'black', marginLeft: "-7px", width: "100vw"}}>

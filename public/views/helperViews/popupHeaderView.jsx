@@ -3,7 +3,7 @@ import React, { createElement } from 'react';
 export const PopupHeaderView = ({exitCallbackFn = () => {}, title, subtitle, id}) => {
     return (
         <nav 
-        className="navbar is-link is-fixed-top" 
+        className="navbar is-link is-fixed-top popup-navbar-blocked" 
         role="navigation" 
         aria-label="main navigation"
         style={{height: "70px"}}

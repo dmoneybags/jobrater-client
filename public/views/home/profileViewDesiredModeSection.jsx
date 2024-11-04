@@ -35,46 +35,50 @@ export const ProfileViewDesiredModeSection = ({user, setShowingId, reloadFunc}) 
     }
     return (
         <div className='p-2'>
-            <div class="checkboxes checkbox-selector">
-                <div className="control checkbox-item">
-                    <label class="checkbox">
-                        <input 
-                        type="checkbox" 
-                        name="desiresOnsite"
-                        checked={desiresOnsite}
-                        onChange={(e) => {
-                            setDesiresOnsite(e.target.checked)
-                        }}
-                        />
-                        On Site
-                    </label>
-                </div>
-                <div className="control checkbox-item">
-                    <label class="checkbox">
-                        <input 
-                        type="checkbox" 
-                        name="desiresHybrid"
-                        checked={desiresHybrid}
-                        onChange={(e) => {
-                            setDesiresHybrid(e.target.checked)
-                        }}
-                        />
-                        Hybrid
-                    </label>
-                </div>
-                <div className="control checkbox-item">
-                    <label class="checkbox">
-                        <input 
-                        type="checkbox" 
-                        name="desiresRemote"
-                        checked={desiresRemote}
-                        onChange={(e) => {
-                            console.log(e.target.checked);
-                            setDesiresRemote(e.target.checked)
-                        }}
-                        />
-                        Remote
-                    </label>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: "100%"}}>
+                <div style={{width: "400px", display: "flex", justifyContent: "center", margin: "30px"}}>
+                    <div class="checkboxes">
+                        <div className="control checkbox-item">
+                            <label class="checkbox">
+                                <input 
+                                type="checkbox" 
+                                name="desiresOnsite"
+                                checked={desiresOnsite}
+                                onChange={(e) => {
+                                    setDesiresOnsite(e.target.checked)
+                                }}
+                                />
+                                On Site
+                            </label>
+                        </div>
+                        <div className="control checkbox-item">
+                            <label class="checkbox">
+                                <input 
+                                type="checkbox" 
+                                name="desiresHybrid"
+                                checked={desiresHybrid}
+                                onChange={(e) => {
+                                    setDesiresHybrid(e.target.checked)
+                                }}
+                                />
+                                Hybrid
+                            </label>
+                        </div>
+                        <div className="control checkbox-item">
+                            <label class="checkbox">
+                                <input 
+                                type="checkbox" 
+                                name="desiresRemote"
+                                checked={desiresRemote}
+                                onChange={(e) => {
+                                    console.log(e.target.checked);
+                                    setDesiresRemote(e.target.checked)
+                                }}
+                                />
+                                Remote
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

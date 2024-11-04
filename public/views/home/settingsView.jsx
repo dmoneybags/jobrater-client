@@ -140,7 +140,7 @@ export const SettingsView = () => {
                         <a className='button is-link' href="https://applicantiq.org/account" target='_blank'>{isSubscribed ? "Change" : "Upgrade"}</a>
                     </div>
                 </div>
-                <div className='setting-row'>
+                <div className='setting-row' style={{width: "400px"}}>
                     <p className='setting-text has-text-white is-size-4'>
                         Auto-save every job
                         <div className='hoverable-icon-container ml-2'> 

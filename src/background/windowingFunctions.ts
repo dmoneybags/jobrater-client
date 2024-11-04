@@ -54,24 +54,6 @@ export class WindowingFunctions {
       const windowId = window.id;
       console.log("SETTING CURRENT WINDOW TO:");
       console.log(windowId);
-    
-      // Start a timer to monitor the window size and reset it if resized
-      const intervalId = setInterval(() => {
-        chrome.windows.get(windowId, (win) => {
-          if (win) {
-            // If the window size has changed, reset it
-            if (win.width !== 400 || win.height !== 600) {
-              chrome.windows.update(windowId, {
-                width: 400,
-                height: 630
-              });
-            }
-          } else {
-            // If the window has been closed, stop the interval
-            clearInterval(intervalId);
-          }
-        });
-      }, 100); // Check every 100ms (adjust if necessary)
     }
     static createOrRefreshWindow = async (options: Record<string, any>=null) => {
       console.log("RELOADING WINDOW");

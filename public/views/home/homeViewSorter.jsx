@@ -129,7 +129,7 @@ export const HomeViewSorter = ({jobs, setJobs, user, bestResumeScores}) => {
                 >
                 </i>
                 {isExpanded && <div style={{padding: "10px"}}>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", justifyContent: "center"}}>
                         <div>
                             <p>Sort by <span>
                                 <div class="select is-small">
