@@ -13,6 +13,7 @@ import { showError, showSuccess } from '../helperViews/notifications';
 
 export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
     const [showingPopup, setShowingPopup] = useState(false);
+    const [loadingPopup, setLoadingPopup] = useState(false);
     const saveJobInLs = () => {
         const asyncSaveJob = async () => {
             try {
@@ -34,13 +35,17 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
         if (job?.company?.companyName){
             const companyExists = await DatabaseCalls.checkIfCompanyExists(job.company.companyName);
             if (!companyExists){
-                const gdData = await LocalStorageHelper.__sendMessageToBgScript({action: "requestGD", company: job.company.companyName});
-                const gdPageSource = gdData.gdPageSource;
-                const gdUrl = gdData.gdUrl;
-                const company = await DatabaseCalls.addCompany(job.company.companyName, gdPageSource, gdUrl);
-                const newJob = job;
-                newJob.company = company;
-                return newJob;
+                try {
+                    const gdData = await LocalStorageHelper.__sendMessageToBgScript({action: "requestGD", company: job.company.companyName});
+                    const gdPageSource = gdData.gdPageSource;
+                    const gdUrl = gdData.gdUrl;
+                    const company = await DatabaseCalls.addCompany(job.company.companyName, gdPageSource, gdUrl);
+                    const newJob = job;
+                    newJob.company = company;
+                    return newJob;
+                } catch {
+                    return job;
+                }
             }
         }
         return job;
@@ -52,12 +57,16 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
             const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
             console.log("Returned job of");
             console.log(reReadJob);
-            LocalStorageHelper.addJob(reReadJob);
+            const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId);
+            if (!jobExists){
+                LocalStorageHelper.addJob(reReadJob);
+            }
         }
     }
     const showJob = async () => {
+        setLoadingPopup(true);
         const completeJob = await requestGDdataIfNeeded();
-        await saveJobIfNeeded();
+        saveJobIfNeeded();
         showFullscreenPopup(JobView, {job: completeJob, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
             LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
             const promptSave = async () => {
@@ -153,7 +162,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
             <div class="buttons is-centered" style={{marginTop: "-10px", marginBottom: "7px"}}>
                 <button 
                 id="evaluateButton" 
-                className="button is-focused is-centered "
+                className={`button is-focused is-centered ${loadingPopup ? 'is-loading': ""}`}
                 onClick={async ()=>{
                     //if no resumes are uploaded we prompt to upload a resume
                     const resumes = await LocalStorageHelper.readResumes();

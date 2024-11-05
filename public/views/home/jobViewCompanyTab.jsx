@@ -75,7 +75,7 @@ export const CompanyViewJobTab = ({job}) => {
                         return (job.company[attributeName] > 0.12 && (<div style={{position: "relative"}}>
                             <hr style={{ width: '90%', margin: '0 auto' }} />
                             <p className='has-text-white'>{printableRatingNames[attributeName]}</p>
-                            <p style={{fontSize: "12px", width: "250px"}}>{ratingDescriptions[attributeName]}</p>
+                            <p style={{fontSize: "12px", width: "230px"}}>{ratingDescriptions[attributeName]}</p>
                             <div 
                             className='resume-tab-match-score job-view-rating-number'
                             style={{
