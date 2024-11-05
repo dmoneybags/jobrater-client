@@ -29,8 +29,36 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
         }
         asyncSaveJob();
     }
-    const showJob = () => {
-        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
+    const requestGDdataIfNeeded = async () => {
+        //I guess I check this?
+        if (job?.company?.companyName){
+            const companyExists = await DatabaseCalls.checkIfCompanyExists(job.company.companyName);
+            if (!companyExists){
+                const gdData = await LocalStorageHelper.__sendMessageToBgScript({action: "requestGD", company: job.company.companyName});
+                const gdPageSource = gdData.gdPageSource;
+                const gdUrl = gdData.gdUrl;
+                const company = await DatabaseCalls.addCompany(job.company.companyName, gdPageSource, gdUrl);
+                const newJob = job;
+                newJob.company = company;
+                return newJob;
+            }
+        }
+        return job;
+    }
+    const saveJobIfNeeded = async () => {
+        if (user.preferences.saveEveryJobByDefault){
+            console.log("Adding Job");
+            console.log(job);
+            const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
+            console.log("Returned job of");
+            console.log(reReadJob);
+            LocalStorageHelper.addJob(reReadJob);
+        }
+    }
+    const showJob = async () => {
+        const completeJob = await requestGDdataIfNeeded();
+        await saveJobIfNeeded();
+        showFullscreenPopup(JobView, {job: completeJob, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
             LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
             const promptSave = async () => {
                 const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId);
@@ -55,7 +83,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
             <p className='job-title mb-2' style={{color: 'white', fontSize: '20px'}}>Job Score:</p>
             <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
                 <div>
-                    <CircleRater rating={RatingFunctions.getRating(job, user.preferences)}  size={200} thickness={8} circleThickness={25} fontSize={64} />
+                    <CircleRater rating={RatingFunctions.getRating(job, user.preferences)}  size={200} thickness={8} circleThickness={25} fontSize={18} innerText={"View job to see rating"}/>
                 </div>
                 <div 
                 style={{width: "110px", whiteSpace: "nowrap", overflow: "visible"}}
@@ -110,7 +138,8 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         </i>
                         <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
                     </div>
-                    {CLIENT_ENV.SCRAPEGLASSDOOR && <div className='latest-job-item'>
+                    {/* we request glassdoor once they pass through this so we wont show it here */}
+                    {/* {CLIENT_ENV.SCRAPEGLASSDOOR && <div className='latest-job-item'>
                         <img 
                         src={glassdoorIcon}
                         className='latest-job-item-icon'
@@ -118,7 +147,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         >
                         </img>
                         <p className='latest-job-item-text'>{job.company.overallRating > 0.01 ? job.company.overallRating + "/5 Glassdoor": "No Glassdoor info"}</p>
-                    </div>}
+                    </div>} */}
                 </div>
             </div>
             <div class="buttons is-centered" style={{marginTop: "-10px", marginBottom: "7px"}}>
