@@ -195,6 +195,7 @@
 }
 .latest-job-container{
     width: 100%;
+    min-width: 400px;
 }
 .latest-job-item {
     position: relative;

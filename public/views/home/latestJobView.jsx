@@ -101,7 +101,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         </i>
                         <p className='latest-job-item-text'>{job.careerStage}</p>
                     </div>}
-                    <div className='latest-job-item'>
+                    {job.applicants && <div className='latest-job-item'>
                         <i 
                         className={`fa-solid fa-user fa-xl latest-job-item-icon`}
                         // we add 0.01 below to not have the value be 0 and result in grey
@@ -109,7 +109,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                         >
                         </i>
                         <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
-                    </div>
+                    </div>}
                     {CLIENT_ENV.SCRAPEGLASSDOOR && <div className='latest-job-item'>
                         <img 
                         src={glassdoorIcon}

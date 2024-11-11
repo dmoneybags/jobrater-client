@@ -1,6 +1,6 @@
 {
     "name": "ApplicantIQ",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "Get AI resume ratings and accurate job ratings for jobs on LinkedIn.",
     "permissions": [
     "storage",
@@ -10,7 +10,8 @@
     "host_permissions" : [
     "https://*.linkedin.com/*",
     "https://applicantiq.org/*",
-    "https://*.glassdoor.com/*"
+    "https://*.glassdoor.com/*",
+    "https://*.indeed.com/*"
     ],
     "background": {
         "service_worker": "dist/background.bundle.js",
@@ -18,7 +19,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://*.linkedin.com/*", "https://applicantiq.org/*"],
+            "matches": ["https://*.linkedin.com/*", "https://applicantiq.org/*", "https://*.indeed.com/*"],
             "js": [
                 "dist/content.bundle.js"
             ]
