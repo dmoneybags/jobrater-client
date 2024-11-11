@@ -33,6 +33,8 @@ import { EMPTYJOB, Job, JobFactory } from "@applicantiq/applicantiq_core/Core/jo
 import { DatabaseCalls } from "@applicantiq/applicantiq_core/Core/databaseCalls";
 import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStorageHelper";
 import { HtmlInjection } from "./htmlInjection";
+import { IndeedFunctions } from "./indeedFunctions";
+import { HelperFunctions } from "@applicantiq/applicantiq_core/Core/helperFunctions";
 
 window.addEventListener('message', async function(event) {
     if (event.origin !== 'https://applicantiq.org') return;
@@ -170,7 +172,7 @@ const handleJobPromise = async (promise:Promise<Job>) => {
         const { type, company, jobId } = obj;
         //Add button to page
         //will need to change based on website
-        HtmlInjection.addViewInApplicantIQbtn(jobId);
+        HelperFunctions.tryWithRetry(() => HtmlInjection.addViewInApplicantIQbtn(jobId), 3);
         currentJob = jobId;
         //check if we already have job in localStorage
         if (await LocalStorageHelper.jobExistsInLocalStorage(jobId)){
@@ -194,6 +196,10 @@ const handleJobPromise = async (promise:Promise<Job>) => {
             switch (company){
                 case "LINKEDIN":
                     await handleJobPromise(LinkedInFunctions.LinkedInJobLoaded(jobId));
+                    break;
+                case "INDEED":
+                    await handleJobPromise(IndeedFunctions.IndeedJobLoaded(jobId));
+                    break;
             }
         }
         return true;

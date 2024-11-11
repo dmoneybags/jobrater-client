@@ -75,7 +75,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         </i>
                         <p className='latest-job-item-text'>{job.careerStage}</p>
                     </div>}
-                    <div className='latest-job-item'>
+                    {job.applicants && <div className='latest-job-item'>
                         <i 
                         className={`fa-solid fa-user fa-xl latest-job-item-icon`}
                         // we add 0.01 below to not have the value be 0 and result in grey
@@ -83,7 +83,7 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                         >
                         </i>
                         <p className='latest-job-item-text'>{job.applicants + " Applicants"}</p>
-                    </div>
+                    </div>}
                     { CLIENT_ENV.SCRAPEGLASSDOOR && <div className='latest-job-item'>
                         <img 
                         src={glassdoorIcon}
@@ -127,9 +127,17 @@ export const JobViewJobTab = ({job, user, mainViewReloadFunc}) => {
                 </button>}
                 {jobSaved && <button 
                 className='button is-focused is-small'
-                onClick={()=>{window.open(`https://www.linkedin.com/jobs/view/${job.jobId}`)}}
+                onClick={()=>{
+                    const jobIdTrimmed = job.jobId.slice(2);
+                    if (job.jobId.startsWith("li")){
+                        window.open(`https://www.linkedin.com/jobs/view/${jobIdTrimmed}`);
+                    }
+                    if (job.jobId.startsWith("in")){
+                        window.open(`https://www.indeed.com/m/basecamp/viewjob?viewtype=embedded&jk=${jobIdTrimmed}`)
+                    }
+                }}
                 >
-                    Visit Job On LinkedIn
+                    {job.jobId.startsWith("li") ? "Visit Job On LinkedIn" : "Visit Job On Indeed"}
                 </button>}
             </div>
             <hr style={{margin: "5px", backgroundColor: "hsl(0deg 0% 33.33%)"}}/>

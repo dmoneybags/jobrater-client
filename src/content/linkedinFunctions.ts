@@ -4,6 +4,11 @@ import { HelperFunctions } from "@applicantiq/applicantiq_core/Core/helperFuncti
 import { Job, JobFactory } from "@applicantiq/applicantiq_core/Core/job";
 
 export class LinkedInFunctions {
+    static urlMatchesLinkedIn(url: string):boolean{
+        return (url.includes("linkedin.com/jobs/search") || 
+        url.includes("linkedin.com/jobs/collections/") || 
+        url.includes("linkedin.com/jobs/view/"))
+    }
     /**
      * getTextContentWithNewlines
      * 

@@ -69,7 +69,7 @@ export const CompanyViewJobTab = ({job}) => {
                         View on Glassdoor
                     </button>
                 </div>
-                <div style={{height: "calc(100vh - 284px)", overflowY: "scroll", overflowX: "hidden", padding: "10px"}}>
+                <div style={{height: "calc(100vh - 284px)", overflowY: "scroll", overflowX: "hidden", padding: "10px", minWidth: "364px"}}>
                     {ratingAttributeNames.map((attributeName)=>{
                         // we will get values like -0.1 and 0.1 for faulty record
                         return (job.company[attributeName] > 0.12 && (<div style={{position: "relative"}}>
