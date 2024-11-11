@@ -45,7 +45,13 @@ export class IndeedFunctions {
     }
     static getPaymentInfo(): Record<string, any>{
         const paymentData: Record<string, number | string | null> = {paymentBase: null, paymentHigh: null, paymentFreq: null}
-        const salaryInfoContainer = document.getElementById("salaryInfoAndJobType");
+        let salaryInfoContainer = document.getElementById("salaryInfoAndJobType");
+        if (!salaryInfoContainer){
+            salaryInfoContainer = document.querySelector('[data-testid="jobsearch-CollapsedEmbeddedHeader-salary"]');
+            if (!salaryInfoContainer){
+                return paymentData;
+            }
+        }
         const salaryStr = (salaryInfoContainer.textContent ?? "").trim();
         if (salaryStr === ""){
             return paymentData;
@@ -66,9 +72,9 @@ export class IndeedFunctions {
         if (matches) {
             // Convert matched strings to numbers and return as an array
             const amounts: number[] = matches.map(match => parseFloat(match.replace(/,/g, '')));
-            paymentData["paymentBase"] = Math.floor(amounts[0]/1000);
+            paymentData["paymentBase"] = paymentData["paymentFreq"] === "yr" ? Math.floor(amounts[0]/1000) : amounts[0];
             if (amounts.length > 1){
-                paymentData["paymentHigh"] = Math.floor(amounts[1]/1000);
+                paymentData["paymentHigh"] = paymentData["paymentFreq"] === "yr" ? Math.floor(amounts[1]/1000) : amounts[1];
             }
         }
         return paymentData;
@@ -100,7 +106,7 @@ export class IndeedFunctions {
             jobName: jobName, applicants: null, careerStage: null,
             description: description, company: {companyName: company}, paymentFreq: paymentData["paymentFreq"],
             paymentBase: paymentData["paymentBase"], paymentHigh: paymentData["paymentHigh"], locationStr: locationStr,
-            mode: mode, jobPostedAt: Math.floor(Date.now() / 1000), timeAdded: Math.floor(Date.now() / 1000)
+            mode: mode, jobPostedAt: Math.floor(Date.now() / 1000) - 24*60*60*28, timeAdded: Math.floor(Date.now() / 1000)
         }
         return jobJson;
     }
