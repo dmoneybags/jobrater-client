@@ -1,6 +1,6 @@
 {
     "name": "ApplicantIQ",
-    "version": "0.0.7",
+    "version": "0.2.1",
     "description": "Get AI resume ratings and accurate job ratings for jobs on LinkedIn.",
     "permissions": [
     "storage",
