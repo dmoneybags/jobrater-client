@@ -53,14 +53,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             if (tab.url.includes("linkedin.com/jobs/view/")) {
                 // Extract the jobId from the URL path after `/view/`
                 const urlParts = tab.url.split('/');
-                jobId = urlParts[urlParts.indexOf("view") + 1]; // Job ID follows 'view'
+                const jobIdStr = urlParts[urlParts.indexOf("view") + 1]; // Job ID follows 'view'
+                const jobIdParts = jobIdStr.split("-");
+                jobId = jobIdParts[jobIdParts.length - 1];
             } else {
                 // Process the URL query string to get the jobId in the `currentJobId` form
                 const queryParameters = tab.url.split("?")[1];
                 const urlParameters = new URLSearchParams(queryParameters);
                 jobId = urlParameters.get("currentJobId");
             }
-            
             if (jobId) {
                 console.log("Job ID found:", jobId);
                 // Send a message to contentScript to get pages and enter it in the DB
