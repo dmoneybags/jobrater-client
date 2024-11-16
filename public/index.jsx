@@ -101,18 +101,14 @@ const MainView = ({ContentView}) => {
       </>
     );
   }
-  if (windowType === "detached"){
-    return (
-      <>
-        <div className="app-container">
-          {isAuthed ? <ContentView /> : <LoginOrSignupView />}
-        </div>
-      </>
-    );
-  }
+
   return (
-    <PopupLinkView/>
-  )
+    <>
+      <div className="app-container">
+        {isAuthed ? <ContentView /> : <LoginOrSignupView />}
+      </div>
+    </>
+  );
 }
 
 const App = () => {  
