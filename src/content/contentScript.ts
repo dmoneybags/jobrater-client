@@ -35,6 +35,8 @@ import { LocalStorageHelper } from "@applicantiq/applicantiq_core/Core/localStor
 import { HtmlInjection } from "./htmlInjection";
 import { IndeedFunctions } from "./indeedFunctions";
 import { HelperFunctions } from "@applicantiq/applicantiq_core/Core/helperFunctions";
+import { addApplyEventListener } from "../../public/views/injectedViews/injectedFunctions";
+import { getJobFromLocalStorage } from "../../public/views/home/homeView";
 
 window.addEventListener('message', async function(event) {
     if (event.origin !== 'https://applicantiq.org') return;
@@ -46,7 +48,7 @@ window.addEventListener('message', async function(event) {
         
         // Save the token in Chrome storage
         await LocalStorageHelper.setToken(token, tokenExpiration);
-        
+        await LocalStorageHelper.__sendMessageToBgScript({ action: 'storeData', key: "firstLogin", value: true });
         chrome.runtime.sendMessage({ action: 'openPopup' , options: {firstLogin: true}});
     }
     // Check if the message is from your signup page
@@ -93,6 +95,9 @@ const handleJobPromise = async (promise:Promise<Job>) => {
     try {
         const responseJson = await DatabaseCalls.sendMessageToAddJob(jobread)
         const completeJob: Job = JobFactory.generateFromJson(responseJson["job"]);
+        //add event listener after we get the full job
+        HelperFunctions.tryWithRetry(() => addApplyEventListener(completeJob), 3);
+
         const activeUser = await LocalStorageHelper.getActiveUser();
         if (activeUser.preferences.saveEveryJobByDefault){
             await LocalStorageHelper.addJob(completeJob);
@@ -172,10 +177,16 @@ const handleJobPromise = async (promise:Promise<Job>) => {
         const { type, company, jobId } = obj;
         //Add button to page
         //will need to change based on website
-        HelperFunctions.tryWithRetry(() => HtmlInjection.addViewInApplicantIQbtn(jobId), 3);
+        HelperFunctions.tryWithRetry(() => HtmlInjection.evaluateResumeBtn(jobId), 3);
+        const firstLoginData = await LocalStorageHelper.__sendMessageToBgScript({ action: 'getData', key: "firstLogin" });
+        if (firstLoginData.message){
+            HelperFunctions.tryWithRetry(() => HtmlInjection.addFirstTimerBanner(), 3);
+        }
         currentJob = jobId;
         //check if we already have job in localStorage
         if (await LocalStorageHelper.jobExistsInLocalStorage(jobId)){
+            const job = await getJobFromLocalStorage(jobId);
+            HelperFunctions.tryWithRetry(() => addApplyEventListener(job), 3);
             console.log("Job already exists in local storage");
             await LocalStorageHelper.moveJobToFront(jobId);
             let popupMessage : Record<string, any> = {action: 'REFRESH'};

@@ -14,7 +14,7 @@
       "public/**/*.ts", 
       "src/tests/jest.setup.mjs",
       "globals.d.ts"
-    ],
+, "src/content/htmlInjection.jsx"    ],
     "exclude": [
       "node_modules"
     ]

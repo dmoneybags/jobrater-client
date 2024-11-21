@@ -61,8 +61,6 @@ export const ProPopupView = ({showingPopup, setShowingPopup, sender=""}) => {
                 <ul style={{fontSize: "14px"}}>
                     {(sender !== "resumeRating") && <li>Get unlimited resume ratings</li>}
                     <li>Upload unlimited resumes</li>
-                    <li>Unlimited access to commute data</li>
-                    <li>Access to zip code specific rent and income data</li>
                     {FreeUserDataHelperFunctions.isDiscountable(freeData?.CreatedAt) && <li>$6.99 lifetime subscription if you sign up by {FreeUserDataHelperFunctions.getDateFromStrDate(freeData.CreatedAt, 7)}</li>}
                     {(!trialExpired && sender === "resumeRating") && <li>Trial access to resume ratings will expire on {FreeUserDataHelperFunctions.getDateFromStrDate(freeData?.CreatedAt, 14)}</li>}
                 </ul>

@@ -29,8 +29,8 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
         }
         asyncSaveJob();
     }
-    const showJob = () => {
-        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc}, job.jobName, job.company.companyName, ()=>{
+    const showJob = (getResumeScore=false) => {
+        showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: mainViewReloadFunc, getResumeScore: getResumeScore}, job.jobName, job.company.companyName, ()=>{
             LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
             const promptSave = async () => {
                 const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId);
@@ -59,7 +59,7 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                 </div>
                 <div 
                 style={{width: "110px", whiteSpace: "nowrap", overflow: "visible"}}
-                className='m-2 mb-6 mt-4'
+                className='m-2'
                 >
                     {job.mode && <div className='latest-job-item'>
                         <i 
@@ -121,10 +121,28 @@ export const LatestJobView = ({job, user, mainViewReloadFunc}) => {
                     </div>}
                 </div>
             </div>
-            <div class="buttons is-centered" style={{marginTop: "-10px", marginBottom: "7px"}}>
+            <div class="buttons is-centered" style={{marginTop: "10px", marginBottom: "7px", flexDirection: "column"}}>
                 <button 
                 id="evaluateButton" 
-                className="button is-focused is-centered "
+                className="button is-focused is-centered is-medium"
+                onClick={async ()=>{
+                    //if no resumes are uploaded we prompt to upload a resume
+                    const resumes = await LocalStorageHelper.readResumes();
+                    console.log(`Found resumes of ${resumes}`);
+                    if (!resumes || !resumes.length){
+                        console.log("Showing popup");
+                        setShowingPopup(true);
+                    //ok they've uploaded a resume lets show them the actual job view
+                    } else {
+                        console.log("Loading job view");
+                        showJob(true);
+                    }
+                }}
+                >
+                    Get Resume Score
+                </button>
+                <button 
+                className="button is-small is-centered "
                 onClick={async ()=>{
                     //if no resumes are uploaded we prompt to upload a resume
                     const resumes = await LocalStorageHelper.readResumes();

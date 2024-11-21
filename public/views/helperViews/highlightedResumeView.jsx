@@ -202,12 +202,12 @@ export const HighlightedResumeView = ({resumeComparison, resume, width, height})
             }
         })
     }
-    const asyncLoadData = async(curPage) => {
-        const fullResume = await DatabaseCalls.sendMessageToReadResume(resume.id);
+    const load = async(fullResume, curPage) => {
+        console.log("Loading PDF");
         const blob = new Blob([fullResume.fileContent], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         setUrl(url);
-        const pdfContainer = document.getElementById('pdf-container');
+        const pdfContainer = document.getElementById('resume-container');
     
         // Clear the old canvas if it exists
         while (pdfContainer.firstChild) {
@@ -251,6 +251,10 @@ export const HighlightedResumeView = ({resumeComparison, resume, width, height})
             });
         });
     }
+    const asyncLoadData = async(curPage) => {
+        const fullResume = await DatabaseCalls.sendMessageToReadResume(resume.id);
+        load(fullResume, curPage);
+    }
     useEffect(() => {
         setPageNum(1);
         if (pdfUrl){
@@ -266,8 +270,8 @@ export const HighlightedResumeView = ({resumeComparison, resume, width, height})
     
     return (
         <div style={{height: height, width: width, position: 'relative'}}>
-            <div id="pdf-container" style={{height: height, width: width}}>
-                {highlightedRegions.map((region, index) => (
+            <div id="resume-container" style={{height: height, width: width}}>
+                {/* {highlightedRegions.map((region, index) => (
                 <div
                     key={index}
                     style={{
@@ -318,7 +322,7 @@ export const HighlightedResumeView = ({resumeComparison, resume, width, height})
                     currentPopupData.resumeSentenceComparison.descriptionSentence.substring(0, 150) + "..."
                     }
                     </p>
-                </div>}
+                </div>} */}
             </div>
             {pageNum <= numPages - 1 && <button
             onClick={()=>{

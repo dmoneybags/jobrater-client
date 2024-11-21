@@ -261,7 +261,7 @@
         box-shadow: 0 0 0 var(--bulma-focus-shadow-size) hsla(var(--bulma-focus-h), var(--bulma-focus-s), var(--bulma-focus-l), var(--bulma-focus-shadow-alpha));
     }
     50% {
-        box-shadow: 0 0 5px 5px hsla(var(--bulma-focus-h), var(--bulma-focus-s), var(--bulma-focus-l), var(--bulma-focus-shadow-alpha));
+        box-shadow: 0 0 10px 10px hsla(var(--bulma-focus-h), var(--bulma-focus-s), var(--bulma-focus-l), var(--bulma-focus-shadow-alpha));
     }
 }
 @keyframes spin {

@@ -11,13 +11,14 @@ import { Spinner } from '../helperViews/loadingSpinner'
 import { loadResume } from '../../../src/tests/debugView/loadMockResumes';
 import { ProPopupView } from './proPopupView';
 
-export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingComparison, mainViewReloadFunc}) => {
+export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingComparison, mainViewReloadFunc, getResumeScore=false}) => {
     const [resumes, setResumes] = useState(null);
     const [currentResume, setCurrentResume] = useState(null);
     const [currentResumeComparison, setCurrentResumeComparison] = useState(null);
     //Used to make sure rendering on load is clean, set to true after we fetch the data
     //on load
     const [loadedData, setLoadedData] = useState(false);
+    const [loadedFirstResume, setLoadedFirstResume] = useState(false);
     //popup vars
     const [showingUploadResumePopup, setShowingUploadResumePopup] = useState(false);
     const [showingProPopup, setShowingProPopup] = useState(false);
@@ -35,6 +36,10 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
         console.log("Loaded resumes of:");
         console.log(rereadResumes);
         setResumes(rereadResumes);
+        if (!rereadResumes.length){
+            setShowingUploadResumePopup(true);
+            return;
+        }
         if (changeResume){
             let defaultResume = null;
             for (let resume of rereadResumes){
@@ -127,12 +132,14 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             try {
                 const file = event.target.files[event.target.files.length - 1];
                 const resume = await loadResume(file);
-                if (resume.fileType !== "pdf"){
-                    throw new Error("Only PDFs are accepted");
+                if (resume.fileType !== "pdf" && resume.fileType !== "docx"){
+                    throw new Error("Only PDFs and Word Documents (docx) are accepted");
                 }
-                const numPages = await HelperFunctions.countPdfPages(file);
-                if (numPages > 5){
-                    throw new Error("Please upload a resume with 5 or less pages");
+                if (resume.fileType === "pdf"){
+                    const numPages = await HelperFunctions.countPdfPages(file);
+                    if (numPages > 5){
+                        throw new Error("Please upload a resume with 5 or less pages");
+                    }
                 }
                 //set our state uploaded resume value to the resume uploaded
                 //needed because we'll need it when we submit
@@ -194,6 +201,12 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
             asyncLoadResumeComparison();
         }
     }, [currentResume])
+    useEffect(() =>{
+        if (getResumeScore && !currentResumeComparison && !loadedFirstResume && currentResume?.id && loadedData){
+            getResumeComparison();
+            setLoadedFirstResume(true);
+        }
+    }, [currentResume, currentResumeComparison, loadedData])
     //Catch if user switches tabs mid comparison check
     useEffect(()=>{
         if (!isLoadingComparison && !currentResumeComparison && currentResume){
@@ -228,7 +241,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                     }
                 }}
                 ></i>
-                <p className='has-text-white is-size-3 m-3'>Re-Evaluate</p>
+                <p className='has-text-white is-size-3 m-3'>{resumes?.length ? "Re-Evaluate": "Upload a Resume"}</p>
                 <label className="custom-file-upload" style={{margin: "15px"}}>
                     <input
                         className="hidden-file-input"
@@ -240,7 +253,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                     <span className={`button is-success is-rounded`}>Upload Resume</span>
                 </label>
                 {reuploadedResume && <p>{reuploadedResume.fileName}</p>}
-                <label className="checkbox p-2">
+                {currentResume && <label className="checkbox p-2">
                     <input 
                         type="checkbox" 
                         checked={isReplacing} 
@@ -249,7 +262,7 @@ export const ResumeViewJobTab = ({job, user, isLoadingComparison, setIsLoadingCo
                     <p className='ml-2' style={{ display: 'inline' }}>
                         Replace current resume
                     </p>
-                </label>
+                </label>}
                 {!isReplacing && <input type="text" 
                 className='input'
                 style={{padding: "10px", margin: "10px", width: "80%"}}

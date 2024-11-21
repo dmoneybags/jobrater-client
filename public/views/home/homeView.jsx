@@ -13,6 +13,52 @@ import { HomeViewSorter } from './homeViewSorter';
 import { HomeViewFilterer } from './homeViewFilterer';
 import { DatabaseCalls } from '@applicantiq/applicantiq_core/Core/databaseCalls';
 import { showError } from '../helperViews/notifications';
+import { JobView } from './jobView';
+
+export const getJobFromLocalStorage = async (jobId) => {
+    //get the jobs from localstorage
+    const jobs = await LocalStorageHelper.readJobs();
+    for (const job of jobs){
+      //look for our match
+      if (jobId === job.jobId){
+        return job;
+      }
+    }
+    return null;
+}
+
+export const asyncSetLatestJob = async (newLatestJobId) => {
+    //spaghetti code but basically first we check if the job is in local storage
+    //if its a new job we first check if content script is loading it, else we send a request to read
+    const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(newLatestJobId);
+    if (jobExists){
+      const job = await getJobFromLocalStorage(newLatestJobId);
+      if (!job) {
+        console.error("Failed to get job from local storage, can't show latest job");
+        return;
+      }
+      let latestJobMessage = {action: 'storeData', key: "latestJob", value: job };
+      await LocalStorageHelper.__sendMessageToBgScript({latestJobMessage});
+    } else {
+      const isLoadingJobResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "loadingJob"});
+      const isLoading = isLoadingJobResp.message?.isLoading ?? false;
+      const currrentTabMessage = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "currentTab"});
+      const currentTab = currrentTabMessage.message;
+      if (!isLoading && currentTab){
+        console.log("Sending message to content script to read");
+        console.log(currentTab);
+        chrome.tabs.sendMessage(currentTab, {
+            type: "NEW",
+            company: "LINKEDIN",
+            jobId: newLatestJobId
+        }).then(response => {
+            console.log('Message sent successfully:', response);
+        }).catch(error => {
+            console.error('Error sending message to content script:', error);
+        });
+      }
+    }
+  }
 
 export const HomeView = () => {
     const [jobs, setJobs] = useState(undefined);
@@ -107,6 +153,7 @@ export const HomeView = () => {
             setLoadingCompanyName(message.payload.companyName);
         }
     }
+
     useEffect(() => {
         if (loadingJob){
             const timeoutId = setTimeout(() => {
@@ -123,6 +170,75 @@ export const HomeView = () => {
             }
         }
     }, [loadingJob]);
+
+    //The useEffect to go straight to resume evaluation if they click the button on the page
+    useEffect(() => {
+        if (!jobsSet) return;
+        //need to define callback to update main view if user wants to save job, could be more modular
+        const saveJobInLs = (job) => {
+            const asyncSaveJob = async () => {
+                try {
+                    console.log("Adding Job");
+                    console.log(job);
+                    const reReadJob = await DatabaseCalls.sendMessageToAddUserJob(job.jobId);
+                    console.log("Returned job of");
+                    console.log(reReadJob);
+                    LocalStorageHelper.addJob(reReadJob);
+                } catch (err) {
+                    showError(err)
+                }
+                asyncLoadData({force: true, showLatestJob: false});
+            }
+            asyncSaveJob();
+        }
+
+        //Get the params of the url
+        const params = new URLSearchParams(window.location.search);
+        console.log("PARAMS:");
+        console.log(params);
+        //Check if were going straight to evaluate resume
+        if (params.get("evaluateResume")){
+            console.log("EVALUATING RESUME");
+            //Set the latest job to the id passed in the query string
+            asyncSetLatestJob(params.get("evaluateResume"));
+            //async wrapper function (We love that useEffects cant be async)
+            const asyncShowPopup = async() => {
+                //Get the job back from local storage
+                const job = await getJobFromLocalStorage(params.get("evaluateResume"));
+                //will happen if the job is still loading, if so its just one more click for the user
+                if (!job){
+                    console.warn("Job is still loading, showing regular popup");
+                    return;
+                }
+                const user = await LocalStorageHelper.getActiveUser();
+                //Remove evaluate resume because we're done with it
+                params.delete('evaluateResume');
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.replaceState({}, document.title, newUrl);
+                //show the popup with forcing resume eval
+                showFullscreenPopup(JobView, {job: job, user: user, mainViewReloadFunc: asyncLoadData, getResumeScore: true}, job.jobName, job.company.companyName, ()=>{
+                    LocalStorageHelper.__sendMessageToBgScript({action: "storeData", key: "latestJob", value: null});
+                    const promptSave = async () => {
+                        const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(job.jobId);
+                        if (!jobExists){
+                            asynchronousBlockingPopup(
+                                `Save ${job.jobName} at ${job.company?.companyName ?? "no company loaded"}?`, 
+                                "", 
+                                "Save", 
+                                ()=>{
+                                    saveJobInLs(job);
+                                }, 
+                                "Exit", 
+                                ()=>{});
+                        }
+                    }
+                    promptSave();
+                }, true)
+            }
+            asyncShowPopup();
+        }
+    }, [jobsSet])
+
     useEffect(() => {
         chrome.runtime.onMessage.addListener(handleMessage);
         //Not the prettiest but we need to make sure we download

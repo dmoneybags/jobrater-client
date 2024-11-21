@@ -4,8 +4,8 @@ import { ResumeViewJobTab } from './jobViewResumeTab';
 import { CompanyViewJobTab } from './jobViewCompanyTab';
 import { LocationViewJobTab } from './jobViewLocationTab';
 
-export const JobView = ({job, user, mainViewReloadFunc}) => {
-    const [activeTab, setActiveTab] = useState("job");
+export const JobView = ({job, user, mainViewReloadFunc, getResumeScore=false}) => {
+    const [activeTab, setActiveTab] = useState(getResumeScore ? "resume" : "job");
     const [isLoadingComparison, setIsLoadingComparison] = useState(false);
     return (
         <div className='latest-job-container'>
@@ -55,7 +55,7 @@ export const JobView = ({job, user, mainViewReloadFunc}) => {
                 </p>
             </div>
             {activeTab === "job" && <JobViewJobTab job={job} user={user} mainViewReloadFunc={mainViewReloadFunc}/>}
-            {activeTab === "resume" && <ResumeViewJobTab job={job} user={user} isLoadingComparison={isLoadingComparison} setIsLoadingComparison={setIsLoadingComparison} mainViewReloadFunc={mainViewReloadFunc}/>}
+            {activeTab === "resume" && <ResumeViewJobTab job={job} user={user} isLoadingComparison={isLoadingComparison} setIsLoadingComparison={setIsLoadingComparison} mainViewReloadFunc={mainViewReloadFunc} getResumeScore={getResumeScore}/>}
             {activeTab === "company" && <CompanyViewJobTab job={job}/>}
             {activeTab === "location" && <LocationViewJobTab job={job} user={user}/>}
         </div>

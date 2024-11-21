@@ -15,7 +15,7 @@ import { ProfileView } from './views/home/profileView';
 import { FeedbackView } from './views/home/feedbackView';
 import { PopupLinkView } from './views/popup/popupLinkView';
 import { LocalStorageHelper } from '@applicantiq/applicantiq_core/Core/localStorageHelper';
-import { WindowingFunctions } from '../src/background/windowingFunctions';
+import { asyncSetLatestJob } from './views/home/homeView';
 
 const BASEURL = "extension://jdmbkjofpaobeedpmoeoocbjnhpfalmm";
 
@@ -32,53 +32,20 @@ const MainView = ({ContentView}) => {
     const params = new URLSearchParams(window.location.search)
     console.log("With params:");
     console.log(params);
+
     if (params.get("windowType") === "detached") {
       setWindowType('detached');
     } else {
       setWindowType('popup');
     }
+
     //anyone who calls the main view can set the latest job to show the user a cetrain job
     if (params.get("latestJob")){
       console.log("Got latest job arg of:");
       console.log(params.get("latestJob"));
-      const asyncSetLatestJob = async () => {
-        //spaghetti code but basically first we check if the job is in local storage
-        //if its a new job we first check if content script is loading it, else we send a request to read
-        const jobExists = await LocalStorageHelper.jobExistsInLocalStorage(params.get("latestJob"));
-        if (jobExists){
-          //get the jobs from localstorage
-          const jobs = await LocalStorageHelper.readJobs();
-          for (const job of jobs){
-            //look for our match
-            if (params.get("latestJob") === job.jobId){
-              //just latest job
-              let latestJobMessage = {action: 'storeData', key: "latestJob", value: job };
-              await LocalStorageHelper.__sendMessageToBgScript({latestJobMessage});
-              break;
-            }
-          }
-        } else {
-          const isLoadingJobResp = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "loadingJob"});
-          const isLoading = isLoadingJobResp.message?.isLoading ?? false;
-          const currrentTabMessage = await LocalStorageHelper.__sendMessageToBgScript({action: "getData", key: "currentTab"});
-          const currentTab = currrentTabMessage.message;
-          if (!isLoading && currentTab){
-            console.log("Sending message to content script to read");
-            console.log(currentTab);
-            chrome.tabs.sendMessage(currentTab, {
-                type: "NEW",
-                company: "LINKEDIN",
-                jobId: params.get("latestJob")
-            }).then(response => {
-                console.log('Message sent successfully:', response);
-            }).catch(error => {
-                console.error('Error sending message to content script:', error);
-            });
-          }
-        }
-      }
-      asyncSetLatestJob();
+      asyncSetLatestJob(params.get("latestJob"));
     }
+
     // Check if the user is authorized when the component mounts
     const checkAuth = async () => {
       const authStatus = await ReadingHelperFunctions.isAuthed();
@@ -88,7 +55,7 @@ const MainView = ({ContentView}) => {
 
     checkAuth();
     chrome.action.setBadgeText({ text: '' }); // clear badge
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+  }, []); 
 
   //UNUSED
   if (isAuthed === null) {

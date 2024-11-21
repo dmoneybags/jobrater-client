@@ -19,12 +19,14 @@ export const SelectResumeModal = ({showingPopup, setShowingPopup, callbackFuncti
                 //Make our button show the loading
                 const file = event.target.files[event.target.files.length - 1];
                 const resume = await loadResume(file);
-                if (resume.fileType !== "pdf"){
-                    throw new Error("Only PDFs are accepted");
+                if (resume.fileType !== "pdf" && resume.fileType !== "docx"){
+                    throw new Error("Only PDFs and Word Documents (docx) are accepted");
                 }
-                const numPages = await HelperFunctions.countPdfPages(file);
-                if (numPages > 5){
-                    throw new Error("Please upload a resume with 5 or less pages");
+                if (resume.fileType === "pdf"){
+                    const numPages = await HelperFunctions.countPdfPages(file);
+                    if (numPages > 5){
+                        throw new Error("Please upload a resume with 5 or less pages");
+                    }
                 }
                 //set our state uploaded resume value to the resume uploaded
                 //needed because we'll need it when we submit
